@@ -1,0 +1,25 @@
+{
+  "name": "@critresult/website",
+  "version": "0.0.1",
+  "description": "The critresult.com user interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/critresult/website.git"
+  },
+  "author": "Chance Hudson",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/critresult/website/issues"
+  },
+  "homepage": "https://github.com/critresult/website#readme",
+  "dependencies": {
+    "mobx": "^5.9.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-router-dom": "^5.0.0"
+  }
+}
