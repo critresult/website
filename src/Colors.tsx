@@ -6,4 +6,4 @@ export default {
   yellow: '#FFD416',
   blue: '#2176FF',
   black: '#31393C',
-}
+};

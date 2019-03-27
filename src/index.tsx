@@ -6,7 +6,7 @@ import CreateEvent from './CreateEvent';
 import Colors from './Colors';
 
 Object.assign(document.body.style, {
-  'margin': 'auto',
+  margin: 'auto',
   'font-family': 'Helvetica',
   'background-color': Colors.white,
 });

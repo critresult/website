@@ -7,36 +7,37 @@ export default class Home extends React.Component {
   render() {
     return (
       <>
-          <HFlex style={{
+        <HFlex
+          style={{
             justifyContent: 'space-between',
-          backgroundColor: Colors.blue,
-          height: 50,
-          color: Colors.white,
-          fontFamily: 'Helvetica',
-          padding: 20,
-          }}>
-            <VFlex>
-            CritResult
-            </VFlex>
-            <VFlex>
-            Signup or Login
-            </VFlex>
+            backgroundColor: Colors.blue,
+            height: 50,
+            color: Colors.white,
+            fontFamily: 'Helvetica',
+            padding: 20,
+          }}
+        >
+          <VFlex>CritResult</VFlex>
+          <VFlex>Signup or Login</VFlex>
         </HFlex>
-        <div style={{
-          backgroundColor: Colors.black,
-          height: 100,
-          color: Colors.white,
-          fontFamily: 'Helvetica',
-          padding: 20,
-        }}>
-        lower header
+        <div
+          style={{
+            backgroundColor: Colors.black,
+            height: 100,
+            color: Colors.white,
+            fontFamily: 'Helvetica',
+            padding: 20,
+          }}
+        >
+          lower header
         </div>
-        <div style={{
-          padding: 20
-        }}>
-        Upcoming Events:
+        <div
+          style={{
+            padding: 20,
+          }}
+        >
+          Upcoming Events:
         </div>
-
       </>
     );
   }
