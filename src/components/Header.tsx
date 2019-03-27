@@ -22,6 +22,18 @@ const LowerHeader = styled(HFlex)`
   padding: 20px;
 `
 
+const TitleSpan = styled.span`
+  font-size: 20px;
+`
+
+const SignupButton = styled.span`
+  padding: 5px;
+  background-color: ${Colors.black};
+  border-radius: 5px;
+  color: ${Colors.white};
+  cursor: pointer;
+`
+
 export default class Header extends React.Component {
   state = {
     signupVisible: true,
@@ -37,27 +49,14 @@ export default class Header extends React.Component {
         </Popup>
         <UpperHeader>
           <VFlex>
-            <span
-              style={{
-                fontSize: 20,
-              }}
-            >
-              CritResult
-            </span>
+            <TitleSpan>CritResult</TitleSpan>
           </VFlex>
           <VFlex>
-            <span
-              style={{
-                padding: 5,
-                backgroundColor: Colors.black,
-                borderRadius: 5,
-                color: Colors.white,
-                cursor: 'pointer',
-              }}
+            <SignupButton
               onClick={() => this.setState({ signupVisible: true })}
             >
               Signup or Login
-            </span>
+            </SignupButton>
           </VFlex>
         </UpperHeader>
         <LowerHeader>

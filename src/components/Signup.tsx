@@ -1,9 +1,10 @@
 import React from 'react'
 import Colors from '../Colors'
-import { HFlex, VFlex } from './Shared'
+import { HFlex, VFlex, Input } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
+import emailValidator from 'email-validator'
 
 export default
 @inject('promoter')
@@ -69,7 +70,8 @@ class Signup extends React.Component<{
         <VFlex style={{ padding: 10 }}>
           <HFlex>
             Email:{' '}
-            <input
+            <Input
+              valid={emailValidator.validate(this.state.email)}
               type="text"
               onInput={(e: any) => {
                 this.setState({ email: e.target.value })
@@ -79,7 +81,8 @@ class Signup extends React.Component<{
           </HFlex>
           <HFlex>
             Password:{' '}
-            <input
+            <Input
+              valid={this.state.password.length >= 6}
               type="password"
               onInput={(e: any) => {
                 this.setState({ password: e.target.value })
@@ -89,7 +92,11 @@ class Signup extends React.Component<{
           </HFlex>
           <HFlex>
             Confirm Password:{' '}
-            <input
+            <Input
+              valid={
+                this.state.password.length >= 6 &&
+                this.state.passwordConfirm === this.state.password
+              }
               type="password"
               onInput={(e: any) => {
                 this.setState({ passwordConfirm: e.target.value })
