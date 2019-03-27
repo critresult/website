@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import Colors from '../Colors'
 import { HFlex, VFlex } from './Shared'
+import Popup from './Popup'
+import Signup from './Signup'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
@@ -21,9 +23,17 @@ const LowerHeader = styled(HFlex)`
 `
 
 export default class Header extends React.Component {
+  state = {
+    signupVisible: true,
+  }
   render() {
     return (
       <>
+        <Popup visible={this.state.signupVisible}>
+          <Signup
+            onCancelClick={() => this.setState({ signupVisible: false })}
+          />
+        </Popup>
         <UpperHeader>
           <VFlex>
             <span
@@ -31,10 +41,23 @@ export default class Header extends React.Component {
                 fontSize: 20,
               }}
             >
-              Crit Result
+              CritResult
             </span>
           </VFlex>
-          <VFlex>Signup or Login</VFlex>
+          <VFlex>
+            <span
+              style={{
+                padding: 5,
+                backgroundColor: Colors.black,
+                borderRadius: 5,
+                color: Colors.white,
+                cursor: 'pointer',
+              }}
+              onClick={() => this.setState({ signupVisible: true })}
+            >
+              Signup or Login
+            </span>
+          </VFlex>
         </UpperHeader>
         <LowerHeader>
           Easy Criterium race registration and result management

@@ -3,6 +3,7 @@ import { VFlex, HFlex } from './components/Shared'
 import styled from 'styled-components'
 import Colors from './Colors'
 import Header from './components/Header'
+import Popup from './components/Popup';
 
 export default class Home extends React.Component {
   render() {
@@ -17,7 +18,6 @@ export default class Home extends React.Component {
           }}
         >
           Upcoming Events:
-          <div style={{}} />
         </div>
       </>
     )
