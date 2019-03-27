@@ -3,9 +3,11 @@ import styled from 'styled-components'
 import Colors from '../Colors'
 import { HFlex, VFlex } from './Shared'
 import Popup from './Popup'
-import AuthModal from './AuthModal'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
+import Signup from './Signup'
+import Login from './Login'
+import TabSelector from './TabSelector'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
@@ -44,14 +46,38 @@ class Header extends React.Component<{
   state = {
     authVisible: false,
   }
+  onAuthenticated = () => this.setState({ authVisible: false })
+  onCancelled = () => this.setState({ authVisible: false })
+
   render() {
+    const tabs = [
+      {
+        title: 'Sign Up',
+        render: () => (
+          <Signup
+            onAuthenticated={this.onAuthenticated}
+            onCancelled={this.onCancelled}
+          />
+        ),
+      },
+      {
+        title: 'Login',
+        render: () => (
+          <Login
+            onAuthenticated={this.onAuthenticated}
+            onCancelled={this.onCancelled}
+          />
+        ),
+      },
+    ]
     return (
       <>
         <Popup visible={this.state.authVisible}>
-          <AuthModal
-            onAuthenticated={() => this.setState({ authVisible: false })}
-            onCancelled={() => this.setState({ authVisible: false })}
-          />
+          <VFlex>
+            <HFlex style={{ borderRadius: 5 }}>
+              <TabSelector tabs={tabs} />
+            </HFlex>
+          </VFlex>
         </Popup>
         <UpperHeader>
           <VFlex>

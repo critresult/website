@@ -33,11 +33,11 @@ class TabSelector extends React.Component<{
               }}
               style={{
                 backgroundColor:
-                  this.state.activeIndex === index ? Colors.blue : Colors.white,
+                  this.state.activeIndex === index ? Colors.white : Colors.blue,
                 color:
                   this.state.activeIndex === index
-                    ? Colors.white
-                    : Colors.black,
+                    ? Colors.black
+                    : Colors.white,
                 minWidth: 100,
                 flex: 1,
                 padding: 10,
