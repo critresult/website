@@ -27,6 +27,7 @@ class TabSelector extends React.Component<{
         >
           {this.props.tabs.map((tab: { title: string }, index: number) => (
             <VFlex
+              key={index}
               onClick={() => {
                 this.setState({ activeIndex: index })
               }}

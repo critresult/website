@@ -29,7 +29,6 @@ class Signup extends React.Component<{
       .signup(this.state.email, this.state.password)
       .then(() => {
         this.resetFields()
-        alert('Account created')
         this.props.onAuthenticated()
       })
       .catch((err) => {

@@ -42,7 +42,7 @@ class Header extends React.Component<{
   promoter?: PromoterStore
 }> {
   state = {
-    signupVisible: true,
+    signupVisible: false,
   }
   render() {
     return (
@@ -60,7 +60,7 @@ class Header extends React.Component<{
           <VFlex>
             {this.props.promoter.authenticated ? (
               <HeaderButton onClick={() => {}}>
-                {this.props.promoter.active.email}
+                {this.props.promoter.active.email || ''}
               </HeaderButton>
             ) : (
               <HeaderButton

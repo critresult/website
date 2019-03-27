@@ -1,8 +1,6 @@
 import React from 'react'
 import { HFlex, VFlex } from './Shared'
 import PromoterStore from '../stores/promoter'
-import Colors from '../Colors'
-import styled from 'styled-components'
 import TabSelector from './TabSelector'
 import Signup from './Signup'
 import Login from './Login'
