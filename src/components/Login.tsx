@@ -18,6 +18,12 @@ class Signup extends React.Component<{
     password: '',
   }
 
+  inputRef = React.createRef()
+
+  componentDidMount() {
+    this.inputRef.current.focus()
+  }
+
   login = () => {
     this.props.promoter
       .login(this.state.email, this.state.password)
@@ -51,6 +57,7 @@ class Signup extends React.Component<{
           <HFlex>
             Email:{' '}
             <Input
+              ref={this.inputRef}
               valid={emailValidator.validate(this.state.email)}
               type="text"
               onChange={(e: any) => {

@@ -19,6 +19,12 @@ class Signup extends React.Component<{
     passwordConfirm: '',
   }
 
+  inputRef = React.createRef()
+
+  componentDidMount() {
+    this.inputRef.current.focus()
+  }
+
   createAccount = () => {
     if (this.state.password !== this.state.passwordConfirm) {
       this.resetFields()
@@ -58,6 +64,7 @@ class Signup extends React.Component<{
           <HFlex>
             Email:{' '}
             <Input
+              ref={this.inputRef}
               valid={emailValidator.validate(this.state.email)}
               type="text"
               onChange={(e: any) => {
