@@ -6,7 +6,7 @@ import { HFlex, VFlex } from './Shared'
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
   justify-content: space-between;
-  height: 50px;
+  height: 40px;
   font-family: Helvetica;
   padding: 20px;
   color: ${Colors.white};
@@ -14,16 +14,10 @@ const UpperHeader = styled(HFlex)`
 
 const LowerHeader = styled(HFlex)`
   background-color: ${Colors.black};
-  height: 100px;
+  height: 20px;
   color: ${Colors.white};
   font-family: Helvetica;
   padding: 20px;
-`
-
-const InnerContainer = styled.div`
-  flex: 1;
-  margin: auto;
-  max-width: 900px;
 `
 
 export default class Header extends React.Component {
@@ -31,10 +25,19 @@ export default class Header extends React.Component {
     return (
       <>
         <UpperHeader>
-          <InnerContainer>upper header</InnerContainer>
+          <VFlex>
+            <span
+              style={{
+                fontSize: 20,
+              }}
+            >
+              Crit Result
+            </span>
+          </VFlex>
+          <VFlex>Signup or Login</VFlex>
         </UpperHeader>
         <LowerHeader>
-          <InnerContainer>lower header</InnerContainer>
+          Easy Criterium race registration and result management
         </LowerHeader>
       </>
     )
