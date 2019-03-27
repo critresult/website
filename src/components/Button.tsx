@@ -1,5 +1,8 @@
 import React from 'react'
 import Colors from '../Colors'
+import { VFlex } from './Shared'
+
+const rings = require('../../static/puff.svg')
 
 export default class Button extends React.Component<{
   title: string
@@ -19,10 +22,18 @@ export default class Button extends React.Component<{
           backgroundColor: Colors.black,
           borderRadius: 5,
           color: Colors.white,
+          minWidth: 100,
+          minHeight: 18,
           ...(this.props.style || {}),
         }}
       >
-        {this.props.title}
+        <VFlex style={{ justifyContent: 'center' }}>
+          {this.props.animating ? (
+            <img src={rings} height="15" />
+          ) : (
+            this.props.title
+          )}
+        </VFlex>
       </div>
     )
   }

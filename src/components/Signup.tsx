@@ -17,6 +17,7 @@ class Signup extends React.Component<{
     email: '',
     password: '',
     passwordConfirm: '',
+    isLoading: false,
   }
 
   inputRef = React.createRef()
@@ -31,6 +32,7 @@ class Signup extends React.Component<{
       alert('Passwords do not match')
       return
     }
+    this.setState({ isLoading: true })
     this.props.promoter
       .signup(this.state.email, this.state.password)
       .then(() => {
@@ -48,6 +50,7 @@ class Signup extends React.Component<{
       email: '',
       password: '',
       passwordConfirm: '',
+      isLoading: false,
     })
 
   render() {
@@ -104,7 +107,11 @@ class Signup extends React.Component<{
             />
           </HFlex>
           <HFlex>
-            <Button title="Sign Up" onClick={this.createAccount} />
+            <Button
+              animating={this.state.isLoading}
+              title="Sign Up"
+              onClick={this.createAccount}
+            />
             <Button title="Cancel" onClick={this.props.onCancelled} />
           </HFlex>
         </VFlex>

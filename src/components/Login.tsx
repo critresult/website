@@ -16,6 +16,7 @@ class Signup extends React.Component<{
   state = {
     email: '',
     password: '',
+    isLoading: false,
   }
 
   inputRef = React.createRef()
@@ -25,6 +26,7 @@ class Signup extends React.Component<{
   }
 
   login = () => {
+    this.setState({ isLoading: true })
     this.props.promoter
       .login(this.state.email, this.state.password)
       .then(() => {
@@ -41,6 +43,7 @@ class Signup extends React.Component<{
     this.setState({
       email: '',
       password: '',
+      isLoading: false,
     })
 
   render() {
@@ -78,7 +81,11 @@ class Signup extends React.Component<{
             />
           </HFlex>
           <HFlex>
-            <Button title="Login" onClick={this.login} />
+            <Button
+              animating={this.state.isLoading}
+              title="Login"
+              onClick={this.login}
+            />
             <Button title="Cancel" onClick={this.props.onCancelled} />
           </HFlex>
         </VFlex>
