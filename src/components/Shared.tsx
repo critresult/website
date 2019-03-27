@@ -13,6 +13,12 @@ export const HFlex = styled.div`
   align-items: center;
 `
 
-export const Cell = styled.div`
-  background-color: ${Colors.white};
+export const Input = styled.input<{ valid?: boolean }>`
+  margin: 5px;
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  outline-width: 0px;
+  border-bottom: 1px solid ${(p) => (!p.valid ? Colors.pink : Colors.blue)};
 `
