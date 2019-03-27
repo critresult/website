@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Colors from '../Colors'
 import { HFlex, VFlex } from './Shared'
 import Popup from './Popup'
-import Signup from './Signup'
+import AuthModal from './AuthModal'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
 
@@ -48,7 +48,7 @@ class Header extends React.Component<{
     return (
       <>
         <Popup visible={this.state.signupVisible}>
-          <Signup
+          <AuthModal
             onAccountCreated={() => this.setState({ signupVisible: false })}
             onCancelClick={() => this.setState({ signupVisible: false })}
           />
