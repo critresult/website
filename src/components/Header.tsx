@@ -31,6 +31,7 @@ export default class Header extends React.Component {
       <>
         <Popup visible={this.state.signupVisible}>
           <Signup
+            onAccountCreated={() => this.setState({ signupVisible: false })}
             onCancelClick={() => this.setState({ signupVisible: false })}
           />
         </Popup>
