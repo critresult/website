@@ -16,17 +16,11 @@ class Signup extends React.Component<{
   state = {
     email: '',
     password: '',
-    passwordConfirm: '',
   }
 
-  createAccount = () => {
-    if (this.state.password !== this.state.passwordConfirm) {
-      this.resetFields()
-      alert('Passwords do not match')
-      return
-    }
+  login = () => {
     this.props.promoter
-      .signup(this.state.email, this.state.password)
+      .login(this.state.email, this.state.password)
       .then(() => {
         this.resetFields()
         alert('Account created')
@@ -42,7 +36,6 @@ class Signup extends React.Component<{
     this.setState({
       email: '',
       password: '',
-      passwordConfirm: '',
     })
 
   render() {
@@ -79,26 +72,7 @@ class Signup extends React.Component<{
             />
           </HFlex>
           <HFlex>
-            Confirm Password:{' '}
-            <Input
-              valid={
-                this.state.password.length >= 6 &&
-                this.state.passwordConfirm === this.state.password
-              }
-              type="password"
-              onChange={(e: any) => {
-                this.setState({ passwordConfirm: e.target.value })
-                if (e.target.value !== this.state.password) {
-                  console.log("Passwords don't match")
-                } else {
-                  console.log('Passwords match')
-                }
-              }}
-              value={this.state.passwordConfirm}
-            />
-          </HFlex>
-          <HFlex>
-            <Button title="Sign Up" onClick={this.createAccount} />
+            <Button title="Login" onClick={this.login} />
             <Button title="Cancel" onClick={this.props.onCancelled} />
           </HFlex>
         </VFlex>

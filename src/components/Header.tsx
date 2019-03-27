@@ -49,8 +49,8 @@ class Header extends React.Component<{
       <>
         <Popup visible={this.state.signupVisible}>
           <AuthModal
-            onAccountCreated={() => this.setState({ signupVisible: false })}
-            onCancelClick={() => this.setState({ signupVisible: false })}
+            onAuthenticated={() => this.setState({ signupVisible: false })}
+            onCancelled={() => this.setState({ signupVisible: false })}
           />
         </Popup>
         <UpperHeader>
