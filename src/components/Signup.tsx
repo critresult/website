@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
 import emailValidator from 'email-validator'
 
-export default
 @inject('promoter')
 @observer
 class Signup extends React.Component<{
@@ -73,7 +72,7 @@ class Signup extends React.Component<{
             <Input
               valid={emailValidator.validate(this.state.email)}
               type="text"
-              onInput={(e: any) => {
+              onChange={(e: any) => {
                 this.setState({ email: e.target.value })
               }}
               value={this.state.email}
@@ -84,7 +83,7 @@ class Signup extends React.Component<{
             <Input
               valid={this.state.password.length >= 6}
               type="password"
-              onInput={(e: any) => {
+              onChange={(e: any) => {
                 this.setState({ password: e.target.value })
               }}
               value={this.state.password}
@@ -98,7 +97,7 @@ class Signup extends React.Component<{
                 this.state.passwordConfirm === this.state.password
               }
               type="password"
-              onInput={(e: any) => {
+              onChange={(e: any) => {
                 this.setState({ passwordConfirm: e.target.value })
                 if (e.target.value !== this.state.password) {
                   console.log("Passwords don't match")
@@ -118,3 +117,5 @@ class Signup extends React.Component<{
     )
   }
 }
+
+export default Signup

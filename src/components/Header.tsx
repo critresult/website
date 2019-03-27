@@ -4,6 +4,8 @@ import Colors from '../Colors'
 import { HFlex, VFlex } from './Shared'
 import Popup from './Popup'
 import Signup from './Signup'
+import { inject, observer } from 'mobx-react'
+import PromoterStore from '../stores/promoter'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
@@ -26,7 +28,7 @@ const TitleSpan = styled.span`
   font-size: 20px;
 `
 
-const SignupButton = styled.span`
+const HeaderButton = styled.span`
   padding: 5px;
   background-color: ${Colors.black};
   border-radius: 5px;
@@ -34,7 +36,11 @@ const SignupButton = styled.span`
   cursor: pointer;
 `
 
-export default class Header extends React.Component {
+@inject('promoter')
+@observer
+class Header extends React.Component<{
+  promoter?: PromoterStore
+}> {
   state = {
     signupVisible: true,
   }
@@ -52,11 +58,17 @@ export default class Header extends React.Component {
             <TitleSpan>CritResult</TitleSpan>
           </VFlex>
           <VFlex>
-            <SignupButton
-              onClick={() => this.setState({ signupVisible: true })}
-            >
-              Signup or Login
-            </SignupButton>
+            {this.props.promoter.authenticated ? (
+              <HeaderButton onClick={() => {}}>
+                {this.props.promoter.active.email}
+              </HeaderButton>
+            ) : (
+              <HeaderButton
+                onClick={() => this.setState({ signupVisible: true })}
+              >
+                Signup or Login
+              </HeaderButton>
+            )}
           </VFlex>
         </UpperHeader>
         <LowerHeader>
@@ -66,3 +78,6 @@ export default class Header extends React.Component {
     )
   }
 }
+
+// Goddamn decorator export linting issues
+export default Header
