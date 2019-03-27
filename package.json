@@ -7,8 +7,14 @@
     "clean": "rm -r ./build || true",
     "build": "npm run clean && webpack --config webpack.prod.js",
     "dev": "webpack-dev-server --config webpack.config.js",
+    "lint": "eslint ./src/**.tsx",
     "now-build": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@jchancehud/eslint-config-typescript"
+    ]
   },
   "repository": {
     "type": "git",
@@ -21,6 +27,7 @@
   },
   "homepage": "https://github.com/critresult/website#readme",
   "dependencies": {
+    "@jchancehud/eslint-config-typescript": "0.0.1",
     "mobx": "^5.9.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
@@ -36,8 +43,11 @@
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
     "@types/styled-components": "^4.1.12",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^5.15.3",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.6.0",
     "typescript": "^3.3.4000",
