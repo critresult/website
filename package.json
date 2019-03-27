@@ -14,7 +14,16 @@
   "eslintConfig": {
     "extends": [
       "@jchancehud/eslint-config-typescript"
-    ]
+    ],
+    "rules": {
+      "semi": [1, "never"],
+      "prettier/prettier": [1, {
+        "trailingComma": "es5",
+        "arrowParens": "always",
+        "singleQuote": true,
+        "semi": false
+      }]
+    }
   },
   "repository": {
     "type": "git",
