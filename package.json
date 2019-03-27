@@ -16,13 +16,19 @@
       "@jchancehud/eslint-config-typescript"
     ],
     "rules": {
-      "semi": [1, "never"],
-      "prettier/prettier": [1, {
-        "trailingComma": "es5",
-        "arrowParens": "always",
-        "singleQuote": true,
-        "semi": false
-      }]
+      "semi": [
+        1,
+        "never"
+      ],
+      "prettier/prettier": [
+        1,
+        {
+          "trailingComma": "es5",
+          "arrowParens": "always",
+          "singleQuote": true,
+          "semi": false
+        }
+      ]
     }
   },
   "repository": {
@@ -37,6 +43,7 @@
   "homepage": "https://github.com/critresult/website#readme",
   "dependencies": {
     "@jchancehud/eslint-config-typescript": "0.0.1",
+    "axios": "^0.18.0",
     "mobx": "^5.9.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
@@ -48,6 +55,7 @@
     "@babel/preset-env": "^7.4.1",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/axios": "^0.14.0",
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
