@@ -42,15 +42,15 @@ class Header extends React.Component<{
   promoter?: PromoterStore
 }> {
   state = {
-    signupVisible: false,
+    authVisible: false,
   }
   render() {
     return (
       <>
-        <Popup visible={this.state.signupVisible}>
+        <Popup visible={this.state.authVisible}>
           <AuthModal
-            onAuthenticated={() => this.setState({ signupVisible: false })}
-            onCancelled={() => this.setState({ signupVisible: false })}
+            onAuthenticated={() => this.setState({ authVisible: false })}
+            onCancelled={() => this.setState({ authVisible: false })}
           />
         </Popup>
         <UpperHeader>
@@ -58,17 +58,27 @@ class Header extends React.Component<{
             <TitleSpan>CritResult</TitleSpan>
           </VFlex>
           <VFlex>
-            {this.props.promoter.authenticated ? (
-              <HeaderButton onClick={() => {}}>
-                {this.props.promoter.active.email || ''}
-              </HeaderButton>
-            ) : (
-              <HeaderButton
-                onClick={() => this.setState({ signupVisible: true })}
-              >
-                Signup or Login
-              </HeaderButton>
-            )}
+            <HFlex>
+              {this.props.promoter.userId ? (
+                <HeaderButton onClick={() => {}}>
+                  {this.props.promoter.active.email || ''}
+                </HeaderButton>
+              ) : (
+                <HeaderButton
+                  onClick={() => this.setState({ authVisible: true })}
+                >
+                  Signup or Login
+                </HeaderButton>
+              )}
+              {this.props.promoter.userId ? (
+                <HeaderButton
+                  style={{ marginLeft: 5 }}
+                  onClick={() => this.props.promoter.logout()}
+                >
+                  Logout
+                </HeaderButton>
+              ) : null}
+            </HFlex>
           </VFlex>
         </UpperHeader>
         <LowerHeader>

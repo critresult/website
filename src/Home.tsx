@@ -1,11 +1,11 @@
 import React from 'react'
 import { VFlex, HFlex } from './components/Shared'
-import styled from 'styled-components'
-import Colors from './Colors'
 import Header from './components/Header'
-import Popup from './components/Popup';
+import { inject, observer } from 'mobx-react'
 
-export default class Home extends React.Component {
+@inject('promoter')
+@observer
+class Home extends React.Component {
   render() {
     return (
       <>
@@ -23,3 +23,5 @@ export default class Home extends React.Component {
     )
   }
 }
+
+export default Home

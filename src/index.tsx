@@ -9,6 +9,7 @@ import PromoterStore from './stores/promoter'
 import axios from 'axios'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
+axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers['content-type'] = 'application/json'
 
 Object.assign(document.body.style, {
