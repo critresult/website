@@ -1,5 +1,5 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   mode: 'development',
@@ -42,8 +42,8 @@ module.exports = {
     publicPath: '/',
     compress: true,
     historyApiFallback: {
-      rewrites: [{ from: /^\/[A-Za-z-]+$/, to: '/index.html' }],
+      rewrites: [{ from: /^\/[0-9A-Za-z-/]+$/, to: '/index.html' }],
       index: 'index.html',
     },
   },
-};
+}
