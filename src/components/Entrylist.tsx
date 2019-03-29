@@ -1,7 +1,7 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import EventStore from '../stores/event'
-import RaceStore from '../stores/race'
+import RaceStore, { Entry } from '../stores/race'
 import styled from 'styled-components'
 import { HFlex, VFlex } from './Shared'
 import Button from './Button'
@@ -27,17 +27,19 @@ class Entrylist extends React.Component<{
     createEntryVisible: false,
   }
   componentDidMount() {
+    this.props.race.loadEntries(this.props.raceId)
     this.props.race.load(this.props.raceId)
   }
 
   render() {
     const race = this.props.race.racesById[this.props.raceId] || {}
-    const entries = race.entries || []
+    const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
     const tabs = [
       {
         title: 'Find Rider',
         render: () => (
           <RiderFind
+            raceId={this.props.raceId}
             onFinished={() => this.setState({ createEntryVisible: false })}
           />
         ),
@@ -67,10 +69,47 @@ class Entrylist extends React.Component<{
           }}
         >
           <EntryCell>
-            {race.name} - {`${(race.entries || []).length} entries`}
+            <VFlex style={{ flex: 1 }}>
+              <div>
+                {race.name} - {`${(race.entries || []).length} entries`}
+              </div>
+            </VFlex>
           </EntryCell>
-          {(race.entries || []).map((entry: any) => (
-            <EntryCell>{entry.bib}</EntryCell>
+          <EntryCell>
+            <HFlex style={{ flex: 1, justifyContent: 'space-between' }}>
+              <VFlex style={{ alignItems: 'flex-start', width: '20%' }}>
+                Name
+              </VFlex>
+              <VFlex>Bib #</VFlex>
+              <VFlex>USAC License</VFlex>
+              <VFlex>Transponder</VFlex>
+              <VFlex style={{ width: '20%' }} />
+            </HFlex>
+          </EntryCell>
+          {entries.map((entry: Entry) => (
+            <EntryCell key={entry._id}>
+              <HFlex style={{ flex: 1, justifyContent: 'space-between' }}>
+                <VFlex style={{ alignItems: 'flex-start', width: '20%' }}>{`${
+                  entry.rider.firstname
+                } ${entry.rider.lastname}`}</VFlex>
+                <VFlex>{entry.bib}</VFlex>
+                <VFlex>{entry.rider.license}</VFlex>
+                <VFlex>{entry.rider.transponder || 'none'}</VFlex>
+                <VFlex style={{ width: '20%', alignItems: 'flex-end' }}>
+                  <Button
+                    title="Remove"
+                    style={{ backgroundColor: Colors.pink }}
+                    onClick={() => {
+                      this.props.race
+                        .removeRider(this.props.raceId, entry.riderId)
+                        .then(() =>
+                          this.props.race.loadEntries(this.props.raceId)
+                        )
+                    }}
+                  />
+                </VFlex>
+              </HFlex>
+            </EntryCell>
           ))}
           <EntryCell style={{ justifyContent: 'flex-end' }}>
             <Button

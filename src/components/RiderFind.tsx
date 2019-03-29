@@ -3,12 +3,15 @@ import { inject, observer } from 'mobx-react'
 import { VFlex, HFlex, ModalContainer, Input } from './Shared'
 import Button from './Button'
 import RiderStore, { Rider } from '../stores/rider'
+import RaceStore from '../stores/race'
 
-@inject('rider')
+@inject('rider', 'race')
 @observer
 class RiderFind extends React.Component<{
+  raceId: string
   onFinished?: () => void
   rider?: RiderStore
+  race?: RaceStore
 }> {
   state = {
     isLoading: false,
@@ -46,15 +49,35 @@ class RiderFind extends React.Component<{
                 ) : null}
               </HFlex>
               {this.state.foundRiders.map((rider: Rider) => (
-                <HFlex key={rider._id} style={{ flexWrap: 'nowrap'}}>
-                  <div>
-                    {`${rider.firstname} ${rider.lastname} - ${rider.license}`}
-                  </div>
-                  <Button
-                    animating={this.state.isLoading}
-                    title="Add"
-                    onClick={() => {}}
-                  />
+                <HFlex key={rider._id} style={{ flexWrap: 'nowrap' }}>
+                  <VFlex style={{ alignItems: 'flex-start' }}>
+                    <HFlex>{`${rider.firstname} ${rider.lastname}`}</HFlex>
+                    <HFlex>{`License: ${rider.license}`}</HFlex>
+                    <HFlex>{`Transponder: ${rider.transponder ||
+                      'none'}`}</HFlex>
+                  </VFlex>
+                  <VFlex>
+                    <Input
+                      valid
+                      type="text"
+                      placeholder="Bib Number"
+                      onChange={(e: any) => {
+                        rider.bib = e.target.value
+                      }}
+                    />
+                    <Button
+                      animating={this.state.isLoading}
+                      title="Add"
+                      onClick={() => {
+                        this.props.race
+                          .addRider(this.props.raceId, rider._id, rider.bib)
+                          .then(() => {
+                            this.props.race.load(this.props.raceId)
+                            this.props.race.loadEntries(this.props.raceId)
+                          })
+                      }}
+                    />
+                  </VFlex>
                 </HFlex>
               ))}
               <HFlex>
