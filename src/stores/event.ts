@@ -3,7 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
 
-interface Event {
+export interface Event {
   _id: string
   name: string
   startDate: string
@@ -24,7 +24,6 @@ export default class EventStore {
           _id,
         },
       })
-      console.log(data)
       this.eventsById[_id] = data
     } catch (err) {
       console.log('Error loading event by id', err)
