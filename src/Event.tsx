@@ -41,7 +41,9 @@ class _Event extends React.Component<{
     const event = this.props.event.eventsById[eventId] || ({} as Event)
     const races = event.races || []
     const dateFormat = 'MMMM Do YYYY'
-    const dayDifference = moment(event.startDate).fromNow()
+    const dayDifference = moment(event.startDate)
+      .utc()
+      .fromNow()
     return (
       <>
         <Header />
@@ -72,8 +74,11 @@ class _Event extends React.Component<{
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
             <LargeText>
-              Event Start: {moment(event.startDate).format(dateFormat)} (
-              {dayDifference})
+              Event Start:{' '}
+              {moment(event.startDate)
+                .utc()
+                .format(dateFormat)}{' '}
+              ({dayDifference})
             </LargeText>
             {event.startDate === event.endDate ? null : (
               <LargeText>Event End: {event.endDate}</LargeText>
