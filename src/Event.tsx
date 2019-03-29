@@ -9,6 +9,8 @@ import moment from 'moment'
 import Popup from './components/Popup'
 import Button from './components/Button'
 import RaceCreate from './components/RaceCreate'
+import Colors from './Colors'
+import { withRouter } from 'react-router-dom'
 
 const LargeText = styled.div`
   font-size: 20px;
@@ -24,6 +26,7 @@ class _Event extends React.Component<{
 }> {
   state = {
     raceCreateVisible: false,
+    isDeleting: false,
   }
 
   componentDidMount() {
@@ -76,11 +79,24 @@ class _Event extends React.Component<{
             ))}
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
-            <LargeText
+            <Button
+              title="Create Race"
               onClick={() => this.setState({ raceCreateVisible: true })}
-            >
-              Create Race
-            </LargeText>
+            />
+            <Button
+              animating={this.state.isDeleting}
+              title="Delete Event"
+              onClick={() => {
+                if (!confirm('Delete this event?')) return
+                this.setState({ isDeleting: true })
+                this.props.event
+                  .delete(eventId)
+                  .then(() => this.props.event.loadUpcoming())
+                  .then(() => this.props.history.push('/'))
+                  .catch(() => this.setState({ isDeleting: false }))
+              }}
+              style={{ backgroundColor: Colors.pink }}
+            />
           </VFlex>
         </HFlex>
       </>
@@ -88,4 +104,4 @@ class _Event extends React.Component<{
   }
 }
 
-export default _Event
+export default withRouter(_Event)

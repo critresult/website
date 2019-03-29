@@ -33,6 +33,17 @@ export default class EventStore {
     }
   }
 
+  async delete(_id: string) {
+    try {
+      await axios.delete('/events', {
+        data: { _id, token: PromoterStore.activeToken() },
+      })
+    } catch (err) {
+      console.log('Error deleting event by id', err)
+      throw err
+    }
+  }
+
   async create(eventData: Event) {
     try {
       const { data } = await axios.post('/events', {

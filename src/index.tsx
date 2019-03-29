@@ -11,7 +11,7 @@ import EventStore from './stores/event'
 import RaceStore from './stores/race'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
-// axios.defaults.baseURL = 'http://localhost:4000'
+axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers['content-type'] = 'application/json'
 
 Object.assign(document.body.style, {
