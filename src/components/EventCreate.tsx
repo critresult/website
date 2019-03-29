@@ -44,8 +44,8 @@ class EventCreate extends React.Component<{
     this.setState({
       eventData: {
         ...this.state.eventData,
-        seriesId: event.target.value
-      }
+        seriesId: event.target.value,
+      },
     })
   }
 
@@ -94,7 +94,9 @@ class EventCreate extends React.Component<{
                   onChange={this.handleSeriesChange}
                 >
                   {this.props.series.mySeries.map((series) => (
-                    <option value={series._id}>{series.name}</option>
+                    <option key={series._id} value={series._id}>
+                      {series.name}
+                    </option>
                   ))}
                 </select>
               </HFlex>

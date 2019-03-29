@@ -58,7 +58,9 @@ class _Event extends React.Component<{
         </Popup>
         <VFlex>
           <VFlex style={{ alignItems: 'flex-start' }}>
-            <LargeText>{event.name}</LargeText>
+            <LargeText>
+              {(event.series || {}).name} - {event.name}
+            </LargeText>
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
             <LargeText>
