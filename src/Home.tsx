@@ -2,12 +2,14 @@ import React from 'react'
 import { VFlex, HFlex, ModalContainer, Input } from './components/Shared'
 import Header from './components/Header'
 import { inject, observer } from 'mobx-react'
-import EventCell from './components/EventCell'
 import EventStore from './stores/event'
 import Colors from './Colors'
 import { TiPlus } from 'react-icons/ti'
 import Popup from './components/Popup'
 import Button from './components/Button'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
+import Entrylist from './components/Entrylist'
 
 @inject('promoter', 'event')
 @observer
@@ -26,7 +28,6 @@ class Home extends React.Component<{
 
   createEvent = () => {
     this.setState({ isLoading: true })
-    console.log(this.state.eventData)
     this.props.event
       .create(this.state.eventData as Event)
       .then(() => this.props.event.loadUpcoming())
@@ -103,37 +104,61 @@ class Home extends React.Component<{
             </HFlex>
           </VFlex>
         </Popup>
-        <div
-          style={{
-            padding: 20,
-            margin: 'auto',
-            maxWidth: 900,
-          }}
-        >
-          Upcoming Events:
-          <HFlex>
-            <div
-              onClick={() => this.setState({ showingCreatePopup: true })}
-              style={{
-                borderRadius: 10,
-                backgroundColor: Colors.black,
-                padding: 5,
-                margin: 5,
-                minWidth: 80,
-                minHeight: 80,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <TiPlus color={Colors.white} size={70} />
-            </div>
-            {this.props.event.upcomingEvents.map((event, index) => (
-              <EventCell id={event._id} key={index} />
-            ))}
-          </HFlex>
-        </div>
+        <VFlex style={{ flex: 1 }}>
+          <div
+            onClick={() => this.setState({ showingCreatePopup: true })}
+            style={{
+              borderRadius: 10,
+              border: `${Colors.black} solid 2px`,
+              backgroundColor: Colors.white,
+              padding: 5,
+              margin: 5,
+              minWidth: 80,
+              minHeight: 80,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <TiPlus color={Colors.black} size={70} />
+          </div>
+          {this.props.event.upcomingEvents.map((_event) => {
+            const event = this.props.event.eventsById[_event._id] || {}
+            const races = event.races || []
+            return (
+              <VFlex
+                key={event._id}
+                style={{
+                  flex: 1,
+                  backgroundColor: Colors.white,
+                  boxShadow: `2px 2px 10px ${Colors.black}`,
+                  padding: 15,
+                  marginBottom: 10,
+                  textAlign: 'center',
+                  color: Colors.black,
+                  width: 900,
+                }}
+              >
+                <HFlex style={{ fontSize: 20 }}>{event.name}</HFlex>
+                <HFlex>
+                  {moment(event.startDate)
+                    .utc()
+                    .format("MMMM D 'YY")}
+                </HFlex>
+                {races.map((race: Race) => (
+                  <Entrylist editable={false} raceId={race._id} />
+                ))}
+                <Link
+                  style={{ textDecoration: 'none' }}
+                  to={`/event/${event._id}`}
+                >
+                  <Button title="View Details" />
+                </Link>
+              </VFlex>
+            )
+          })}
+        </VFlex>
       </>
     )
   }

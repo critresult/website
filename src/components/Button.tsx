@@ -8,7 +8,7 @@ export default class Button extends React.Component<{
   title: string
   animating?: boolean
   style?: any
-  onClick: (event: React.MouseEvent) => void
+  onClick?: (event: React.MouseEvent) => void
 }> {
   render() {
     return (

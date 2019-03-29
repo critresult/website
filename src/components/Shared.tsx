@@ -5,7 +5,7 @@ export const VFlex = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
+  flex: 1;
 `
 
 export const HFlex = styled.div`
@@ -13,6 +13,7 @@ export const HFlex = styled.div`
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
+  flex: 1;
 `
 
 export const Input = styled.input<{ valid?: boolean }>`

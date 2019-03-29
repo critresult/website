@@ -82,10 +82,10 @@ class Header extends React.Component<{
           </VFlex>
         </Popup>
         <UpperHeader>
-          <VFlex>
+          <VFlex style={{ alignItems: 'flex-start' }}>
             <TitleSpan to="/">CritResult</TitleSpan>
           </VFlex>
-          <VFlex>
+          <VFlex style={{ alignItems: 'flex-end' }}>
             <HFlex>
               {this.props.promoter.userId ? (
                 <HeaderButton onClick={() => {}}>

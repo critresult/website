@@ -56,25 +56,12 @@ class _Event extends React.Component<{
             onCancelled={() => this.setState({ raceCreateVisible: false })}
           />
         </Popup>
-        <HFlex style={{ justifyContent: 'space-between' }}>
+        <VFlex style={{ padding: 10 }}>
           <VFlex style={{ alignItems: 'flex-start' }}>
-            <LargeText>Event Name: {event.name}</LargeText>
-            <LargeText>
-              <HFlex>
-                <div>
-                  {races.length} Race{races.length !== 1 && 's'}
-                  {' - '}
-                </div>
-                <Button
-                  title="Add Race"
-                  onClick={() => this.setState({ raceCreateVisible: true })}
-                />
-              </HFlex>
-            </LargeText>
+            <LargeText>{event.name}</LargeText>
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
             <LargeText>
-              Event Start:{' '}
               {moment(event.startDate)
                 .utc()
                 .format(dateFormat)}{' '}
@@ -83,6 +70,15 @@ class _Event extends React.Component<{
             {event.startDate === event.endDate ? null : (
               <LargeText>Event End: {event.endDate}</LargeText>
             )}
+          </VFlex>
+          {races.map((race: Race) => (
+            <Entrylist key={race._id} raceId={race._id} />
+          ))}
+          <HFlex>
+            <Button
+              title="Add Race"
+              onClick={() => this.setState({ raceCreateVisible: true })}
+            />
             <Button
               animating={this.state.isDeleting}
               title="Delete Event"
@@ -97,11 +93,8 @@ class _Event extends React.Component<{
               }}
               style={{ backgroundColor: Colors.pink }}
             />
-          </VFlex>
-        </HFlex>
-        {races.map((race: Race) => (
-          <Entrylist key={race._id} raceId={race._id} />
-        ))}
+          </HFlex>
+        </VFlex>
       </>
     )
   }

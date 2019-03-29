@@ -14,12 +14,16 @@ import RiderFind from './RiderFind'
 const EntryCell = styled(HFlex)`
   min-height: 40px;
   border-bottom: solid 1px ${Colors.black};
-  width: 100%;
+  flex-wrap: nowrap;
+  flex: 1;
+  justify-content: space-between;
+  min-width: 900px;
 `
 @inject('event', 'race')
 @observer
 class Entrylist extends React.Component<{
   raceId: string
+  editable?: boolean
   event?: EventStore
   race?: RaceStore
 }> {
@@ -55,62 +59,57 @@ class Entrylist extends React.Component<{
       },
     ]
     return (
-      <>
+      <VFlex
+        style={{
+          margin: 8,
+          padding: 8,
+          borderRadius: 10,
+          backgroundColor: 'white',
+        }}
+      >
         <Popup visible={this.state.createEntryVisible}>
           <TabSelector tabs={tabs} />
         </Popup>
-        <VFlex
-          style={{
-            margin: 8,
-            padding: 8,
-            borderRadius: 10,
-            backgroundColor: 'white',
-            flex: 1,
-          }}
-        >
-          <EntryCell>
-            <VFlex style={{ flex: 1 }}>
-              <div>
-                {race.name} - {`${(race.entries || []).length} entries`}
-              </div>
-            </VFlex>
-          </EntryCell>
-          <EntryCell>
-            <HFlex style={{ flex: 1, justifyContent: 'space-between' }}>
-              <VFlex style={{ alignItems: 'flex-start', width: '20%' }}>
-                Name
+        <EntryCell>
+          <VFlex>
+            {race.name} - {`${(race.entries || []).length} entries`}
+          </VFlex>
+        </EntryCell>
+        <EntryCell>
+          <VFlex style={{ alignItems: 'flex-start' }}>Name</VFlex>
+          <VFlex>Bib #</VFlex>
+          <VFlex>USAC License</VFlex>
+          <VFlex>Transponder</VFlex>
+          {this.props.editable === false ? null : (
+            <VFlex style={{ width: '20%'}}/>
+          )}
+        </EntryCell>
+        {entries.map((entry: Entry) => (
+          <EntryCell key={entry._id}>
+            <VFlex style={{ alignItems: 'flex-start', width: '20%' }}>{`${
+              entry.rider.firstname
+            } ${entry.rider.lastname}`}</VFlex>
+            <VFlex>{entry.bib}</VFlex>
+            <VFlex>{entry.rider.license}</VFlex>
+            <VFlex>{entry.rider.transponder || 'none'}</VFlex>
+            {this.props.editable === false ? null : (
+              <VFlex style={{ alignItems: 'flex-end' }}>
+                <Button
+                  title="Remove"
+                  style={{ backgroundColor: Colors.pink }}
+                  onClick={() => {
+                    this.props.race
+                      .removeRider(this.props.raceId, entry.riderId)
+                      .then(() =>
+                        this.props.race.loadEntries(this.props.raceId)
+                      )
+                  }}
+                />
               </VFlex>
-              <VFlex>Bib #</VFlex>
-              <VFlex>USAC License</VFlex>
-              <VFlex>Transponder</VFlex>
-              <VFlex style={{ width: '20%' }} />
-            </HFlex>
+            )}
           </EntryCell>
-          {entries.map((entry: Entry) => (
-            <EntryCell key={entry._id}>
-              <HFlex style={{ flex: 1, justifyContent: 'space-between' }}>
-                <VFlex style={{ alignItems: 'flex-start', width: '20%' }}>{`${
-                  entry.rider.firstname
-                } ${entry.rider.lastname}`}</VFlex>
-                <VFlex>{entry.bib}</VFlex>
-                <VFlex>{entry.rider.license}</VFlex>
-                <VFlex>{entry.rider.transponder || 'none'}</VFlex>
-                <VFlex style={{ width: '20%', alignItems: 'flex-end' }}>
-                  <Button
-                    title="Remove"
-                    style={{ backgroundColor: Colors.pink }}
-                    onClick={() => {
-                      this.props.race
-                        .removeRider(this.props.raceId, entry.riderId)
-                        .then(() =>
-                          this.props.race.loadEntries(this.props.raceId)
-                        )
-                    }}
-                  />
-                </VFlex>
-              </HFlex>
-            </EntryCell>
-          ))}
+        ))}
+        {this.props.editable === false ? null : (
           <EntryCell style={{ justifyContent: 'flex-end' }}>
             <Button
               title="Add Entry"
@@ -119,8 +118,8 @@ class Entrylist extends React.Component<{
               }}
             />
           </EntryCell>
-        </VFlex>
-      </>
+        )}
+      </VFlex>
     )
   }
 }
