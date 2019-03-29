@@ -42,6 +42,29 @@ class Entrylist extends React.Component<{
     this.props.race.load(this.props.raceId)
   }
 
+  exportCSV = () => {
+    this.props.race.loadEntries(this.props.raceId).then(() => {
+      const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
+      const rows = entries.map((entry: Entry) =>
+        [
+          entry.rider.license,
+          'ANN',
+          entry.bib,
+          entry.rider.transponder,
+          entry.rider.firstname,
+          entry.rider.lastname,
+          entry.rider.team,
+        ].join(', ')
+      )
+      const csvContent = `data:text/csv;charset=utf-8,${rows.join('\r\n')}`
+      const link = document.createElement('a')
+      link.setAttribute('href', csvContent)
+      link.setAttribute('download', 'race_data.csv')
+      document.body.appendChild(link) // Required for FF
+      link.click()
+    })
+  }
+
   render() {
     const race = this.props.race.racesById[this.props.raceId] || {}
     const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
@@ -112,14 +135,17 @@ class Entrylist extends React.Component<{
             )}
           </EntryCell>
         ))}
-        {this.props.editable === false ? null : (
-          <Button
-            title="Add Entry"
-            onClick={() => {
-              this.setState({ createEntryVisible: true })
-            }}
-          />
-        )}
+        <HFlex>
+          <Button title="Export CSV" onClick={this.exportCSV} />
+          {this.props.editable === false ? null : (
+            <Button
+              title="Add Entry"
+              onClick={() => {
+                this.setState({ createEntryVisible: true })
+              }}
+            />
+          )}
+        </HFlex>
       </VFlex>
     )
   }
