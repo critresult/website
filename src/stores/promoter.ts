@@ -39,6 +39,10 @@ export default class PromoterStore {
     return localStorage.getItem('token')
   }
 
+  static activeToken() {
+    return localStorage.getItem('token')
+  }
+
   /**
    * Call with arguments to filter, otherwise retrieve own profile
    **/
