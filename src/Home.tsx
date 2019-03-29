@@ -128,7 +128,7 @@ class Home extends React.Component<{
             const races = event.races || []
             return (
               <VFlex
-                key={event._id}
+                key={_event._id}
                 style={{
                   flex: 1,
                   backgroundColor: Colors.white,
@@ -146,7 +146,11 @@ class Home extends React.Component<{
                     .format("MMMM D 'YY")}
                 </HFlex>
                 {races.map((race: Race) => (
-                  <Entrylist editable={false} raceId={race._id} />
+                  <Entrylist
+                    key={race._id}
+                    editable={false}
+                    raceId={race._id}
+                  />
                 ))}
                 <Link
                   style={{ textDecoration: 'none' }}
