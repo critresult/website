@@ -55,14 +55,17 @@ class _Event extends React.Component<{
           <VFlex style={{ alignItems: 'flex-start' }}>
             <LargeText>Event Name: {event.name}</LargeText>
             <LargeText>
-              Event Start: {moment(event.startDate).format(dateFormat)} (
-              {dayDifference})
-            </LargeText>
-            {event.startDate === event.endDate ? null : (
-              <LargeText>Event End: {event.endDate}</LargeText>
-            )}
-            <LargeText>
-              {races.length} Race{races.length !== 1 && 's'}
+              <HFlex>
+                <div>
+                  {races.length} Race{races.length !== 1 && 's'}
+                  {' - '}
+                </div>
+
+                <Button
+                  title="Add Race"
+                  onClick={() => this.setState({ raceCreateVisible: true })}
+                />
+              </HFlex>
             </LargeText>
             {races.map((race: Race) => (
               <div
@@ -79,10 +82,13 @@ class _Event extends React.Component<{
             ))}
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
-            <Button
-              title="Create Race"
-              onClick={() => this.setState({ raceCreateVisible: true })}
-            />
+            <LargeText>
+              Event Start: {moment(event.startDate).format(dateFormat)} (
+              {dayDifference})
+            </LargeText>
+            {event.startDate === event.endDate ? null : (
+              <LargeText>Event End: {event.endDate}</LargeText>
+            )}
             <Button
               animating={this.state.isDeleting}
               title="Delete Event"
