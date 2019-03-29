@@ -35,7 +35,10 @@ export default class EventStore {
 
   async create(eventData: Event) {
     try {
-      const { data } = await axios.post('/events', eventData)
+      const { data } = await axios.post('/events', {
+        ...eventData,
+        token: PromoterStore.activeToken(),
+      })
       this.eventsById[data._id] = data
     } catch (err) {
       console.log('Error creating event', err)
