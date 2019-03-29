@@ -49,6 +49,7 @@
     "mobx-react": "^5.4.3",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-icons": "^3.5.0",
     "react-router-dom": "^5.0.0",
     "styled-components": "^4.2.0"
   },
