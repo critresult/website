@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
   justify-content: space-between;
-  height: 40px;
+  height: 30px;
   font-family: Helvetica;
   padding: 20px;
   color: ${Colors.white};
@@ -21,10 +21,9 @@ const UpperHeader = styled(HFlex)`
 
 const LowerHeader = styled(HFlex)`
   background-color: ${Colors.black};
-  height: 20px;
+  height: 2px;
   color: ${Colors.white};
   font-family: Helvetica;
-  padding: 20px;
 `
 
 const TitleSpan = styled(Link)`
@@ -110,9 +109,7 @@ class Header extends React.Component<{
             </HFlex>
           </VFlex>
         </UpperHeader>
-        <LowerHeader>
-          Easy Criterium race registration and result management
-        </LowerHeader>
+        <LowerHeader />
       </>
     )
   }
