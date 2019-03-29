@@ -8,6 +8,7 @@ import PromoterStore from '../stores/promoter'
 import Signup from './Signup'
 import Login from './Login'
 import TabSelector from './TabSelector'
+import { Link } from 'react-router-dom'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
@@ -26,8 +27,10 @@ const LowerHeader = styled(HFlex)`
   padding: 20px;
 `
 
-const TitleSpan = styled.span`
+const TitleSpan = styled(Link)`
   font-size: 20px;
+  color: ${Colors.white};
+  text-decoration: none;
 `
 
 const HeaderButton = styled.span`
@@ -81,7 +84,7 @@ class Header extends React.Component<{
         </Popup>
         <UpperHeader>
           <VFlex>
-            <TitleSpan>CritResult</TitleSpan>
+            <TitleSpan to="/">CritResult</TitleSpan>
           </VFlex>
           <VFlex>
             <HFlex>
