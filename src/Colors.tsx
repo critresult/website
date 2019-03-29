@@ -1,9 +1,9 @@
-// https://coolors.co/31393c-2184ff-ffdc42-f7f9fa-ef626c
+// https://coolors.co/31393c-1d73db-ffdc42-fafbfa-ef626c
 
 export default {
-  white: '#F7F9FA',
+  white: '#FAFBFA',
   pink: '#EF626C',
   yellow: '#FFDC42',
-  blue: '#2184FF',
+  blue: '#1D73DB',
   black: '#31393C',
 }
