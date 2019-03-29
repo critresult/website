@@ -116,31 +116,33 @@ class Entrylist extends React.Component<{
           <CellContent>Transponder</CellContent>
           {this.props.editable === false ? null : <CellContent />}
         </EntryCell>
-        {entries.map((entry: Entry) => (
-          <EntryCell key={entry._id}>
-            <CellContent style={{ alignItems: 'flex-start' }}>{`${
-              entry.rider.firstname
-            } ${entry.rider.lastname}`}</CellContent>
-            <CellContent>{entry.bib}</CellContent>
-            <CellContent>{entry.rider.license}</CellContent>
-            <CellContent>{entry.rider.transponder || 'none'}</CellContent>
-            {this.props.editable === false ? null : (
-              <CellContent style={{ alignItems: 'flex-end' }}>
-                <Button
-                  title="Remove"
-                  style={{ backgroundColor: Colors.pink }}
-                  onClick={() => {
-                    this.props.race
-                      .removeRider(this.props.raceId, entry.riderId)
-                      .then(() =>
-                        this.props.race.loadEntries(this.props.raceId)
-                      )
-                  }}
-                />
-              </CellContent>
-            )}
-          </EntryCell>
-        ))}
+        {entries.map((entry: Entry) =>
+          !entry.rider ? null : (
+            <EntryCell key={entry._id}>
+              <CellContent style={{ alignItems: 'flex-start' }}>{`${
+                entry.rider.firstname
+              } ${entry.rider.lastname}`}</CellContent>
+              <CellContent>{entry.bib}</CellContent>
+              <CellContent>{entry.rider.license}</CellContent>
+              <CellContent>{entry.rider.transponder || 'none'}</CellContent>
+              {this.props.editable === false ? null : (
+                <CellContent style={{ alignItems: 'flex-end' }}>
+                  <Button
+                    title="Remove"
+                    style={{ backgroundColor: Colors.pink }}
+                    onClick={() => {
+                      this.props.race
+                        .removeRider(this.props.raceId, entry.riderId)
+                        .then(() =>
+                          this.props.race.loadEntries(this.props.raceId)
+                        )
+                    }}
+                  />
+                </CellContent>
+              )}
+            </EntryCell>
+          )
+        )}
         <HFlex>
           <Button
             animating={this.state.exportingCSV}

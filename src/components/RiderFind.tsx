@@ -35,7 +35,7 @@ class RiderFind extends React.Component<{
                       .search(e.target.value)
                       .then((riders) => {
                         this.setState({ isSearching: false })
-                        this.setState({ foundRiders: riders })
+                        this.setState({ foundRiders: riders.slice(0, 5) })
                       })
                       .catch(() => this.setState({ isSearching: false }))
                   }}

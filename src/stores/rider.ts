@@ -1,6 +1,8 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
+import chunk from 'lodash.chunk'
+import uniqby from 'lodash.uniqby'
 
 export interface Rider {
   _id: string
@@ -29,6 +31,19 @@ export default class RiderStore {
     }
   }
 
+  async update(where: any, changes: any) {
+    try {
+      await axios.put('/riders', {
+        where,
+        changes,
+        token: PromoterStore.activeToken(),
+      })
+    } catch (err) {
+      console.log('Error updating document', err)
+      throw err
+    }
+  }
+
   async search(value: string) {
     try {
       const { data } = await axios.get('/riders/search', {
@@ -40,6 +55,28 @@ export default class RiderStore {
       return data
     } catch (err) {
       console.log('Error searching', err)
+      throw err
+    }
+  }
+
+  async createMany(models: any) {
+    try {
+      const chunks = chunk(uniqby(models, 'license'), 100)
+      const created = []
+      for (const modelChunk of chunks) {
+        console.log(modelChunk)
+        const { data } = await axios
+          .post('/riders', {
+            models: modelChunk,
+            token: PromoterStore.activeToken(),
+          })
+          .catch(() => ({ data: []}))
+        created.push(...data)
+        await new Promise(r => setTimeout(r, 1000))
+      }
+      created.map((model: Rider) => (this.ridersById[model._id] = model))
+    } catch (err) {
+      console.log('Error creating many models', err)
       throw err
     }
   }
