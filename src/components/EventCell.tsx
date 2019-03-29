@@ -5,6 +5,8 @@ import { inject, observer } from 'mobx-react'
 import { TiPlus } from 'react-icons/ti'
 import { HFlex, VFlex } from './Shared'
 import { Link } from 'react-router-dom'
+import Colors from '../Colors'
+import moment from 'moment'
 
 @inject('promoter', 'event')
 @observer
@@ -15,8 +17,9 @@ class EventCell extends React.Component<{
 }> {
   render() {
     const event = this.props.event.eventsById[this.props.id] || {}
+    const races = event.races || []
     return (
-      <Link to={`/event/${event._id}`}>
+      <Link style={{ textDecoration: 'none' }} to={`/event/${event._id}`}>
         <div
           style={{
             minWidth: 80,
@@ -25,13 +28,15 @@ class EventCell extends React.Component<{
             margin: 5,
             backgroundColor: 'white',
             borderRadius: 10,
+            color: Colors.black,
+            textDecoration: 'none',
           }}
         >
           {event.name}
           <br />
-          {event.startDate}
+          {moment(event.startDate).format('dddd MMMM D, YYYY')}
           <br />
-          {event.endDate}
+          {races.length} Races
         </div>
       </Link>
     )
