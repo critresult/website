@@ -34,7 +34,9 @@ class EventCell extends React.Component<{
         >
           {event.name}
           <br />
-          {moment(event.startDate).format('dddd MMMM D, YYYY')}
+          {moment(event.startDate)
+            .utc()
+            .format('dddd MMMM D, YYYY')}
           <br />
           {races.length} Races
         </div>
