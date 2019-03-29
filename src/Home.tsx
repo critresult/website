@@ -1,5 +1,5 @@
 import React from 'react'
-import { VFlex, HFlex } from './components/Shared'
+import { VFlex, HFlex, ModalContainer } from './components/Shared'
 import Header from './components/Header'
 import { inject, observer } from 'mobx-react'
 import EventCell from './components/EventCell'
@@ -27,7 +27,9 @@ class Home extends React.Component<{
         <Header />
         <Popup visible={this.state.showingCreatePopup}>
           <VFlex>
-            <HFlex style={{ borderRadius: 5 }}>Create Event</HFlex>
+            <HFlex style={{ borderRadius: 5 }}>
+              <ModalContainer />
+            </HFlex>
           </VFlex>
         </Popup>
         <div

@@ -22,3 +22,11 @@ export const Input = styled.input<{ valid?: boolean }>`
   outline-width: 0px;
   border-bottom: 1px solid ${(p) => (!p.valid ? Colors.pink : Colors.blue)};
 `
+
+export const ModalContainer = styled.div`
+  background-color: ${Colors.white};
+  border-radius: 5px;
+  border-color: rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  min-height: 200px;
+`

@@ -1,6 +1,6 @@
 import React from 'react'
 import Colors from '../Colors'
-import { HFlex, VFlex, Input } from './Shared'
+import { HFlex, VFlex, Input, ModalContainer } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
@@ -55,14 +55,7 @@ class Signup extends React.Component<{
 
   render() {
     return (
-      <div
-        style={{
-          backgroundColor: Colors.white,
-          borderRadius: 5,
-          borderColor: 'rgba(0, 0, 0, 0.15)',
-          minWidth: 300,
-        }}
-      >
+      <ModalContainer>
         <VFlex style={{ padding: 10 }}>
           <HFlex>
             Email:{' '}
@@ -115,7 +108,7 @@ class Signup extends React.Component<{
             <Button title="Cancel" onClick={this.props.onCancelled} />
           </HFlex>
         </VFlex>
-      </div>
+      </ModalContainer>
     )
   }
 }
