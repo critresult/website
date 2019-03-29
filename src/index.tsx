@@ -9,6 +9,7 @@ import { Provider } from 'mobx-react'
 import PromoterStore from './stores/promoter'
 import EventStore from './stores/event'
 import RaceStore from './stores/race'
+import RiderStore from './stores/rider'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
@@ -24,6 +25,7 @@ const stores = {
   promoter: new PromoterStore(),
   event: new EventStore(),
   race: new RaceStore(),
+  rider: new RiderStore(),
 }
 
 ReactDOM.render(

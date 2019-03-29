@@ -13,14 +13,32 @@ export default class RaceStore {
     [key: string]: Race
   } = {}
 
-  async racesByEventId(eventId: string) {
+  async load(_id: string) {
     try {
-      const { data } = await axios.get('/events/races', {
+      const { data } = await axios.get('/races', {
         params: {
-          eventId,
+          _id,
+          token: PromoterStore.activeToken(),
         },
       })
-      this.racesById[data._id] = data
+      this.racesById[_id] = data
+    } catch (err) {
+      console.log('Error loading races by event id', err)
+      throw err
+    }
+  }
+
+  async loadByEventId(eventId: string) {
+    try {
+      const { data } = await axios.get('/races', {
+        params: {
+          eventId,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      data.forEach((race: Race) => {
+        this.racesById[race._id] = race
+      })
     } catch (err) {
       console.log('Error loading races by event id', err)
       throw err

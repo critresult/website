@@ -11,6 +11,7 @@ import Button from './components/Button'
 import RaceCreate from './components/RaceCreate'
 import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
+import Entrylist from './components/Entrylist'
 
 const LargeText = styled.div`
   font-size: 20px;
@@ -30,7 +31,9 @@ class _Event extends React.Component<{
   }
 
   componentDidMount() {
-    this.props.event.load(this.props.match.params.id)
+    const eventId = this.props.match.params.id
+    this.props.event.load(eventId)
+    this.props.race.loadByEventId(eventId)
   }
 
   render() {
@@ -60,26 +63,12 @@ class _Event extends React.Component<{
                   {races.length} Race{races.length !== 1 && 's'}
                   {' - '}
                 </div>
-
                 <Button
                   title="Add Race"
                   onClick={() => this.setState({ raceCreateVisible: true })}
                 />
               </HFlex>
             </LargeText>
-            {races.map((race: Race) => (
-              <div
-                key={race._id}
-                style={{
-                  margin: 8,
-                  padding: 8,
-                  borderRadius: 10,
-                  backgroundColor: 'white',
-                }}
-              >
-                {race.name}
-              </div>
-            ))}
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
             <LargeText>
@@ -105,6 +94,9 @@ class _Event extends React.Component<{
             />
           </VFlex>
         </HFlex>
+        {races.map((race: Race) => (
+          <Entrylist key={race._id} raceId={race._id} />
+        ))}
       </>
     )
   }
