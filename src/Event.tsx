@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import Popup from './components/Popup'
 import Button from './components/Button'
+import RaceCreate from './components/RaceCreate'
 
 const LargeText = styled.div`
   font-size: 20px;
@@ -23,24 +24,10 @@ class _Event extends React.Component<{
 }> {
   state = {
     raceCreateVisible: false,
-    isLoading: false,
-    raceData: {},
   }
 
   componentDidMount() {
     this.props.event.load(this.props.match.params.id)
-  }
-
-  createRace = () => {
-    this.setState({ isLoading: true })
-    const eventId = this.props.match.params.id
-    this.props.race
-      .create({ ...this.state.raceData, eventId })
-      .then(() => this.props.event.load(eventId))
-      .then(() => {
-        this.setState({ isLoading: false, raceCreateVisible: false })
-      })
-      .catch(() => this.setState({ isLoading: false }))
   }
 
   render() {
@@ -53,58 +40,13 @@ class _Event extends React.Component<{
       <>
         <Header />
         <Popup visible={this.state.raceCreateVisible}>
-          <VFlex>
-            <HFlex style={{ borderRadius: 5 }}>
-              <ModalContainer>
-                <VFlex style={{ padding: 10 }}>
-                  <HFlex>
-                    Race Name:{' '}
-                    <Input
-                      valid
-                      type="text"
-                      onChange={(e: any) => {
-                        this.setState({
-                          raceData: {
-                            ...this.state.raceData,
-                            name: e.target.value,
-                          },
-                        })
-                      }}
-                    />
-                  </HFlex>
-                  <HFlex>
-                    Start Time:{' '}
-                    <Input
-                      valid
-                      type="time"
-                      onChange={(e: any) => {
-                        this.setState({
-                          raceData: {
-                            ...this.state.raceData,
-                            scheduledStartTime: e.target.value,
-                          },
-                        })
-                      }}
-                    />
-                  </HFlex>
-                  <HFlex>Event: {event.name}</HFlex>
-                  <HFlex>
-                    <Button
-                      animating={this.state.isLoading}
-                      title="Create Race"
-                      onClick={this.createRace}
-                    />
-                    <Button
-                      title="Cancel"
-                      onClick={() =>
-                        this.setState({ raceCreateVisible: false })
-                      }
-                    />
-                  </HFlex>
-                </VFlex>
-              </ModalContainer>
-            </HFlex>
-          </VFlex>
+          <RaceCreate
+            eventId={eventId}
+            onCreated={() => {
+              this.setState({ raceCreateVisible: false })
+            }}
+            onCancelled={() => this.setState({ raceCreateVisible: false })}
+          />
         </Popup>
         <HFlex style={{ justifyContent: 'space-between' }}>
           <VFlex style={{ alignItems: 'flex-start' }}>

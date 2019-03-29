@@ -29,7 +29,6 @@ export default class RaceStore {
 
   async create(raceData: any) {
     try {
-      console.log(raceData)
       const { data } = await axios.post('/races', {
         ...raceData,
         token: PromoterStore.activeToken(),
