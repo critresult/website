@@ -12,10 +12,14 @@ interface Event {
 
 export default class EventStore {
   @observable upcomingEvents: Event[] = []
+  @observable eventsById: {
+    [key: string]: Event
+  } = {}
 
-  async create(data: Event) {
+  async create(eventData: Event) {
     try {
-      await axios.post('/events', data)
+      const { data } = await axios.post('/events', eventData)
+      this.eventsById[data._id] = data
     } catch (err) {
       console.log('Error creating event', err)
       throw err
@@ -41,6 +45,9 @@ export default class EventStore {
           }
           return -1
         }
+      )
+      this.upcomingEvents.forEach(
+        (event) => (this.eventsById[event._id] = event)
       )
     } catch (err) {
       console.log('Error loading upcoming events', err)

@@ -130,7 +130,7 @@ class Home extends React.Component<{
               <TiPlus color={Colors.white} size={70} />
             </div>
             {this.props.event.upcomingEvents.map((event, index) => (
-              <div key={index}>{event.name}</div>
+              <EventCell id={event._id} key={index} />
             ))}
           </HFlex>
         </div>
