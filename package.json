@@ -42,9 +42,11 @@
   },
   "homepage": "https://github.com/critresult/website#readme",
   "dependencies": {
+    "@types/lodash.uniqby": "^4.7.6",
     "axios": "^0.18.0",
     "email-validator": "^2.0.4",
     "jsonwebtoken": "^8.5.1",
+    "lodash.uniqby": "^4.7.0",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "react": "^16.8.4",
