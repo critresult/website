@@ -2,10 +2,18 @@ import React from 'react'
 import { VFlex, HFlex } from './components/Shared'
 import Header from './components/Header'
 import { inject, observer } from 'mobx-react'
+import EventCell from './components/EventCell'
+import EventStore from './stores/event'
 
-@inject('promoter')
+@inject('promoter', 'event')
 @observer
-class Home extends React.Component {
+class Home extends React.Component<{
+  event?: EventStore
+}> {
+  componentDidMount() {
+    this.props.event.loadUpcoming()
+  }
+
   render() {
     return (
       <>
@@ -18,6 +26,9 @@ class Home extends React.Component {
           }}
         >
           Upcoming Events:
+          {this.props.event.upcomingEvents.map((event) => (
+            <div>{event.name}</div>
+          ))}
         </div>
       </>
     )

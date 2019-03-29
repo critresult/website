@@ -48,7 +48,7 @@ export default class PromoterStore {
    **/
   async loadPromoter(_id?: string) {
     try {
-      const { data } = await axios.get('/promoter', {
+      const { data } = await axios.get('/promoters', {
         params: {
           _id,
           token: this.token,
@@ -65,7 +65,7 @@ export default class PromoterStore {
 
   async signup(email: string, password: string) {
     try {
-      const { data } = await axios.post('/promoter', {
+      const { data } = await axios.post('/promoters', {
         email,
         password,
       })
@@ -83,7 +83,7 @@ export default class PromoterStore {
 
   async login(email: string, password: string) {
     try {
-      const { data } = await axios.post('/promoter/login', {
+      const { data } = await axios.post('/promoters/login', {
         email,
         password,
       })
