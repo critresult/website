@@ -56,7 +56,7 @@ class _Event extends React.Component<{
             onCancelled={() => this.setState({ raceCreateVisible: false })}
           />
         </Popup>
-        <VFlex style={{ padding: 10 }}>
+        <VFlex>
           <VFlex style={{ alignItems: 'flex-start' }}>
             <LargeText>{event.name}</LargeText>
           </VFlex>

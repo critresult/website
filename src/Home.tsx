@@ -137,7 +137,6 @@ class Home extends React.Component<{
                   marginBottom: 10,
                   textAlign: 'center',
                   color: Colors.black,
-                  width: 900,
                 }}
               >
                 <HFlex style={{ fontSize: 20 }}>{event.name}</HFlex>

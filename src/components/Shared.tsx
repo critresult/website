@@ -5,7 +5,6 @@ export const VFlex = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
 `
 
 export const HFlex = styled.div`
