@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import Entrylist from './components/Entrylist'
 import RiderStore from './stores/rider'
+import SeriesCreate from './components/SeriesCreate'
+import EventCreate from './components/EventCreate'
 
 @inject('promoter', 'event', 'rider')
 @observer
@@ -20,6 +22,7 @@ class Home extends React.Component<{
 }> {
   state = {
     showingCreatePopup: false,
+    showingCreateSeriesPopup: false,
     isLoading: false,
     eventData: {},
   }
@@ -30,83 +33,23 @@ class Home extends React.Component<{
     this.props.event.loadUpcoming()
   }
 
-  createEvent = () => {
-    this.setState({ isLoading: true })
-    this.props.event
-      .create(this.state.eventData as Event)
-      .then(() => this.props.event.loadUpcoming())
-      .then(() =>
-        this.setState({
-          isLoading: false,
-          showingCreatePopup: false,
-        })
-      )
-      .catch(() => {
-        this.setState({ isLoading: false })
-      })
-  }
-
   render() {
     return (
       <>
         <Header />
+        <Popup visible={this.state.showingCreateSeriesPopup}>
+          <SeriesCreate
+            onCreated={() => this.setState({ showingCreateSeriesPopup: false })}
+            onCancelled={() =>
+              this.setState({ showingCreateSeriesPopup: false })
+            }
+          />
+        </Popup>
         <Popup visible={this.state.showingCreatePopup}>
-          <VFlex>
-            <HFlex style={{ borderRadius: 5 }}>
-              <ModalContainer>
-                <VFlex style={{ padding: 10 }}>
-                  <HFlex>
-                    Event Name:{' '}
-                    <Input
-                      valid
-                      type="text"
-                      onChange={(e: any) => {
-                        this.setState({
-                          eventData: {
-                            ...this.state.eventData,
-                            name: e.target.value,
-                          },
-                        })
-                      }}
-                    />
-                  </HFlex>
-                  <HFlex>
-                    Event Date:{' '}
-                    <Input
-                      valid
-                      type="date"
-                      onChange={(e: any) => {
-                        const date = new Date(e.target.value).toISOString()
-                        this.setState({
-                          eventData: {
-                            ...this.state.eventData,
-                            startDate: date,
-                            endDate: date,
-                          },
-                        })
-                      }}
-                    />
-                  </HFlex>
-                  <HFlex style={{ padding: 8, textAlign: 'center' }}>
-                    Additional options can be configured after creation.
-                  </HFlex>
-                  <HFlex>
-                    <Button
-                      animating={this.state.isLoading}
-                      title="Create Event"
-                      onClick={this.createEvent}
-                    />
-                    <Button
-                      title="Cancel"
-                      onClick={() =>
-                        this.setState({ showingCreatePopup: false })
-                      }
-                    />
-                  </HFlex>
-                </VFlex>
-              </ModalContainer>
-            </HFlex>
-          </VFlex>
+          <EventCreate
+            onCreated={() => this.setState({ showingCreatePopup: false })}
+            onCancelled={() => this.setState({ showingCreatePopup: false })}
+          />
         </Popup>
         <VFlex style={{ flex: 1 }}>
           <div
@@ -127,6 +70,12 @@ class Home extends React.Component<{
           >
             <TiPlus color={Colors.black} size={70} />
           </div>
+          <Button
+            title="Create Series"
+            onClick={() => {
+              this.setState({ showingCreateSeriesPopup: true })
+            }}
+          />
           {this.props.event.upcomingEvents.map((_event) => {
             const event = this.props.event.eventsById[_event._id] || {}
             const races = event.races || []
