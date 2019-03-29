@@ -2,12 +2,14 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
+import { Race } from './race'
 
 export interface Event {
   _id: string
   name: string
   startDate: string
   endDate: string
+  races?: Race[]
 }
 
 export default class EventStore {

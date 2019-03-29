@@ -8,6 +8,7 @@ import Colors from './Colors'
 import { Provider } from 'mobx-react'
 import PromoterStore from './stores/promoter'
 import EventStore from './stores/event'
+import RaceStore from './stores/race'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
@@ -22,6 +23,7 @@ Object.assign(document.body.style, {
 const stores = {
   promoter: new PromoterStore(),
   event: new EventStore(),
+  race: new RaceStore(),
 }
 
 ReactDOM.render(
