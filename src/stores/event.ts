@@ -16,6 +16,22 @@ export default class EventStore {
     [key: string]: Event
   } = {}
 
+  async load(_id: string) {
+    try {
+      const { data } = await axios.get('/events', {
+        params: {
+          token: PromoterStore.activeToken(),
+          _id,
+        },
+      })
+      console.log(data)
+      this.eventsById[_id] = data
+    } catch (err) {
+      console.log('Error loading event by id', err)
+      throw err
+    }
+  }
+
   async create(eventData: Event) {
     try {
       const { data } = await axios.post('/events', eventData)
