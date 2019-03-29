@@ -156,7 +156,7 @@ class Home extends React.Component<{
                   style={{ textDecoration: 'none' }}
                   to={`/event/${event._id}`}
                 >
-                  <Button title="View Details" />
+                  <Button style={{ backgroundColor: Colors.yellow, color: Colors.black }} title="View Details" />
                 </Link>
               </VFlex>
             )
