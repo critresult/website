@@ -5,12 +5,14 @@ export const VFlex = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 export const HFlex = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 export const Input = styled.input<{ valid?: boolean }>`
@@ -27,6 +29,7 @@ export const ModalContainer = styled.div`
   background-color: ${Colors.white};
   border-radius: 5px;
   border-color: rgba(0, 0, 0, 0.15);
-  min-width: 300px;
+  width: 300px;
   min-height: 200px;
+  padding: 10px;
 `

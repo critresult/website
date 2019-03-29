@@ -13,6 +13,15 @@ interface Event {
 export default class EventStore {
   @observable upcomingEvents: Event[] = []
 
+  async create(data: Event) {
+    try {
+      await axios.post('/events', data)
+    } catch (err) {
+      console.log('Error creating event', err)
+      throw err
+    }
+  }
+
   async loadUpcoming() {
     try {
       const { data } = await axios.get('/events/upcoming', {
