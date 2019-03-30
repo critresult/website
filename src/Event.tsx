@@ -1,6 +1,12 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { VFlex, HFlex, ModalContainer, Input, LargeText } from './components/Shared'
+import {
+  VFlex,
+  HFlex,
+  ModalContainer,
+  Input,
+  LargeText,
+} from './components/Shared'
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
 import RaceStore, { Race } from './stores/race'
@@ -71,7 +77,11 @@ class _Event extends React.Component<{
             )}
           </VFlex>
           {races.map((race: Race) => (
-            <Entrylist key={race._id} raceId={race._id} />
+            <Entrylist
+              key={race._id}
+              seriesId={race.seriesId}
+              raceId={race._id}
+            />
           ))}
           <HFlex>
             <Button

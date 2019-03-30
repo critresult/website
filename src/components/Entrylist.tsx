@@ -23,6 +23,7 @@ const EntryCell = styled(HFlex)`
 @inject('event', 'race')
 @observer
 class Entrylist extends React.Component<{
+  seriesId: string
   raceId: string
   editable?: boolean
   event?: EventStore
@@ -82,6 +83,8 @@ class Entrylist extends React.Component<{
         title: 'Create Rider',
         render: () => (
           <RiderCreate
+            seriesId={this.props.seriesId}
+            raceId={this.props.raceId}
             onCreated={() => this.setState({ createEntryVisible: false })}
             onCancelled={() => this.setState({ createEntryVisible: false })}
           />

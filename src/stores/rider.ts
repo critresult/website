@@ -88,6 +88,7 @@ export default class RiderStore {
         token: PromoterStore.activeToken(),
       })
       this.ridersById[data._id] = data
+      return data
     } catch (err) {
       console.log('Error creating rider', err)
       throw err

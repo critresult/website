@@ -5,28 +5,40 @@ import { inject, observer } from 'mobx-react'
 import RaceStore from '../stores/race'
 import EventStore from '../stores/event'
 import RiderStore from '../stores/rider'
+import BibStore from '../stores/bib'
 
-@inject('event', 'race', 'rider')
+@inject('event', 'race', 'rider', 'bib')
 @observer
 class RiderCreate extends React.Component<{
   onCreated?: () => void
   onCancelled?: () => void
+  seriesId?: string
+  raceId?: string
   race?: RaceStore
   event?: EventStore
   rider?: RiderStore
+  bib?: BibStore
 }> {
   state = {
-    isLoading: false,
     riderData: {},
+    bibNumber: 0,
   }
 
-  createRider = () => {
-    this.setState({ isLoading: true })
-    this.props.rider
-      .create({ ...this.state.riderData })
-      .then(() => this.setState({ isLoading: false }))
-      .then(() => (this.props.onCreated || (() => {}))())
-      .catch(() => this.setState({ isLoading: false }))
+  createRider = async () => {
+    const rider = await this.props.rider.create({ ...this.state.riderData })
+    if (this.props.seriesId && this.state.bibNumber) {
+      const bib = await this.props.bib.create({
+        bibNumber: this.state.bibNumber,
+        riderId: rider._id,
+        seriesId: this.props.seriesId,
+      })
+      if (this.props.raceId) {
+        await this.props.race.addEntry(this.props.raceId, rider._id, bib._id)
+        await this.props.race.loadEntries(this.props.raceId)
+      }
+    }
+
+    ;(this.props.onCreated || (() => {}))()
   }
 
   render() {
@@ -100,6 +112,7 @@ class RiderCreate extends React.Component<{
                 <Input
                   valid
                   type="text"
+                  placeholder="Empty for one day license"
                   onChange={(e: any) => {
                     this.setState({
                       riderData: {
@@ -140,12 +153,22 @@ class RiderCreate extends React.Component<{
                   }}
                 />
               </HFlex>
+              {this.props.seriesId ? (
+                <HFlex>
+                  Bib #:{' '}
+                  <Input
+                    valid
+                    type="text"
+                    onChange={(e: any) => {
+                      this.setState({
+                        bibNumber: e.target.value,
+                      })
+                    }}
+                  />
+                </HFlex>
+              ) : null}
               <HFlex>
-                <Button
-                  animating={this.state.isLoading}
-                  title="Create Rider"
-                  onClick={this.createRider}
-                />
+                <Button title="Create Rider" onClick={this.createRider} />
                 <Button
                   title="Cancel"
                   onClick={this.props.onCancelled || (() => {})}
