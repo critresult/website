@@ -28,12 +28,14 @@ export default class RaceStore {
 
   async addEntry(raceId: string, riderId: string, bibId: string) {
     try {
-      await axios.post('/races/entry', {
+      const { data } = await axios.post('/races/entry', {
         raceId,
         riderId,
         bibId,
         token: PromoterStore.activeToken(),
       })
+      this.entriesByRaceId[raceId] = this.entriesByRaceId[raceId] || []
+      this.entriesByRaceId[raceId].push(data)
     } catch (err) {
       console.log('Error adding rider', err)
       throw err

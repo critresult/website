@@ -11,7 +11,6 @@ import keyby from 'lodash.keyby'
 @observer
 class EntryCreate extends React.Component<{
   raceId: string
-  seriesId: string
   onFinished?: () => void
   rider?: RiderStore
   race?: RaceStore
@@ -23,9 +22,12 @@ class EntryCreate extends React.Component<{
     foundRiders: [] as Rider[],
   }
 
+  searchRef = React.createRef()
+
   componentDidMount() {
     const race = this.props.race.racesById[this.props.raceId] || {}
     this.props.bib.loadBibsForSeries(race.seriesId)
+    this.searchRef.current.focus()
   }
 
   render() {
@@ -40,6 +42,7 @@ class EntryCreate extends React.Component<{
           <HFlex>
             Search:{' '}
             <Input
+              ref={this.searchRef}
               valid
               type="text"
               onChange={(e: any) => {
@@ -74,7 +77,6 @@ class EntryCreate extends React.Component<{
                     Bib #{bibsByRiderId[rider._id].bibNumber}
                     <Button
                       title="Add Entry"
-                      animating={this.state.isLoading}
                       onClick={() =>
                         this.props.race
                           .addEntry(
@@ -82,7 +84,14 @@ class EntryCreate extends React.Component<{
                             rider._id,
                             bibsByRiderId[rider._id]._id
                           )
-                          .then(() => this.props.race.load(this.props.raceId))
+                          .then(() =>
+                            Promise.all([
+                              this.props.race.load(this.props.raceId),
+                              this.props.race.loadEntries(this.props.raceId),
+                            ])
+                          )
+                          .then(() => (this.searchRef.current.value = ''))
+                          .then(() => this.searchRef.current.focus())
                       }
                     />
                   </HFlex>
@@ -93,19 +102,33 @@ class EntryCreate extends React.Component<{
                       type="text"
                       placeholder="Bib Number"
                       onChange={(e: any) => {
-                        rider.bib = e.target.value
+                        rider.__bib = e.target.value
                       }}
                     />
                     <Button
                       animating={this.state.isLoading}
                       title="Add"
                       onClick={() =>
-                        this.props.race
-                          .addEntry(this.props.raceId, rider._id, rider.bib)
-                          .then(() => {
-                            this.props.race.load(this.props.raceId)
-                            this.props.race.loadEntries(this.props.raceId)
+                        this.props.bib
+                          .create({
+                            bibNumber: rider.__bib,
+                            riderId: rider._id,
+                            seriesId: race.seriesId,
                           })
+                          .then((bib) =>
+                            this.props.race.addEntry(
+                              this.props.raceId,
+                              rider._id,
+                              bib._id
+                            )
+                          )
+                          .then(() =>
+                            Promise.all([
+                              this.props.race.load(this.props.raceId),
+                              this.props.race.loadEntries(this.props.raceId),
+                              this.props.bib.loadBibsForSeries(race.seriesId),
+                            ])
+                          )
                       }
                     />
                   </>

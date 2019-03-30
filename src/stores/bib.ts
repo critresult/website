@@ -28,10 +28,12 @@ export default class BibStore {
 
   async create(bibData: any) {
     try {
-      await axios.post('/bibs', {
+      const { data } = await axios.post('/bibs', {
         ...bibData,
         token: PromoterStore.activeToken(),
       })
+      this.bibsBySeriesId[data.seriesId].push(data)
+      return data
     } catch (err) {
       console.log('Error creating bib', err)
       throw err
