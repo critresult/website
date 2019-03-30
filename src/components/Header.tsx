@@ -134,9 +134,11 @@ class Header extends React.Component<{
         <LowerHeader />
         <HFlex
           style={{
-            borderBottom: `solid 2px ${Colors.black}`,
+            borderBottom: `solid 1px ${Colors.blue}`,
             backgroundColor: Colors.black,
             justifyContent: 'space-between',
+            paddingLeft: 20,
+            paddingRight: 20,
             fontSize: 20,
           }}
         >

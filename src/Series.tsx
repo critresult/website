@@ -148,7 +148,9 @@ class Series extends React.Component<{
                     title="Delete"
                     style={{ backgroundColor: Colors.pink, flex: 1 }}
                     onClick={() => {
-                      confirm('Are you sure you want to delete this bib? Any race entries will also be deleted.')
+                      confirm(
+                        'Are you sure you want to delete this bib? Any race entries will also be deleted.'
+                      )
                       return this.props.bib
                         .delete(bib._id)
                         .then(() => this.props.bib.loadBibsForSeries(seriesId))
@@ -158,7 +160,7 @@ class Series extends React.Component<{
               </VFlex>
             </HFlex>
           ))}
-          <Footer />
+        <Footer />
       </>
     )
   }
