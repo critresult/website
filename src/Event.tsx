@@ -13,6 +13,7 @@ import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import idx from 'idx'
+import Footer from './components/Footer'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer
@@ -90,6 +91,7 @@ class _Event extends React.Component<{
             />
           </HFlex>
         </VFlex>
+        <Footer />
       </>
     )
   }

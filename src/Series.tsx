@@ -10,6 +10,7 @@ import keyby from 'lodash.keyby'
 import Colors from './Colors'
 import AddBibCell from './components/AddBibCell'
 import idx from 'idx'
+import Footer from './components/Footer'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -156,6 +157,7 @@ class Series extends React.Component<{
               </VFlex>
             </HFlex>
           ))}
+          <Footer />
       </>
     )
   }

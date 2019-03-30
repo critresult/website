@@ -11,6 +11,7 @@ import Entrylist from './components/Entrylist'
 import RiderStore from './stores/rider'
 import SeriesStore, { Series } from './stores/series'
 import styled from 'styled-components'
+import Footer from './components/Footer'
 
 const Cell = styled(VFlex)`
   flex: 1;
@@ -84,6 +85,7 @@ class Home extends React.Component<{
             )
           })}
         </HFlex>
+        <Footer />
       </>
     )
   }
