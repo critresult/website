@@ -3,11 +3,12 @@ import { inject, observer } from 'mobx-react'
 import { HFlex, VFlex, Input, LargeText } from './components/Shared'
 import SeriesStore from './stores/series'
 import BibStore from './stores/bib'
-import RiderStore from './stores/rider'
+import RiderStore, { Rider } from './stores/rider'
 import Header from './components/Header'
 import Button from './components/Button'
 import keyby from 'lodash.keyby'
 import Colors from './Colors'
+import AddBibCell from './components/AddBibCell'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -19,14 +20,35 @@ class Series extends React.Component<{
   state = {
     isSearching: false,
     foundRiders: [],
-    updatedBibs: {},
   }
+
+  searchRef = React.createRef()
+
   componentDidMount() {
     const seriesId = this.props.match.params.id
     this.props.series.load(seriesId)
     this.props.series.load()
     this.props.bib.loadBibsForSeries(seriesId)
+    this.searchRef.current.focus()
   }
+
+  searchChanged = (e: any) => {
+    const newSearchString = e.target.value
+    if (newSearchString.length === 0) {
+      this.setState({ foundRiders: [], isSearching: false })
+      return
+    }
+    this.setState({ isSearching: true })
+    this.props.rider
+      .search(newSearchString)
+      .then((riders) => {
+        if (this.searchRef.current.value !== newSearchString) return
+        this.setState({ isSearching: false })
+        this.setState({ foundRiders: riders })
+      })
+      .catch(() => this.setState({ isSearching: false }))
+  }
+
   render() {
     const seriesId = this.props.match.params.id
     const series = this.props.series.seriesById[seriesId] || {}
@@ -40,93 +62,82 @@ class Series extends React.Component<{
           <LargeText>{series.name}</LargeText>
         </VFlex>
         <VFlex>
-          <LargeText>Active Bibs</LargeText>
-        </VFlex>
-        <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
-          <VFlex>Bib #</VFlex>
-          <VFlex>Firstname</VFlex>
-          <VFlex>Lastname</VFlex>
-          <VFlex>License</VFlex>
-          <VFlex />
-        </HFlex>
-        {bibs.map((bib) => (
-          <HFlex
-            key={bib._id}
-            style={{ justifyContent: 'space-between', margin: 16 }}
-          >
-            <VFlex>{bib.bibNumber}</VFlex>
-            <VFlex>{bib.rider.firstname}</VFlex>
-            <VFlex>{bib.rider.lastname}</VFlex>
-            <VFlex>{bib.rider.license}</VFlex>
-            <Button title="Delete" style={{ backgroundColor: Colors.pink }} />
-          </HFlex>
-        ))}
-        <HFlex>
-          Search:{' '}
-          <Input
-            valid
-            type="text"
-            onChange={(e: any) => {
-              this.setState({ isSearching: true })
-              this.props.rider
-                .search(e.target.value)
-                .then((riders) => {
-                  this.setState({ isSearching: false })
-                  this.setState({ foundRiders: riders })
-                })
-                .catch(() => this.setState({ isSearching: false }))
-            }}
-          />
-          {this.state.isSearching ? (
-            <img
-              src={require('../static/puff.svg')}
-              height="15"
-              style={{ filter: 'brightness(0)' }}
-            />
-          ) : null}
-        </HFlex>
-        {this.state.foundRiders.map((rider: Rider) => (
-          <HFlex key={rider._id} style={{ margin: 16, flexWrap: 'nowrap' }}>
-            <VFlex style={{ alignItems: 'flex-start' }}>
-              <HFlex>{`${rider.firstname} ${rider.lastname}`}</HFlex>
-              <HFlex>{`License: ${rider.license}`}</HFlex>
-              <HFlex>{`Status: ${
-                new Date(rider.licenseExpirationDate) > new Date()
-                  ? 'Active'
-                  : 'Expired'
-              }`}</HFlex>
-            </VFlex>
+          <LargeText>Add Rider to Series</LargeText>
+          <HFlex>
+            Search:
             <Input
+              ref={this.searchRef}
               valid
               type="text"
-              placeholder={
-                bibsByRiderId[rider._id]
-                  ? bibsByRiderId[rider._id].bibNumber
-                  : 'New Bib Number'
-              }
-              onChange={(e: any) => {
-                this.setState({
-                  updatedBibs: {
-                    ...this.state.updatedBibs,
-                    [rider._id]: e.target.value,
-                  },
-                })
-              }}
+              placeholder="firstname, lastname, or license #"
+              style={{ minWidth: 200 }}
+              onChange={this.searchChanged}
             />
-            <Button
-              title="Update Bib"
-              onClick={() => {
-                this.props.bib
-                  .create({
-                    seriesId,
-                    bibNumber: this.state.updatedBibs[rider._id],
-                    riderId: rider._id,
-                  })
-                  .then(() => this.props.bib.loadBibsForSeries(seriesId))
-              }}
-            />
+            {this.state.isSearching ? (
+              <img
+                src={require('../static/puff.svg')}
+                height="15"
+                style={{ filter: 'brightness(0)' }}
+              />
+            ) : null}
           </HFlex>
+        </VFlex>
+        {this.state.foundRiders.map((rider: Rider) => (
+          <AddBibCell
+            seriesId={seriesId}
+            _rider={rider}
+            bibNumber={(bibsByRiderId[rider._id] || {}).bibNumber}
+          />
         ))}
+        <VFlex>
+          <LargeText>Active Bibs ({bibs.length})</LargeText>
+        </VFlex>
+        <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
+          <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>License</VFlex>
+          <VFlex style={{ flex: 1 }} />
+        </HFlex>
+        {bibs
+          .sort((a, b) => (a.bibNumber > b.bibNumber ? 1 : -1))
+          .map((bib) => (
+            <HFlex
+              key={bib._id}
+              style={{
+                justifyContent: 'space-between',
+                margin: 8,
+                marginBottom: 0,
+              }}
+            >
+              <VFlex style={{ minWidth: '15%' }}>{bib.bibNumber}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{bib.rider.firstname}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{bib.rider.lastname}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{bib.rider.license}</VFlex>
+              <VFlex style={{ flex: 1 }}>
+                <HFlex>
+                  <Button
+                    title="Edit"
+                    style={{
+                      backgroundColor: Colors.yellow,
+                      color: Colors.black,
+                      flex: 1,
+                    }}
+                    onClick={() => {}}
+                  />
+                  <Button
+                    title="Delete"
+                    style={{ backgroundColor: Colors.pink, flex: 1 }}
+                    onClick={() => {
+                      this.props.bib
+                        .delete(bib._id)
+                        .then(() => this.props.bib.loadBibsForSeries(seriesId))
+                    }}
+                  />
+                </HFlex>
+              </VFlex>
+            </HFlex>
+          ))}
       </>
     )
   }

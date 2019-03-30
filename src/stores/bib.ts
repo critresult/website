@@ -30,10 +30,24 @@ export default class BibStore {
     try {
       await axios.post('/bibs', {
         ...bibData,
-        token: PromoterStore.activeToken()
+        token: PromoterStore.activeToken(),
       })
-    } catch( err) {
+    } catch (err) {
       console.log('Error creating bib', err)
+      throw err
+    }
+  }
+
+  async delete(_id: string) {
+    try {
+      await axios.delete('/bibs', {
+        data: {
+          _id,
+          token: PromoterStore.activeToken(),
+        },
+      })
+    } catch (err) {
+      console.log('Error deleting bib', err)
       throw err
     }
   }
