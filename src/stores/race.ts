@@ -116,4 +116,18 @@ export default class RaceStore {
       throw err
     }
   }
+
+  async delete(_id: string) {
+    try {
+      await axios.delete('/races', {
+        data: {
+          _id,
+          token: PromoterStore.activeToken(),
+        },
+      })
+    } catch (err) {
+      console.log('Error deleting race', err)
+      throw err
+    }
+  }
 }

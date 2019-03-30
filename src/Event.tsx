@@ -13,7 +13,7 @@ import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 
-@inject('promoter', 'event', 'race')
+@inject('promoter', 'event', 'race', 'series')
 @observer
 class _Event extends React.Component<{
   event: EventStore
@@ -28,6 +28,7 @@ class _Event extends React.Component<{
     const eventId = this.props.match.params.id
     this.props.event.load(eventId)
     this.props.race.loadByEventId(eventId)
+    this.props.series.load()
   }
 
   render() {

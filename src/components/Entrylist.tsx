@@ -150,12 +150,28 @@ class Entrylist extends React.Component<{
             onClick={this.exportCSV}
           />
           {this.props.editable === false ? null : (
-            <Button
-              title="Add Entry"
-              onClick={() => {
-                this.setState({ createEntryVisible: true })
-              }}
-            />
+            <>
+              <Button
+                title="Add Entry"
+                onClick={() => {
+                  this.setState({ createEntryVisible: true })
+                }}
+              />
+              <Button
+                title="Delete Race"
+                style={{ backgroundColor: Colors.pink }}
+                onClick={() =>
+                  this.props.race
+                    .delete(this.props.raceId)
+                    .then(() =>
+                      Promise.all([
+                        this.props.race.loadByEventId(race.eventId),
+                        this.props.event.load(race.eventId),
+                      ])
+                    )
+                }
+              />
+            </>
           )}
         </HFlex>
       </VFlex>
