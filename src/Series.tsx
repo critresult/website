@@ -28,9 +28,18 @@ class Series extends React.Component<{
   componentDidMount() {
     const seriesId = this.props.match.params.id
     this.props.series.load(seriesId)
-    this.props.series.load()
     this.props.bib.loadBibsForSeries(seriesId)
+    this.props.series.load()
     this.searchRef.current.focus()
+  }
+
+  componentWillReceiveProps(newProps) {
+    const seriesId = idx(this, (_: any) => _.props.match.params.id)
+    const newSeriesId = idx(newProps, (_: any) => _.match.params.id)
+    if (newSeriesId !== seriesId) {
+      this.props.series.load(newSeriesId)
+      this.props.bib.loadBibsForSeries(newSeriesId)
+    }
   }
 
   searchChanged = (e: any) => {

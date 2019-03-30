@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
-import { Race } from './race'
+import { Race, Entry } from './race'
 
 export interface Event {
   _id: string
@@ -17,6 +17,9 @@ export default class EventStore {
   @observable eventsById: {
     [key: string]: Event
   } = {}
+  @observable entriesByEvent: {
+    [key: string]: Entry[]
+  } = {}
 
   async load(_id: string) {
     try {
@@ -29,6 +32,15 @@ export default class EventStore {
       this.eventsById[_id] = data
     } catch (err) {
       console.log('Error loading event by id', err)
+      throw err
+    }
+  }
+
+  async loadEntries(_id: string) {
+    try {
+      await axios.get('/events')
+    } catch (err) {
+      console.log('Error loading entries', err)
       throw err
     }
   }

@@ -15,12 +15,12 @@ import styled from 'styled-components'
 const Cell = styled(VFlex)`
   flex: 1;
   background-color: ${Colors.white};
-  box-shadow: 1px 1px 20px ${Colors.black};
-  padding: 15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  padding: 8px;
   text-align: center;
   color: ${Colors.black};
+  border-radius: 10px;
+  border: solid 1px ${Colors.black};
+  margin: 8px;
 `
 
 @inject('promoter', 'event', 'rider', 'series')
@@ -41,25 +41,33 @@ class Home extends React.Component<{
     return (
       <>
         <Header />
-        <VFlex style={{ flex: 1 }}>
+        <HFlex style={{ padding: 8, flex: 1 }}>
           {this.props.event.upcomingEvents.map((_event) => {
             const event = this.props.event.eventsById[_event._id] || {}
             const races = event.races || []
             return (
               <Cell key={_event._id}>
-                <HFlex style={{ fontSize: 20 }}>{(event.series || {}).name || ''} - {event.name}</HFlex>
+                <HFlex style={{ fontSize: 20 }}>
+                  {(event.series || {}).name || ''} - {event.name}
+                </HFlex>
                 <HFlex>
                   {moment(event.startDate)
                     .utc()
-                    .format("MMMM D 'YY")}
+                    .format('MMMM D YYYY')}
                 </HFlex>
-                {races.map((race: Race) => (
-                  <Entrylist
-                    key={race._id}
-                    editable={false}
-                    raceId={race._id}
-                  />
-                ))}
+                <HFlex>
+                  {races.length} race{races.length === 1 ? '' : 's'}
+                </HFlex>
+                {event.preregistrationUrl ? (
+                  <a href={event.preregistrationUrl} target="_blank">
+                    Pre-registration
+                  </a>
+                ) : null}
+                {event.flyerUrl ? (
+                  <a href={event.flyerUrl} target="_blank">
+                    Race Flyer
+                  </a>
+                ) : null}
                 <Link
                   style={{ textDecoration: 'none' }}
                   to={`/event/${event._id}`}
@@ -75,7 +83,7 @@ class Home extends React.Component<{
               </Cell>
             )
           })}
-        </VFlex>
+        </HFlex>
       </>
     )
   }

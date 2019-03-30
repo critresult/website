@@ -12,6 +12,7 @@ import RaceCreate from './components/RaceCreate'
 import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
+import idx from 'idx'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer
@@ -25,10 +26,10 @@ class _Event extends React.Component<{
   }
 
   componentDidMount() {
-    const eventId = this.props.match.params.id
+    const eventId = idx(this, (_: any) => _.props.match.params.id)
+    this.props.series.load()
     this.props.event.load(eventId)
     this.props.race.loadByEventId(eventId)
-    this.props.series.load()
   }
 
   render() {
