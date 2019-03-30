@@ -160,8 +160,9 @@ class Entrylist extends React.Component<{
               <Button
                 title="Delete Race"
                 style={{ backgroundColor: Colors.pink }}
-                onClick={() =>
-                  this.props.race
+                onClick={() => {
+                  if (!confirm('Delete this race?')) return
+                  return this.props.race
                     .delete(this.props.raceId)
                     .then(() =>
                       Promise.all([
@@ -169,7 +170,7 @@ class Entrylist extends React.Component<{
                         this.props.event.load(race.eventId),
                       ])
                     )
-                }
+                }}
               />
             </>
           )}
