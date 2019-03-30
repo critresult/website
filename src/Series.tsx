@@ -119,7 +119,7 @@ class Series extends React.Component<{
               key={bib._id}
               style={{
                 justifyContent: 'space-between',
-                margin: 8,
+                margin: 4,
                 marginBottom: 0,
               }}
             >
