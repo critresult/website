@@ -12,14 +12,12 @@ import moment from 'moment'
 import Entrylist from './components/Entrylist'
 import RiderStore from './stores/rider'
 import SeriesStore, { Series } from './stores/series'
-import SeriesCreate from './components/SeriesCreate'
-import EventCreate from './components/EventCreate'
 import styled from 'styled-components'
 
 const Cell = styled(VFlex)`
   flex: 1;
   background-color: ${Colors.white};
-  box-shadow: 2px 2px 10px ${Colors.black};
+  box-shadow: 1px 1px 20px ${Colors.black};
   padding: 15px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -34,11 +32,6 @@ class Home extends React.Component<{
   rider?: RiderStore
   series?: SeriesStore
 }> {
-  state = {
-    showingCreatePopup: false,
-    showingCreateSeriesPopup: false,
-  }
-
   inputFileRef = React.createRef()
 
   componentDidMount() {
@@ -50,62 +43,6 @@ class Home extends React.Component<{
     return (
       <>
         <Header />
-        <Popup visible={this.state.showingCreateSeriesPopup}>
-          <SeriesCreate
-            onCreated={() => this.setState({ showingCreateSeriesPopup: false })}
-            onCancelled={() =>
-              this.setState({ showingCreateSeriesPopup: false })
-            }
-          />
-        </Popup>
-        <Popup visible={this.state.showingCreatePopup}>
-          <EventCreate
-            onCreated={() => this.setState({ showingCreatePopup: false })}
-            onCancelled={() => this.setState({ showingCreatePopup: false })}
-          />
-        </Popup>
-        <HFlex
-          style={{
-            borderBottom: `solid 2px ${Colors.black}`,
-            backgroundColor: Colors.black,
-            justifyContent: 'space-between',
-            fontSize: 20,
-          }}
-        >
-          <VFlex style={{ margin: 8, color: Colors.white }}>
-            <HFlex>
-              Active Series
-              <Button
-                title={''}
-                onClick={() => {
-                  this.setState({ showingCreateSeriesPopup: true })
-                }}
-                style={{ minWidth: 0, backgroundColor: Colors.white }}
-              >
-                <TiPlus color={Colors.black} size={23} />
-              </Button>
-              {this.props.series.all.map((series: Series, index) => (
-                <Button
-                  key={index}
-                  title={series.name}
-                  style={{ backgroundColor: Colors.white, color: Colors.black }}
-                  onClick={() => {
-                    this.props.history.push(`/series/${series._id}`)
-                  }}
-                />
-              ))}
-            </HFlex>
-          </VFlex>
-          <VFlex>
-            <Button
-              title="Create Event"
-              onClick={() => {
-                this.setState({ showingCreatePopup: true })
-              }}
-              style={{ backgroundColor: Colors.green }}
-            />
-          </VFlex>
-        </HFlex>
         <VFlex style={{ flex: 1 }}>
           {this.props.event.upcomingEvents.map((_event) => {
             const event = this.props.event.eventsById[_event._id] || {}

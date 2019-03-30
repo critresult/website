@@ -1,6 +1,6 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { VFlex, HFlex, ModalContainer, Input } from './components/Shared'
+import { VFlex, HFlex, ModalContainer, Input, LargeText } from './components/Shared'
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
 import RaceStore, { Race } from './stores/race'
@@ -12,11 +12,6 @@ import RaceCreate from './components/RaceCreate'
 import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
-
-const LargeText = styled.div`
-  font-size: 20px;
-  margin: 8px;
-`
 
 @inject('promoter', 'event', 'race')
 @observer

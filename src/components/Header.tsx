@@ -9,6 +9,12 @@ import Signup from './Signup'
 import Login from './Login'
 import TabSelector from './TabSelector'
 import { Link } from 'react-router-dom'
+import Button from './Button'
+import { TiPlus } from 'react-icons/ti'
+import EventCreate from './EventCreate'
+import SeriesCreate from './SeriesCreate'
+import SeriesStore, { Series } from '../stores/series'
+import { withRouter } from 'react-router-dom'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
@@ -40,13 +46,16 @@ const HeaderButton = styled.span`
   cursor: pointer;
 `
 
-@inject('promoter')
+@inject('promoter', 'series')
 @observer
 class Header extends React.Component<{
   promoter?: PromoterStore
+  series?: SeriesStore
 }> {
   state = {
     authVisible: false,
+    showingCreatePopup: false,
+    showingCreateSeriesPopup: false,
   }
   onAuthenticated = () => this.setState({ authVisible: false })
   onCancelled = () => this.setState({ authVisible: false })
@@ -81,6 +90,20 @@ class Header extends React.Component<{
             </HFlex>
           </VFlex>
         </Popup>
+        <Popup visible={this.state.showingCreateSeriesPopup}>
+          <SeriesCreate
+            onCreated={() => this.setState({ showingCreateSeriesPopup: false })}
+            onCancelled={() =>
+              this.setState({ showingCreateSeriesPopup: false })
+            }
+          />
+        </Popup>
+        <Popup visible={this.state.showingCreatePopup}>
+          <EventCreate
+            onCreated={() => this.setState({ showingCreatePopup: false })}
+            onCancelled={() => this.setState({ showingCreatePopup: false })}
+          />
+        </Popup>
         <UpperHeader>
           <VFlex style={{ alignItems: 'flex-start' }}>
             <TitleSpan to="/">CritResult</TitleSpan>
@@ -110,10 +133,52 @@ class Header extends React.Component<{
           </VFlex>
         </UpperHeader>
         <LowerHeader />
+        <HFlex
+          style={{
+            borderBottom: `solid 2px ${Colors.black}`,
+            backgroundColor: Colors.black,
+            justifyContent: 'space-between',
+            fontSize: 20,
+          }}
+        >
+          <VFlex style={{ margin: 8, color: Colors.white }}>
+            <HFlex>
+              <span style={{ marginRight: 5 }}>Series:</span>
+              <Button
+                title={''}
+                onClick={() => {
+                  this.setState({ showingCreateSeriesPopup: true })
+                }}
+                style={{ minWidth: 0, backgroundColor: Colors.white }}
+              >
+                <TiPlus color={Colors.black} size={23} />
+              </Button>
+              {this.props.series.all.map((series: Series, index) => (
+                <Button
+                  key={index}
+                  title={series.name}
+                  style={{ backgroundColor: Colors.white, color: Colors.black }}
+                  onClick={() => {
+                    this.props.history.push(`/series/${series._id}`)
+                  }}
+                />
+              ))}
+            </HFlex>
+          </VFlex>
+          <VFlex>
+            <Button
+              title="Create Event"
+              onClick={() => {
+                this.setState({ showingCreatePopup: true })
+              }}
+              style={{ backgroundColor: Colors.green }}
+            />
+          </VFlex>
+        </HFlex>
       </>
     )
   }
 }
 
 // Goddamn decorator export linting issues
-export default Header
+export default withRouter(Header)

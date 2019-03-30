@@ -33,3 +33,8 @@ export const ModalContainer = styled.div`
   min-height: 200px;
   padding: 10px;
 `
+
+export const LargeText = styled.div`
+  font-size: 20px;
+  margin: 8px;
+`

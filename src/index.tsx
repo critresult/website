@@ -12,6 +12,7 @@ import EventStore from './stores/event'
 import RaceStore from './stores/race'
 import RiderStore from './stores/rider'
 import SeriesStore from './stores/series'
+import BibStore from './stores/bib'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
@@ -29,6 +30,7 @@ const stores = {
   race: new RaceStore(),
   rider: new RiderStore(),
   series: new SeriesStore(),
+  bib: new BibStore(),
 }
 
 ReactDOM.render(
