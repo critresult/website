@@ -32,7 +32,6 @@ export default class BibStore {
         ...bibData,
         token: PromoterStore.activeToken(),
       })
-      this.bibsBySeriesId[data.seriesId].push(data)
       return data
     } catch (err) {
       console.log('Error creating bib', err)

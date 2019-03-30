@@ -20,12 +20,6 @@ const EntryCell = styled(HFlex)`
   min-width: 600px;
 `
 
-const CellContent = styled(VFlex)`
-  margin-left: 10px;
-  margin-right: 10px;
-  min-width: 80px;
-`
-
 @inject('event', 'race')
 @observer
 class Entrylist extends React.Component<{
@@ -110,23 +104,29 @@ class Entrylist extends React.Component<{
           {race.name} - {`${(race.entries || []).length} entries`}
         </EntryCell>
         <EntryCell>
-          <CellContent style={{ alignItems: 'flex-start' }}>Name</CellContent>
-          <CellContent>Bib #</CellContent>
-          <CellContent>USAC License</CellContent>
-          <CellContent>Transponder</CellContent>
-          {this.props.editable === false ? null : <CellContent />}
+          <VFlex style={{ flex: 1 }}>Name</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>License</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
+          {this.props.editable === false ? null : (
+            <VFlex style={{ minWidth: '15%' }} />
+          )}
         </EntryCell>
         {entries.map((entry: Entry) =>
           !entry.rider ? null : (
             <EntryCell key={entry._id}>
-              <CellContent style={{ alignItems: 'flex-start' }}>{`${
-                entry.rider.firstname
-              } ${entry.rider.lastname}`}</CellContent>
-              <CellContent>{entry.bib}</CellContent>
-              <CellContent>{entry.rider.license}</CellContent>
-              <CellContent>{entry.rider.transponder || 'none'}</CellContent>
+              <VFlex style={{ flex: 1 }}>{`${entry.rider.firstname} ${
+                entry.rider.lastname
+              }`}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {(entry.bib || {}).bibNumber}
+              </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{entry.rider.license}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {entry.rider.transponder || 'none'}
+              </VFlex>
               {this.props.editable === false ? null : (
-                <CellContent style={{ alignItems: 'flex-end' }}>
+                <VFlex style={{ minWidth: '15%' }}>
                   <Button
                     title="Remove"
                     style={{ backgroundColor: Colors.pink }}
@@ -138,7 +138,7 @@ class Entrylist extends React.Component<{
                         )
                     }
                   />
-                </CellContent>
+                </VFlex>
               )}
             </EntryCell>
           )

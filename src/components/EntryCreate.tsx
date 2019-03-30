@@ -45,6 +45,8 @@ class EntryCreate extends React.Component<{
               ref={this.searchRef}
               valid
               type="text"
+              placeholder="firstname, lastname, or license #"
+              style={{ minWidth: 200 }}
               onChange={(e: any) => {
                 this.setState({ isSearching: true })
                 this.props.rider
@@ -90,8 +92,11 @@ class EntryCreate extends React.Component<{
                               this.props.race.loadEntries(this.props.raceId),
                             ])
                           )
-                          .then(() => (this.searchRef.current.value = ''))
-                          .then(() => this.searchRef.current.focus())
+                          .then(() => {
+                            this.searchRef.current.value = ''
+                            this.searchRef.current.focus()
+                            this.setState({ foundRiders: [] })
+                          })
                       }
                     />
                   </HFlex>
@@ -129,6 +134,11 @@ class EntryCreate extends React.Component<{
                               this.props.bib.loadBibsForSeries(race.seriesId),
                             ])
                           )
+                          .then(() => {
+                            this.searchRef.current.value = ''
+                            this.searchRef.current.focus()
+                            this.setState({ foundRiders: [] })
+                          })
                       }
                     />
                   </>

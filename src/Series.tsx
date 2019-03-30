@@ -9,6 +9,7 @@ import Button from './components/Button'
 import keyby from 'lodash.keyby'
 import Colors from './Colors'
 import AddBibCell from './components/AddBibCell'
+import idx from 'idx'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -113,9 +114,15 @@ class Series extends React.Component<{
               }}
             >
               <VFlex style={{ minWidth: '15%' }}>{bib.bibNumber}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{bib.rider.firstname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{bib.rider.lastname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{bib.rider.license}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {idx(bib, (_: any) => _.rider.firstname)}
+              </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {idx(bib, (_: any) => _.rider.lastname)}
+              </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {idx(bib, (_: any) => _.rider.license)}
+              </VFlex>
               <VFlex style={{ flex: 1 }}>
                 <HFlex>
                   <Button

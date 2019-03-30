@@ -16,7 +16,6 @@ class SeriesBibCell extends React.Component<{
 }> {
   state = {
     selectedBib: '',
-    isLoading: false,
   }
   render() {
     const rider = this.props._rider
@@ -55,8 +54,7 @@ class SeriesBibCell extends React.Component<{
           <Button
             animating={this.state.isLoading}
             title="Add Bib"
-            onClick={() => {
-              this.setState({ isLoading: true })
+            onClick={() =>
               this.props.bib
                 .create({
                   seriesId: this.props.seriesId,
@@ -69,11 +67,9 @@ class SeriesBibCell extends React.Component<{
                 .then(() =>
                   this.setState({
                     selectedBib: '',
-                    isLoading: false,
                   })
                 )
-                .catch(() => this.setState({ isLoading: false }))
-            }}
+            }
           />
         </VFlex>
       </HFlex>
