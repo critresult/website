@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { HFlex, VFlex, Input, LargeText } from './components/Shared'
 import SeriesStore from './stores/series'
@@ -82,11 +82,12 @@ class Series extends React.Component<{
             ) : null}
           </HFlex>
         </VFlex>
-        {this.state.foundRiders.map((rider: Rider) => (
+        {this.state.foundRiders.map((_rider: Rider) => (
           <AddBibCell
+            key={_rider._id}
             seriesId={seriesId}
-            _rider={rider}
-            bibNumber={(bibsByRiderId[rider._id] || {}).bibNumber}
+            _rider={_rider}
+            bibNumber={(bibsByRiderId[_rider._id] || {}).bibNumber}
           />
         ))}
         <VFlex>
