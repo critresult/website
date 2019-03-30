@@ -147,11 +147,12 @@ class Series extends React.Component<{
                   <Button
                     title="Delete"
                     style={{ backgroundColor: Colors.pink, flex: 1 }}
-                    onClick={() =>
-                      this.props.bib
+                    onClick={() => {
+                      confirm('Are you sure you want to delete this bib? Any race entries will also be deleted.')
+                      return this.props.bib
                         .delete(bib._id)
                         .then(() => this.props.bib.loadBibsForSeries(seriesId))
-                    }
+                    }}
                   />
                 </HFlex>
               </VFlex>
