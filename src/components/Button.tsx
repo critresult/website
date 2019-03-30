@@ -31,7 +31,7 @@ export default class Button extends React.Component<{
           {this.props.animating ? (
             <img src={rings} height="15" />
           ) : (
-            this.props.title
+            this.props.title || this.props.children
           )}
         </VFlex>
       </div>

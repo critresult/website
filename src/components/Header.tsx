@@ -27,7 +27,7 @@ const LowerHeader = styled(HFlex)`
 `
 
 const TitleSpan = styled(Link)`
-  font-size: 20px;
+  font-size: 25px;
   color: ${Colors.white};
   text-decoration: none;
 `

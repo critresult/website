@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
 import Home from './Home'
 import Event from './Event'
+import Series from './Series'
 import Colors from './Colors'
 import { Provider } from 'mobx-react'
 import PromoterStore from './stores/promoter'
@@ -35,6 +36,7 @@ ReactDOM.render(
     <Router>
       <Route path="/" component={Home} exact />
       <Route path="/event/:id" component={Event} />
+      <Route path="/series/:id" component={Series} />
     </Router>
   </Provider>,
   document.getElementById('app')
