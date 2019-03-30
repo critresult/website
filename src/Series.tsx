@@ -101,6 +101,7 @@ class Series extends React.Component<{
           <VFlex style={{ flex: 1 }} />
         </HFlex>
         {bibs
+          .slice()
           .sort((a, b) => (a.bibNumber > b.bibNumber ? 1 : -1))
           .map((bib) => (
             <HFlex

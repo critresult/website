@@ -51,6 +51,7 @@ export default class EventStore {
         token: PromoterStore.activeToken(),
       })
       this.eventsById[data._id] = data
+      return data
     } catch (err) {
       console.log('Error creating event', err)
       throw err

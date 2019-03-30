@@ -26,12 +26,12 @@ export default class RaceStore {
     [key: string]: Entry[]
   } = {}
 
-  async addRider(raceId: string, riderId: string, bib: string) {
+  async addEntry(raceId: string, riderId: string, bibId: string) {
     try {
       await axios.post('/races/entry', {
         raceId,
         riderId,
-        bib,
+        bibId,
         token: PromoterStore.activeToken(),
       })
     } catch (err) {
@@ -40,7 +40,7 @@ export default class RaceStore {
     }
   }
 
-  async removeRider(raceId: string, riderId: string) {
+  async removeEntry(raceId: string, riderId: string) {
     try {
       await axios.delete('/races/entries', {
         data: {

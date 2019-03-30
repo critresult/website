@@ -22,7 +22,6 @@ class _Event extends React.Component<{
 }> {
   state = {
     raceCreateVisible: false,
-    isDeleting: false,
   }
 
   componentDidMount() {
@@ -77,16 +76,13 @@ class _Event extends React.Component<{
               onClick={() => this.setState({ raceCreateVisible: true })}
             />
             <Button
-              animating={this.state.isDeleting}
               title="Delete Event"
               onClick={() => {
                 if (!confirm('Delete this event?')) return
-                this.setState({ isDeleting: true })
-                this.props.event
+                return this.props.event
                   .delete(eventId)
                   .then(() => this.props.event.loadUpcoming())
                   .then(() => this.props.history.push('/'))
-                  .catch(() => this.setState({ isDeleting: false }))
               }}
               style={{ backgroundColor: Colors.pink }}
             />

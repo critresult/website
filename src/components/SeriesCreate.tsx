@@ -17,19 +17,14 @@ class SeriesCreate extends React.Component<{
   rider?: RiderStore
 }> {
   state = {
-    isLoading: false,
     name: '',
   }
 
-  createSeries = () => {
-    this.setState({ isLoading: true })
+  createSeries = () =>
     this.props.series
       .create({ name: this.state.name })
       .then(() => this.props.series.load())
-      .then(() => this.setState({ isLoading: false }))
       .then(() => (this.props.onCreated || (() => {}))())
-      .catch(() => this.setState({ isLoading: false }))
-  }
 
   render() {
     return (
@@ -50,11 +45,7 @@ class SeriesCreate extends React.Component<{
                 />
               </HFlex>
               <HFlex>
-                <Button
-                  animating={this.state.isLoading}
-                  title="Create Series"
-                  onClick={this.createSeries}
-                />
+                <Button title="Create Series" onClick={this.createSeries} />
                 <Button
                   title="Cancel"
                   onClick={this.props.onCancelled || (() => {})}

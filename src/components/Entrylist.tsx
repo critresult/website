@@ -9,7 +9,7 @@ import Colors from '../Colors'
 import Popup from './Popup'
 import RiderCreate from './RiderCreate'
 import TabSelector from './TabSelector'
-import RiderFind from './RiderFind'
+import EntryCreate from './EntryCreate'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -78,7 +78,7 @@ class Entrylist extends React.Component<{
       {
         title: 'Find Rider',
         render: () => (
-          <RiderFind
+          <EntryCreate
             raceId={this.props.raceId}
             onFinished={() => this.setState({ createEntryVisible: false })}
           />
@@ -130,13 +130,13 @@ class Entrylist extends React.Component<{
                   <Button
                     title="Remove"
                     style={{ backgroundColor: Colors.pink }}
-                    onClick={() => {
+                    onClick={() =>
                       this.props.race
-                        .removeRider(this.props.raceId, entry.riderId)
+                        .removeEntry(this.props.raceId, entry.riderId)
                         .then(() =>
                           this.props.race.loadEntries(this.props.raceId)
                         )
-                    }}
+                    }
                   />
                 </CellContent>
               )}

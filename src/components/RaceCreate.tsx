@@ -15,19 +15,15 @@ class RaceCreate extends React.Component<{
   eventId: string
 }> {
   state = {
-    isLoading: false,
     raceData: {},
   }
 
   createRace = () => {
-    this.setState({ isLoading: true })
     const { eventId } = this.props
-    this.props.race
+    return this.props.race
       .create({ ...this.state.raceData, eventId })
       .then(() => this.props.event.load(eventId))
-      .then(() => this.setState({ isLoading: false }))
       .then(() => (this.props.onCreated || (() => {}))())
-      .catch(() => this.setState({ isLoading: false }))
   }
 
   render() {
@@ -69,11 +65,7 @@ class RaceCreate extends React.Component<{
               </HFlex>
               <HFlex>Event: {event.name}</HFlex>
               <HFlex>
-                <Button
-                  animating={this.state.isLoading}
-                  title="Create Race"
-                  onClick={this.createRace}
-                />
+                <Button title="Create Race" onClick={this.createRace} />
                 <Button
                   title="Cancel"
                   onClick={this.props.onCancelled || (() => {})}

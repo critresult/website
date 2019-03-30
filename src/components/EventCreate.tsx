@@ -4,50 +4,33 @@ import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import EventStore from '../stores/event'
 import SeriesStore from '../stores/series'
+import { withRouter } from 'react-router-dom'
 
 @inject('event', 'series')
 @observer
 class EventCreate extends React.Component<{
-  onCreated?: () => void
   onCancelled?: () => void
   event?: EventStore
   series?: SeriesStore
 }> {
   state = {
-    isLoading: false,
     eventData: {},
   }
 
+  selectRef = React.createRef()
+
   componentDidMount() {
     this.props.series.load()
+    this.props.series.loadMySeries()
   }
 
-  createEvent = () => {
-    this.setState({ isLoading: true })
+  createEvent = () =>
     this.props.event
-      .create(this.state.eventData as Event)
-      .then(() => this.props.event.loadUpcoming())
-      .then(() =>
-        this.setState({
-          isLoading: false,
-        })
-      )
-      .then(() => (this.props.onCreated || (() => {}))())
-      .catch(() => {
-        this.setState({ isLoading: false })
-      })
-  }
-
-  handleSeriesChange = (event) => {
-    event.preventDefault()
-    console.log(event.target.value)
-    this.setState({
-      eventData: {
+      .create({
         ...this.state.eventData,
-        seriesId: event.target.value,
-      },
-    })
-  }
+        seriesId: this.selectRef.current.value,
+      })
+      .then((created: any) => this.props.history.push(`/event/${created._id}`))
 
   render() {
     return (
@@ -89,10 +72,7 @@ class EventCreate extends React.Component<{
               </HFlex>
               <HFlex>
                 Series:{' '}
-                <select
-                  value={this.state.eventData.seriesId}
-                  onChange={this.handleSeriesChange}
-                >
+                <select ref={this.selectRef}>
                   {this.props.series.mySeries.map((series) => (
                     <option key={series._id} value={series._id}>
                       {series.name}
@@ -104,11 +84,7 @@ class EventCreate extends React.Component<{
                 Additional options can be configured after creation.
               </HFlex>
               <HFlex>
-                <Button
-                  animating={this.state.isLoading}
-                  title="Create Event"
-                  onClick={this.createEvent}
-                />
+                <Button title="Create Event" onClick={this.createEvent} />
                 <Button
                   title="Cancel"
                   onClick={this.props.onCancelled || (() => {})}
@@ -122,4 +98,4 @@ class EventCreate extends React.Component<{
   }
 }
 
-export default EventCreate
+export default withRouter(EventCreate)

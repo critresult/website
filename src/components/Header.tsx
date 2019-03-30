@@ -100,7 +100,6 @@ class Header extends React.Component<{
         </Popup>
         <Popup visible={this.state.showingCreatePopup}>
           <EventCreate
-            onCreated={() => this.setState({ showingCreatePopup: false })}
             onCancelled={() => this.setState({ showingCreatePopup: false })}
           />
         </Popup>
