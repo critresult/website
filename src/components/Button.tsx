@@ -43,15 +43,15 @@ export default class Button extends React.Component<{
             )
         }}
         style={{
-          margin: 5,
-          padding: 5,
+          margin: 4,
+          padding: 8,
+          paddingLeft: 16,
+          paddingRight: 16,
           fontFamily: 'Helvetica',
           cursor: 'pointer',
           backgroundColor: Colors.black,
           borderRadius: 5,
           color: Colors.white,
-          minWidth: 100,
-          minHeight: 18,
           ...(this.props.style || {}),
         }}
       >

@@ -61,6 +61,7 @@ class Series extends React.Component<{
     const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
     const bibsByRiderId = keyby(bibs, 'riderId')
     const promoters = this.props.series.promotersBySeriesId[seriesId] || []
+    const events = this.props.event.eventsBySeriesId[seriesId] || []
 
     return (
       <>
@@ -136,26 +137,25 @@ class Series extends React.Component<{
         </RootCell>
         <RootCell>
           <VFlex>
-            <LargeText>Upcoming Events</LargeText>
+            <LargeText>Events</LargeText>
           </VFlex>
-          {this.props.event.upcomingEvents
-            .filter((_event) => _event.seriesId === seriesId)
-            .map((_event) => {
-              const races = _event.races || []
+          <HFlex>
+            {events.map((event: any) => {
+              const races = event.races || []
               return (
-                <div key={_event._id}>
-                  <HFlex style={{ fontSize: 20 }}>
-                    {series.name || ''} - {_event.name}
+                <div style={{ padding: 8 }} key={event._id}>
+                  <HFlex>
+                    {series.name || ''} - {event.name}
                   </HFlex>
                   <HFlex style={{ margin: 8 }}>
-                    {moment(_event.startDate)
+                    {moment(event.startDate)
                       .utc()
                       .format('MMMM D, YYYY')}{' '}
                     - {races.length} race{races.length === 1 ? '' : 's'}
                   </HFlex>
                   <Link
                     style={{ textDecoration: 'none' }}
-                    to={`/event/${_event._id}`}
+                    to={`/event/${event._id}`}
                   >
                     <Button
                       style={{
@@ -168,13 +168,18 @@ class Series extends React.Component<{
                 </div>
               )
             })}
-          <Button
-            style={{
-              backgroundColor: Colors.green,
-            }}
-            title="Create Event"
-            onClick={() => this.setState({ showingCreatePopup: true })}
-          />
+          </HFlex>
+          <HFlex style={{ justifyContent: 'flex-end' }}>
+            <VFlex>
+              <Button
+                style={{
+                  backgroundColor: Colors.green,
+                }}
+                title="Create Event"
+                onClick={() => this.setState({ showingCreatePopup: true })}
+              />
+            </VFlex>
+          </HFlex>
         </RootCell>
         <RootCell>
           <VFlex>

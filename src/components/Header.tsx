@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Colors from '../Colors'
-import { HFlex, VFlex } from './Shared'
+import { HFlex, VFlex, LargeText } from './Shared'
 import Popup from './Popup'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
@@ -139,31 +139,37 @@ class Header extends React.Component<{
             justifyContent: 'space-between',
             paddingLeft: 20,
             paddingRight: 20,
-            fontSize: 20,
           }}
         >
-          <VFlex style={{ margin: 8, color: Colors.white }}>
+          <VFlex style={{ color: Colors.white }}>
             <HFlex>
               {this.props.series.all.map((series: Series, index) => (
-                <Button
-                  key={index}
-                  title={series.name}
-                  style={{ backgroundColor: Colors.white, color: Colors.black }}
-                  onClick={() => {
-                    this.props.history.push(`/series/${series._id}`)
-                  }}
-                />
+                <LargeText key={index}>
+                  <Button
+                    key={index}
+                    title={series.name}
+                    style={{
+                      backgroundColor: Colors.white,
+                      color: Colors.black,
+                    }}
+                    onClick={() => {
+                      this.props.history.push(`/series/${series._id}`)
+                    }}
+                  />
+                </LargeText>
               ))}
             </HFlex>
           </VFlex>
           <VFlex>
-            <Button
-              title="Create Series"
-              onClick={() => {
-                this.setState({ showingCreateSeriesPopup: true })
-              }}
-              style={{ backgroundColor: Colors.green }}
-            />
+            <LargeText>
+              <Button
+                title="Create Series"
+                onClick={() => {
+                  this.setState({ showingCreateSeriesPopup: true })
+                }}
+                style={{ backgroundColor: Colors.green }}
+              />
+            </LargeText>
           </VFlex>
         </HFlex>
       </>

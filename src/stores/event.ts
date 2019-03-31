@@ -4,6 +4,7 @@ import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
 import { Race, Entry } from './race'
 import Hydrated from './hydrated'
+import groupby from 'lodash.groupby'
 
 export interface Event {
   _id: string
@@ -15,6 +16,9 @@ export interface Event {
 
 export default class EventStore extends Hydrated {
   @observable upcomingEvents: Event[] = []
+  @observable eventsBySeriesId: {
+    [key: string]: Event[]
+  } = {}
   @observable eventsById: {
     [key: string]: Event
   } = {}
@@ -24,6 +28,12 @@ export default class EventStore extends Hydrated {
 
   async hydrate() {
     await this.loadUpcoming()
+    const { data } = await axios.get('/events', {
+      params: {
+        token: PromoterStore.activeToken(),
+      },
+    })
+    this.eventsBySeriesId = groupby(data, 'seriesId')
   }
 
   async load(_id: string) {
