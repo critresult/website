@@ -75,20 +75,24 @@ class _Event extends React.Component<{
         <RootCell>
           <HFlex style={{ justifyContent: 'space-around' }}>
             <Button
-              title="Add Race"
-              style={{ backgroundColor: Colors.green }}
-              onClick={() => this.setState({ raceCreateVisible: true })}
-            />
-            <Button
               title="Delete Event"
               onClick={() => {
-                if (!confirm('Delete this event?')) return
+                if (
+                  !confirm(
+                    'Are you sure? This will delete all associated races and entries.'
+                  )
+                ) return
                 return this.props.event
                   .delete(eventId)
                   .then(() => this.props.event.loadUpcoming())
                   .then(() => this.props.history.push('/'))
               }}
               style={{ backgroundColor: Colors.pink }}
+            />
+            <Button
+              title="Add Race"
+              style={{ backgroundColor: Colors.green }}
+              onClick={() => this.setState({ raceCreateVisible: true })}
             />
           </HFlex>
         </RootCell>

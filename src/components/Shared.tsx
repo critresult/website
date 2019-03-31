@@ -32,6 +32,9 @@ export const ModalContainer = styled.div`
   min-width: 300px;
   min-height: 200px;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 export const LargeText = styled.div`
@@ -42,6 +45,7 @@ export const LargeText = styled.div`
 export const RootCell = styled.div`
   background-color: ${Colors.white};
   margin: auto;
+  margin-top: 8px;
   max-width: 1200px;
   padding: 8px;
   border-radius: 1px;

@@ -3,13 +3,14 @@ import { inject, observer } from 'mobx-react'
 import EventStore from '../stores/event'
 import RaceStore, { Entry } from '../stores/race'
 import styled from 'styled-components'
-import { HFlex, VFlex } from './Shared'
+import { HFlex, VFlex, LargeText } from './Shared'
 import Button from './Button'
 import Colors from '../Colors'
 import Popup from './Popup'
 import RiderCreate from './RiderCreate'
 import TabSelector from './TabSelector'
 import EntryCreate from './EntryCreate'
+import { TiTimes } from 'react-icons/ti'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -97,7 +98,9 @@ class Entrylist extends React.Component<{
           <TabSelector tabs={tabs} />
         </Popup>
         <EntryCell style={{ justifyContent: 'center' }}>
-          {race.name} - {`${(race.entries || []).length} entries`}
+          <LargeText>
+            {race.name} - {`${(race.entries || []).length} entries`}
+          </LargeText>
         </EntryCell>
         <EntryCell>
           <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
@@ -122,52 +125,53 @@ class Entrylist extends React.Component<{
               {this.props.editable === false ? null : (
                 <VFlex style={{ flex: 1 }}>
                   <Button
-                    title="Remove"
-                    style={{ backgroundColor: Colors.pink }}
-                    onClick={() =>
-                      this.props.race
+                    style={{ minWidth: 0, backgroundColor: Colors.pink }}
+                    onClick={() => {
+                      if (!confirm('Remove this entry?')) return
+                      return this.props.race
                         .removeEntry(this.props.raceId, entry.riderId)
                         .then(() =>
                           this.props.race.loadEntries(this.props.raceId)
                         )
-                    }
-                  />
+                    }}
+                  >
+                    <TiTimes size={30} color={Colors.white} />
+                  </Button>
                 </VFlex>
               )}
             </EntryCell>
           )
         )}
         <HFlex>
+          <HFlex>
+            <Button
+              animating={this.state.exportingCSV}
+              title="Export CSV"
+              onClick={this.exportCSV}
+            />
+            <Button
+              title="Delete Race"
+              style={{ backgroundColor: Colors.pink }}
+              onClick={() => {
+                if (!confirm('Delete this race?')) return
+                return this.props.race
+                  .delete(this.props.raceId)
+                  .then(() =>
+                    Promise.all([
+                      this.props.race.loadByEventId(race.eventId),
+                      this.props.event.load(race.eventId),
+                    ])
+                  )
+              }}
+            />
+          </HFlex>
           <Button
-            animating={this.state.exportingCSV}
-            title="Export CSV"
-            onClick={this.exportCSV}
+            title="Add Entry"
+            style={{ backgroundColor: Colors.green }}
+            onClick={() => {
+              this.setState({ createEntryVisible: true })
+            }}
           />
-          {this.props.editable === false ? null : (
-            <>
-              <Button
-                title="Add Entry"
-                onClick={() => {
-                  this.setState({ createEntryVisible: true })
-                }}
-              />
-              <Button
-                title="Delete Race"
-                style={{ backgroundColor: Colors.pink }}
-                onClick={() => {
-                  if (!confirm('Delete this race?')) return
-                  return this.props.race
-                    .delete(this.props.raceId)
-                    .then(() =>
-                      Promise.all([
-                        this.props.race.loadByEventId(race.eventId),
-                        this.props.event.load(race.eventId),
-                      ])
-                    )
-                }}
-              />
-            </>
-          )}
         </HFlex>
       </>
     )

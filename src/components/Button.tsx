@@ -5,7 +5,7 @@ import { VFlex } from './Shared'
 const rings = require('../../static/puff.svg')
 
 export default class Button extends React.Component<{
-  title: string
+  title?: string
   animating?: boolean
   style?: any
   onClick?: () => void | Promise<any>
