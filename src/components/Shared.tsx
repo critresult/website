@@ -38,3 +38,11 @@ export const LargeText = styled.div`
   font-size: 20px;
   margin: 8px;
 `
+
+export const RootCell = styled.div`
+  background-color: ${Colors.white};
+  margin: 8px;
+  max-width: 1200px;
+  padding: 8px;
+  border-radius: 1px;
+`

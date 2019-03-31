@@ -21,7 +21,7 @@ axios.defaults.headers['content-type'] = 'application/json'
 Object.assign(document.body.style, {
   margin: 'auto',
   'font-family': 'Helvetica',
-  'background-color': Colors.white,
+  'background-color': Colors.whiteDark,
 })
 
 const stores = {
