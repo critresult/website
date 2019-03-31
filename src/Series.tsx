@@ -56,6 +56,7 @@ class Series extends React.Component<{
     const series = this.props.series.seriesById[seriesId] || {}
     const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
     const bibsByRiderId = keyby(bibs, 'riderId')
+    const promoters = this.props.series.promotersBySeriesId[seriesId] || []
 
     return (
       <>
@@ -97,6 +98,11 @@ class Series extends React.Component<{
         <RootCell>
           <VFlex>
             <LargeText>Promoters</LargeText>
+            <VFlex style={{ margin: 8 }}>
+              {promoters.map((promoter) => (
+                <div>{promoter.email}</div>
+              ))}
+            </VFlex>
             <HFlex>
               <Input
                 valid={emailValidator.validate(this.state.promoterEmail)}

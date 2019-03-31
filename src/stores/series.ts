@@ -1,6 +1,6 @@
 import { observable } from 'mobx'
 import axios from 'axios'
-import PromoterStore from './promoter'
+import PromoterStore, { Promoter } from './promoter'
 import uniqby from 'lodash.uniqby'
 import Hydrated from './hydrated'
 
@@ -16,9 +16,28 @@ export default class SeriesStore extends Hydrated {
   @observable seriesById: {
     [key: string]: Series
   } = {}
+  @observable promotersBySeriesId: {
+    [key: string]: Promoter[]
+  } = {}
 
   async hydrate() {
     await this.load()
+    await Promise.all(this.all.map((series) => this.loadPromoters(series._id)))
+  }
+
+  async loadPromoters(seriesId: string) {
+    try {
+      const { data } = await axios.get('/series/promoters', {
+        params: {
+          seriesId,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      this.promotersBySeriesId[seriesId] = data
+    } catch (err) {
+      console.log('Error loading promoters for series', err)
+      throw err
+    }
   }
 
   async load(_id?: string) {
