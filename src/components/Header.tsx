@@ -144,16 +144,6 @@ class Header extends React.Component<{
         >
           <VFlex style={{ margin: 8, color: Colors.white }}>
             <HFlex>
-              <span style={{ marginRight: 5 }}>Series:</span>
-              <Button
-                title={''}
-                onClick={() => {
-                  this.setState({ showingCreateSeriesPopup: true })
-                }}
-                style={{ minWidth: 0, backgroundColor: Colors.white }}
-              >
-                <TiPlus color={Colors.black} size={23} />
-              </Button>
               {this.props.series.all.map((series: Series, index) => (
                 <Button
                   key={index}
