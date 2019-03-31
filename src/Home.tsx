@@ -1,5 +1,5 @@
 import React from 'react'
-import { VFlex, HFlex, ModalContainer, Input } from './components/Shared'
+import { VFlex, HFlex, LargeText, RootCell } from './components/Shared'
 import Header from './components/Header'
 import { inject, observer } from 'mobx-react'
 import EventStore from './stores/event'
@@ -12,6 +12,7 @@ import RiderStore from './stores/rider'
 import SeriesStore, { Series } from './stores/series'
 import styled from 'styled-components'
 import Footer from './components/Footer'
+import Hydrated from './stores/hydrated'
 
 const Cell = styled(VFlex)`
   flex: 1;
@@ -33,58 +34,62 @@ class Home extends React.Component<{
 }> {
   inputFileRef = React.createRef()
 
-  componentDidMount() {
-    this.props.event.loadUpcoming()
-    this.props.series.load()
+  async componentDidMount() {
+    await Hydrated.hydrate()
   }
 
   render() {
     return (
       <>
         <Header />
-        <HFlex style={{ padding: 8, flex: 1 }}>
-          {this.props.event.upcomingEvents.map((_event) => {
-            const event = this.props.event.eventsById[_event._id] || {}
-            const races = event.races || []
-            return (
-              <Cell key={_event._id}>
-                <HFlex style={{ fontSize: 20 }}>
-                  {(event.series || {}).name || ''} - {event.name}
-                </HFlex>
-                <HFlex>
-                  {moment(event.startDate)
-                    .utc()
-                    .format('MMMM D YYYY')}
-                </HFlex>
-                <HFlex>
-                  {races.length} race{races.length === 1 ? '' : 's'}
-                </HFlex>
-                {event.preregistrationUrl ? (
-                  <a href={event.preregistrationUrl} target="_blank">
-                    Pre-registration
-                  </a>
-                ) : null}
-                {event.flyerUrl ? (
-                  <a href={event.flyerUrl} target="_blank">
-                    Race Flyer
-                  </a>
-                ) : null}
-                <Link
-                  style={{ textDecoration: 'none' }}
-                  to={`/event/${event._id}`}
-                >
-                  <Button
-                    style={{
-                      backgroundColor: Colors.yellow,
-                      color: Colors.black,
-                    }}
-                    title="View Details"
-                  />
-                </Link>
-              </Cell>
-            )
-          })}
-        </HFlex>
+        <VFlex>
+          <LargeText>Upcoming Events</LargeText>
+        </VFlex>
+        <RootCell>
+          <HFlex style={{ padding: 8, flex: 1 }}>
+            {this.props.event.upcomingEvents.map((_event) => {
+              const event = this.props.event.eventsById[_event._id] || {}
+              const races = event.races || []
+              return (
+                <Cell key={_event._id}>
+                  <HFlex style={{ fontSize: 20 }}>
+                    {(event.series || {}).name || ''} - {event.name}
+                  </HFlex>
+                  <HFlex>
+                    {moment(event.startDate)
+                      .utc()
+                      .format('MMMM D YYYY')}
+                  </HFlex>
+                  <HFlex>
+                    {races.length} race{races.length === 1 ? '' : 's'}
+                  </HFlex>
+                  {event.preregistrationUrl ? (
+                    <a href={event.preregistrationUrl} target="_blank">
+                      Pre-registration
+                    </a>
+                  ) : null}
+                  {event.flyerUrl ? (
+                    <a href={event.flyerUrl} target="_blank">
+                      Race Flyer
+                    </a>
+                  ) : null}
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to={`/event/${event._id}`}
+                  >
+                    <Button
+                      style={{
+                        backgroundColor: Colors.yellow,
+                        color: Colors.black,
+                      }}
+                      title="View Details"
+                    />
+                  </Link>
+                </Cell>
+              )
+            })}
+          </HFlex>
+        </RootCell>
         <Footer />
       </>
     )

@@ -1,5 +1,6 @@
 import { computed, observable, action, runInAction } from 'mobx'
 import axios from 'axios'
+import Hydrated from './hydrated'
 
 interface Promoter {
   _id: string
@@ -7,13 +8,14 @@ interface Promoter {
   email: string
 }
 
-export default class PromoterStore {
+export default class PromoterStore extends Hydrated {
   @observable userId: string
   @observable promotersById: {
     [key: string]: Promoter
   }
 
   constructor() {
+    super()
     this.promotersById = {}
     const active = JSON.parse(localStorage.getItem('promoter'))
     if (active) {
@@ -24,6 +26,8 @@ export default class PromoterStore {
       this.loadPromoter().catch(() => {})
     }
   }
+
+  async hydrate() {}
 
   @computed
   get active() {

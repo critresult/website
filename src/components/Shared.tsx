@@ -41,7 +41,7 @@ export const LargeText = styled.div`
 
 export const RootCell = styled.div`
   background-color: ${Colors.white};
-  margin: 8px;
+  margin: auto;
   max-width: 1200px;
   padding: 8px;
   border-radius: 1px;

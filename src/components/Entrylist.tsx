@@ -92,14 +92,7 @@ class Entrylist extends React.Component<{
       },
     ]
     return (
-      <VFlex
-        style={{
-          margin: 8,
-          padding: 8,
-          borderRadius: 10,
-          backgroundColor: 'white',
-        }}
-      >
+      <>
         <Popup visible={this.state.createEntryVisible}>
           <TabSelector tabs={tabs} />
         </Popup>
@@ -107,20 +100,18 @@ class Entrylist extends React.Component<{
           {race.name} - {`${(race.entries || []).length} entries`}
         </EntryCell>
         <EntryCell>
-          <VFlex style={{ flex: 1 }}>Name</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>License</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
-          {this.props.editable === false ? null : (
-            <VFlex style={{ minWidth: '15%' }} />
-          )}
+          {this.props.editable === false ? null : <VFlex style={{ flex: 1 }} />}
         </EntryCell>
         {entries.map((entry: Entry) =>
           !entry.rider ? null : (
             <EntryCell key={entry._id}>
-              <VFlex style={{ flex: 1 }}>{`${entry.rider.firstname} ${
-                entry.rider.lastname
-              }`}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {(entry.bib || {}).bibNumber}
               </VFlex>
@@ -129,7 +120,7 @@ class Entrylist extends React.Component<{
                 {entry.rider.transponder || 'none'}
               </VFlex>
               {this.props.editable === false ? null : (
-                <VFlex style={{ minWidth: '15%' }}>
+                <VFlex style={{ flex: 1 }}>
                   <Button
                     title="Remove"
                     style={{ backgroundColor: Colors.pink }}
@@ -178,7 +169,7 @@ class Entrylist extends React.Component<{
             </>
           )}
         </HFlex>
-      </VFlex>
+      </>
     )
   }
 }

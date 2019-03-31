@@ -1,15 +1,30 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
+import Hydrated from './hydrated'
+import keyby from 'lodash.keyby'
 
 export interface Bib {
   _id: string
 }
 
-export default class BibStore {
+export default class BibStore extends Hydrated {
   @observable bibsBySeriesId: {
     [key: string]: Bib[]
   } = {}
+
+  async hydrate() {
+    const { data } = await axios.get('/bibs', {
+      params: {
+        token: PromoterStore.activeToken(),
+      },
+    })
+    data.forEach((bib) => {
+      this.bibsBySeriesId[bib.seriesId] =
+        this.bibsBySeriesId[bib.seriesId] || []
+      this.bibsBySeriesId[bib.seriesId].push(bib)
+    })
+  }
 
   async loadBibsForSeries(seriesId: string) {
     try {

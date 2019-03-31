@@ -3,6 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
 import { Race, Entry } from './race'
+import Hydrated from './hydrated'
 
 export interface Event {
   _id: string
@@ -12,7 +13,7 @@ export interface Event {
   races?: Race[]
 }
 
-export default class EventStore {
+export default class EventStore extends Hydrated {
   @observable upcomingEvents: Event[] = []
   @observable eventsById: {
     [key: string]: Event
@@ -20,6 +21,10 @@ export default class EventStore {
   @observable entriesByEvent: {
     [key: string]: Entry[]
   } = {}
+
+  async hydrate() {
+    await this.loadUpcoming()
+  }
 
   async load(_id: string) {
     try {

@@ -11,6 +11,7 @@ import Colors from './Colors'
 import AddBibCell from './components/AddBibCell'
 import idx from 'idx'
 import Footer from './components/Footer'
+import Hydrated from './stores/hydrated'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -26,12 +27,9 @@ class Series extends React.Component<{
 
   searchRef = React.createRef()
 
-  componentDidMount() {
-    const seriesId = this.props.match.params.id
-    this.props.series.load(seriesId)
-    this.props.bib.loadBibsForSeries(seriesId)
-    this.props.series.load()
+  async componentDidMount() {
     this.searchRef.current.focus()
+    await Hydrated.hydrate()
   }
 
   componentWillReceiveProps(newProps: any) {

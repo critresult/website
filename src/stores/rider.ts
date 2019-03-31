@@ -3,6 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import chunk from 'lodash.chunk'
 import uniqby from 'lodash.uniqby'
+import Hydrated from './hydrated'
 
 export interface Rider {
   _id: string
@@ -11,10 +12,12 @@ export interface Rider {
   license: string
 }
 
-export default class RiderStore {
+export default class RiderStore extends Hydrated {
   @observable ridersById: {
     [key: string]: Rider
   } = {}
+
+  async hydrate() {}
 
   async load(_id: string) {
     try {
@@ -70,9 +73,9 @@ export default class RiderStore {
             models: modelChunk,
             token: PromoterStore.activeToken(),
           })
-          .catch(() => ({ data: []}))
+          .catch(() => ({ data: [] }))
         created.push(...data)
-        await new Promise(r => setTimeout(r, 1000))
+        await new Promise((r) => setTimeout(r, 1000))
       }
       created.map((model: Rider) => (this.ridersById[model._id] = model))
     } catch (err) {

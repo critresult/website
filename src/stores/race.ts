@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import { Rider } from './rider'
+import Hydrated from './hydrated'
 
 export interface Race {
   _id: string
@@ -18,13 +19,22 @@ export interface Entry {
   rider?: Rider
 }
 
-export default class RaceStore {
+export default class RaceStore extends Hydrated {
   @observable racesById: {
     [key: string]: Race
   } = {}
   @observable entriesByRaceId: {
     [key: string]: Entry[]
   } = {}
+
+  async hydrate() {
+    const { data } = await axios.get('/races', {
+      params: {
+        token: PromoterStore.activeToken(),
+      },
+    })
+    data.forEach((model: any) => (this.racesById[model._id] = model))
+  }
 
   async addEntry(raceId: string, riderId: string, bibId: string) {
     try {

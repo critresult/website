@@ -6,6 +6,7 @@ import {
   ModalContainer,
   Input,
   LargeText,
+  RootCell,
 } from './components/Shared'
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
@@ -20,6 +21,7 @@ import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import idx from 'idx'
 import Footer from './components/Footer'
+import Hydrated from './stores/hydrated'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer
@@ -32,11 +34,8 @@ class _Event extends React.Component<{
     raceCreateVisible: false,
   }
 
-  componentDidMount() {
-    const eventId = idx(this, (_: any) => _.props.match.params.id)
-    this.props.series.load()
-    this.props.event.load(eventId)
-    this.props.race.loadByEventId(eventId)
+  async componentDidMount() {
+    await Hydrated.hydrate()
   }
 
   render() {
@@ -60,32 +59,24 @@ class _Event extends React.Component<{
           />
         </Popup>
         <VFlex>
-          <VFlex style={{ alignItems: 'flex-start' }}>
-            <LargeText>
-              {(event.series || {}).name} - {event.name}
-            </LargeText>
-          </VFlex>
-          <VFlex style={{ alignItems: 'flex-end' }}>
-            <LargeText>
-              {moment(event.startDate)
-                .utc()
-                .format(dateFormat)}{' '}
-              ({dayDifference})
-            </LargeText>
-            {event.startDate === event.endDate ? null : (
-              <LargeText>Event End: {event.endDate}</LargeText>
-            )}
-          </VFlex>
-          {races.map((race: Race) => (
-            <Entrylist
-              key={race._id}
-              seriesId={race.seriesId}
-              raceId={race._id}
-            />
-          ))}
-          <HFlex>
+          <LargeText>
+            {(event.series || {}).name} - {event.name}
+          </LargeText>
+          <LargeText>
+            {moment(event.startDate)
+              .utc()
+              .format(dateFormat)}{' '}
+            ({dayDifference})
+          </LargeText>
+          {event.startDate === event.endDate ? null : (
+            <LargeText>Event End: {event.endDate}</LargeText>
+          )}
+        </VFlex>
+        <RootCell>
+          <HFlex style={{ justifyContent: 'space-around' }}>
             <Button
               title="Add Race"
+              style={{ backgroundColor: Colors.green }}
               onClick={() => this.setState({ raceCreateVisible: true })}
             />
             <Button
@@ -100,7 +91,16 @@ class _Event extends React.Component<{
               style={{ backgroundColor: Colors.pink }}
             />
           </HFlex>
-        </VFlex>
+        </RootCell>
+        {races.map((race: Race) => (
+          <RootCell>
+            <Entrylist
+              key={race._id}
+              seriesId={race.seriesId}
+              raceId={race._id}
+            />
+          </RootCell>
+        ))}
         <Footer />
       </>
     )

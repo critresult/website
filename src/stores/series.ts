@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqby from 'lodash.uniqby'
+import Hydrated from './hydrated'
 
 export interface Series {
   _id: string
@@ -9,12 +10,16 @@ export interface Series {
   promoterId: string
 }
 
-export default class SeriesStore {
+export default class SeriesStore extends Hydrated {
   @observable all: Series[] = []
   @observable mySeries: Series[] = []
   @observable seriesById: {
     [key: string]: Series
   } = {}
+
+  async hydrate() {
+    await this.load()
+  }
 
   async load(_id?: string) {
     try {
