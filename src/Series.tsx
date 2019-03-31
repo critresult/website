@@ -12,6 +12,7 @@ import AddBibCell from './components/AddBibCell'
 import idx from 'idx'
 import Footer from './components/Footer'
 import Hydrated from './stores/hydrated'
+import emailValidator from 'email-validator'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -23,6 +24,7 @@ class Series extends React.Component<{
   state = {
     isSearching: false,
     foundRiders: [],
+    promoterEmail: '',
   }
 
   searchRef = React.createRef()
@@ -62,13 +64,7 @@ class Series extends React.Component<{
           <LargeText>{series.name}</LargeText>
         </VFlex>
         <RootCell>
-          <VFlex
-            style={{
-              backgroundColor: Colors.white,
-              margin: 8,
-              borderRadius: 10,
-            }}
-          >
+          <VFlex>
             <LargeText>Add Rider to Series</LargeText>
             <HFlex>
               Search:
@@ -97,6 +93,31 @@ class Series extends React.Component<{
               bibNumber={(bibsByRiderId[_rider._id] || {}).bibNumber}
             />
           ))}
+        </RootCell>
+        <RootCell>
+          <VFlex>
+            <LargeText>Promoters</LargeText>
+            <HFlex>
+              <Input
+                valid={emailValidator.validate(this.state.promoterEmail)}
+                type="text"
+                placeholder="email@domain.com"
+                style={{ minWidth: 200 }}
+                onChange={(e) =>
+                  this.setState({ promoterEmail: e.target.value })
+                }
+              />
+              <Button
+                title="Invite"
+                onClick={() =>
+                  this.props.series.invitePromoter(
+                    seriesId,
+                    this.state.promoterEmail
+                  )
+                }
+              />
+            </HFlex>
+          </VFlex>
         </RootCell>
         <RootCell>
           <VFlex>

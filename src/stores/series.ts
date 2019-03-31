@@ -69,4 +69,17 @@ export default class SeriesStore extends Hydrated {
       throw err
     }
   }
+
+  async invitePromoter(seriesId: string, email: string) {
+    try {
+      await axios.post('/series/invite', {
+        token: PromoterStore.activeToken(),
+        email,
+        seriesId,
+      })
+    } catch (err) {
+      console.log('Error inviting promoter', err)
+      throw err
+    }
+  }
 }
