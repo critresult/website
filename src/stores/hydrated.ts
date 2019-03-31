@@ -5,7 +5,10 @@ export default class Hydrated {
     [key: string]: Hydrated
   } = {}
 
+  static __hydrating = false
+
   static async hydrate(...args: string[]) {
+    if (this.__hydrating) return
     try {
       const promises = []
       for (const key in this.stores) {

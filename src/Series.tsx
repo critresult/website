@@ -32,15 +32,6 @@ class Series extends React.Component<{
     await Hydrated.hydrate()
   }
 
-  componentWillReceiveProps(newProps: any) {
-    const seriesId = idx(this, (_: any) => _.props.match.params.id)
-    const newSeriesId = idx(newProps, (_: any) => _.match.params.id)
-    if (newSeriesId !== seriesId) {
-      this.props.series.load(newSeriesId)
-      this.props.bib.loadBibsForSeries(newSeriesId)
-    }
-  }
-
   searchChanged = (e: any) => {
     const newSearchString = e.target.value
     if (newSearchString.length === 0) {

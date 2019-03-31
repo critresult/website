@@ -8,6 +8,8 @@ export interface Race {
   _id: string
   name: string
   scheduledStart: string
+  seriesId: string
+  eventId: string
 }
 
 export interface Entry {

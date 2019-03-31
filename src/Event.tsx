@@ -93,12 +93,8 @@ class _Event extends React.Component<{
           </HFlex>
         </RootCell>
         {races.map((race: Race) => (
-          <RootCell>
-            <Entrylist
-              key={race._id}
-              seriesId={race.seriesId}
-              raceId={race._id}
-            />
+          <RootCell key={race._id}>
+            <Entrylist seriesId={race.seriesId} raceId={race._id} />
           </RootCell>
         ))}
         <Footer />

@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import Hydrated from './hydrated'
-import keyby from 'lodash.keyby'
+import groupby from 'lodash.groupby'
 
 export interface Bib {
   _id: string
@@ -19,12 +19,7 @@ export default class BibStore extends Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
-    this.bibsBySeriesId = {}
-    data.forEach((bib) => {
-      this.bibsBySeriesId[bib.seriesId] =
-        this.bibsBySeriesId[bib.seriesId] || []
-      this.bibsBySeriesId[bib.seriesId].push(bib)
-    })
+    this.bibsBySeriesId = groupby(data, 'seriesId')
   }
 
   async loadBibsForSeries(seriesId: string) {
