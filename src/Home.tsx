@@ -63,16 +63,6 @@ class Home extends React.Component<{
                   <HFlex>
                     {races.length} race{races.length === 1 ? '' : 's'}
                   </HFlex>
-                  {event.preregistrationUrl ? (
-                    <a href={event.preregistrationUrl} target="_blank">
-                      Pre-registration
-                    </a>
-                  ) : null}
-                  {event.flyerUrl ? (
-                    <a href={event.flyerUrl} target="_blank">
-                      Race Flyer
-                    </a>
-                  ) : null}
                   <Link
                     style={{ textDecoration: 'none' }}
                     to={`/event/${event._id}`}

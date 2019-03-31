@@ -13,6 +13,8 @@ import idx from 'idx'
 import Footer from './components/Footer'
 import Hydrated from './stores/hydrated'
 import emailValidator from 'email-validator'
+import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -124,6 +126,40 @@ class Series extends React.Component<{
               />
             </HFlex>
           </VFlex>
+        </RootCell>
+        <RootCell>
+          <VFlex>
+            <LargeText>Upcoming Events</LargeText>
+          </VFlex>
+          {this.props.event.upcomingEvents
+            .filter((_event) => _event.seriesId === seriesId)
+            .map((_event) => {
+              const races = _event.races || []
+              return (
+                <div key={_event._id}>
+                  <HFlex style={{ fontSize: 20 }}>
+                    {series.name || ''} - {_event.name}
+                  </HFlex>
+                  <HFlex style={{ margin: 8 }}>
+                    {moment(_event.startDate)
+                      .utc()
+                      .format('MMMM D, YYYY')} - {races.length} race{races.length === 1 ? '' : 's'}
+                  </HFlex>
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to={`/event/${_event._id}`}
+                  >
+                    <Button
+                      style={{
+                        backgroundColor: Colors.yellow,
+                        color: Colors.black,
+                      }}
+                      title="View Details"
+                    />
+                  </Link>
+                </div>
+              )
+            })}
         </RootCell>
         <RootCell>
           <VFlex>
