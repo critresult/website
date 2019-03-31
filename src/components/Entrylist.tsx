@@ -36,7 +36,6 @@ class Entrylist extends React.Component<{
   }
   componentDidMount() {
     this.props.race.loadEntries(this.props.raceId)
-    this.props.race.load(this.props.raceId)
   }
 
   exportCSV = () => {
@@ -99,7 +98,7 @@ class Entrylist extends React.Component<{
         </Popup>
         <EntryCell style={{ justifyContent: 'center' }}>
           <LargeText>
-            {race.name} - {`${(race.entries || []).length} entries`}
+            {race.name} - {`${entries.length} entries`}
           </LargeText>
         </EntryCell>
         <EntryCell>

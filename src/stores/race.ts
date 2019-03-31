@@ -35,7 +35,11 @@ export default class RaceStore extends Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
-    data.forEach((model: any) => (this.racesById[model._id] = model))
+    data.forEach((model: any) => {
+      this.racesById[model._id] = model
+      if (this.entriesByRaceId[model._id]) return
+      this.loadEntries(model._id)
+    })
   }
 
   async addEntry(raceId: string, riderId: string, bibId: string) {
