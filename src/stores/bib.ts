@@ -19,6 +19,7 @@ export default class BibStore extends Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
+    this.bibsBySeriesId = {}
     data.forEach((bib) => {
       this.bibsBySeriesId[bib.seriesId] =
         this.bibsBySeriesId[bib.seriesId] || []
