@@ -100,7 +100,7 @@ class Series extends React.Component<{
             <LargeText>Promoters</LargeText>
             <VFlex style={{ margin: 8 }}>
               {promoters.map((promoter) => (
-                <div>{promoter.email}</div>
+                <div key={promoter._id}>{promoter.email}</div>
               ))}
             </VFlex>
             <HFlex>
