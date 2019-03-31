@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react'
 import {
   VFlex,
   HFlex,
-  ModalContainer,
-  Input,
   LargeText,
   RootCell,
   TitleText,
@@ -12,7 +10,6 @@ import {
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
 import RaceStore, { Race } from './stores/race'
-import styled from 'styled-components'
 import moment from 'moment'
 import Popup from './components/Popup'
 import Button from './components/Button'
@@ -20,7 +17,6 @@ import RaceCreate from './components/RaceCreate'
 import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
-import idx from 'idx'
 import Footer from './components/Footer'
 import Hydrated from './stores/hydrated'
 
