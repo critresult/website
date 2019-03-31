@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore, { Promoter } from './promoter'
 import uniqby from 'lodash.uniqby'
-import Hydrated from './hydrated'
+import Hydrated from 'hydrated'
 
 export interface Series {
   _id: string

@@ -3,7 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
 import { Race, Entry } from './race'
-import Hydrated from './hydrated'
+import Hydrated from 'hydrated'
 import groupby from 'lodash.groupby'
 
 export interface Event {

@@ -18,7 +18,7 @@ import Colors from './Colors'
 import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import Footer from './components/Footer'
-import Hydrated from './stores/hydrated'
+import Hydrated from 'hydrated'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer

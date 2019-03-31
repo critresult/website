@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import { Rider } from './rider'
-import Hydrated from './hydrated'
+import Hydrated from 'hydrated'
 
 export interface Race {
   _id: string

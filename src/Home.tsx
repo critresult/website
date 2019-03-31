@@ -18,7 +18,7 @@ import RiderStore from './stores/rider'
 import SeriesStore, { Series } from './stores/series'
 import styled from 'styled-components'
 import Footer from './components/Footer'
-import Hydrated from './stores/hydrated'
+import Hydrated from 'hydrated'
 
 const Cell = styled(VFlex)`
   flex: 1;

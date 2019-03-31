@@ -13,7 +13,7 @@ import RaceStore from './stores/race'
 import RiderStore from './stores/rider'
 import SeriesStore from './stores/series'
 import BibStore from './stores/bib'
-import Hydrated from './stores/hydrated'
+import Hydrated from 'hydrated'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'

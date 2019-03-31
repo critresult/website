@@ -1,6 +1,6 @@
 import { computed, observable, action, runInAction } from 'mobx'
 import axios from 'axios'
-import Hydrated from './hydrated'
+import Hydrated from 'hydrated'
 
 export interface Promoter {
   _id: string

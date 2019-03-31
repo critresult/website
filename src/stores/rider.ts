@@ -3,7 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import chunk from 'lodash.chunk'
 import uniqby from 'lodash.uniqby'
-import Hydrated from './hydrated'
+import Hydrated from 'hydrated'
 
 export interface Rider {
   _id: string
