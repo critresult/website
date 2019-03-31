@@ -117,7 +117,9 @@ class Entrylist extends React.Component<{
               <VFlex style={{ minWidth: '15%' }}>
                 {(entry.bib || {}).bibNumber}
               </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{entry.rider.license}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                {entry.rider.license || 'One Day'}
+              </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {entry.rider.transponder || 'none'}
               </VFlex>

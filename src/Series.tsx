@@ -15,6 +15,8 @@ import Hydrated from './stores/hydrated'
 import emailValidator from 'email-validator'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import Popup from './components/Popup'
+import EventCreate from './components/EventCreate'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -27,12 +29,12 @@ class Series extends React.Component<{
     isSearching: false,
     foundRiders: [],
     promoterEmail: '',
+    showingCreatePopup: false,
   }
 
   searchRef = React.createRef()
 
   async componentDidMount() {
-    this.searchRef.current.focus()
     await Hydrated.hydrate()
   }
 
@@ -62,6 +64,11 @@ class Series extends React.Component<{
 
     return (
       <>
+        <Popup visible={this.state.showingCreatePopup}>
+          <EventCreate
+            onCancelled={() => this.setState({ showingCreatePopup: false })}
+          />
+        </Popup>
         <Header />
         <VFlex>
           <LargeText>{series.name}</LargeText>
@@ -143,7 +150,8 @@ class Series extends React.Component<{
                   <HFlex style={{ margin: 8 }}>
                     {moment(_event.startDate)
                       .utc()
-                      .format('MMMM D, YYYY')} - {races.length} race{races.length === 1 ? '' : 's'}
+                      .format('MMMM D, YYYY')}{' '}
+                    - {races.length} race{races.length === 1 ? '' : 's'}
                   </HFlex>
                   <Link
                     style={{ textDecoration: 'none' }}
@@ -160,6 +168,13 @@ class Series extends React.Component<{
                 </div>
               )
             })}
+          <Button
+            style={{
+              backgroundColor: Colors.green,
+            }}
+            title="Create Event"
+            onClick={() => this.setState({ showingCreatePopup: true })}
+          />
         </RootCell>
         <RootCell>
           <VFlex>
@@ -170,6 +185,7 @@ class Series extends React.Component<{
             <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
             <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
             <VFlex style={{ minWidth: '15%' }}>License</VFlex>
+            <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
             <VFlex style={{ flex: 1 }} />
           </HFlex>
           {bibs
@@ -192,7 +208,10 @@ class Series extends React.Component<{
                   {idx(bib, (_: any) => _.rider.lastname)}
                 </VFlex>
                 <VFlex style={{ minWidth: '15%' }}>
-                  {idx(bib, (_: any) => _.rider.license)}
+                  {idx(bib, (_: any) => _.rider.license) || 'One Day'}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  {idx(bib, (_: any) => _.rider.transponder) || 'none'}
                 </VFlex>
                 <VFlex style={{ flex: 1 }}>
                   <HFlex>

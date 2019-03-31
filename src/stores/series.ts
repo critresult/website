@@ -69,7 +69,6 @@ export default class SeriesStore extends Hydrated {
         },
       })
       this.mySeries = data
-      this.mySeries.forEach((series) => (this.seriesById[series._id] = series))
     } catch (err) {
       console.log('Error loading owned series', err)
       throw err

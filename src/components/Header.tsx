@@ -158,9 +158,9 @@ class Header extends React.Component<{
           </VFlex>
           <VFlex>
             <Button
-              title="Create Event"
+              title="Create Series"
               onClick={() => {
-                this.setState({ showingCreatePopup: true })
+                this.setState({ showingCreateSeriesPopup: true })
               }}
               style={{ backgroundColor: Colors.green }}
             />
