@@ -33,6 +33,7 @@ export default class EventStore extends Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
+    data.forEach((model: any) => (this.eventsById[model._id] = model))
     this.eventsBySeriesId = groupby(data, 'seriesId')
   }
 

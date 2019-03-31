@@ -7,6 +7,7 @@ import {
   Input,
   LargeText,
   RootCell,
+  TitleText,
 } from './components/Shared'
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
@@ -41,6 +42,7 @@ class _Event extends React.Component<{
   render() {
     const eventId = this.props.match.params.id
     const event = this.props.event.eventsById[eventId] || ({} as Event)
+    const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
     const dateFormat = 'MMMM Do YYYY'
     const dayDifference = moment(event.startDate)
@@ -58,20 +60,22 @@ class _Event extends React.Component<{
             onCancelled={() => this.setState({ raceCreateVisible: false })}
           />
         </Popup>
-        <VFlex>
-          <LargeText>
-            {(event.series || {}).name} - {event.name}
-          </LargeText>
-          <LargeText>
-            {moment(event.startDate)
-              .utc()
-              .format(dateFormat)}{' '}
-            ({dayDifference})
-          </LargeText>
-          {event.startDate === event.endDate ? null : (
-            <LargeText>Event End: {event.endDate}</LargeText>
-          )}
-        </VFlex>
+        <RootCell style={{ marginTop: 0 }}>
+          <VFlex>
+            <TitleText>
+              {series.name} - {event.name}
+            </TitleText>
+            <LargeText>
+              {moment(event.startDate)
+                .utc()
+                .format(dateFormat)}{' '}
+              ({dayDifference})
+            </LargeText>
+            {event.startDate === event.endDate ? null : (
+              <LargeText>Event End: {event.endDate}</LargeText>
+            )}
+          </VFlex>
+        </RootCell>
         <RootCell>
           <HFlex style={{ justifyContent: 'space-around' }}>
             <Button

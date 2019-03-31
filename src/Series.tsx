@@ -1,6 +1,13 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { HFlex, VFlex, Input, LargeText, RootCell } from './components/Shared'
+import {
+  HFlex,
+  VFlex,
+  Input,
+  LargeText,
+  RootCell,
+  TitleText,
+} from './components/Shared'
 import SeriesStore from './stores/series'
 import BibStore from './stores/bib'
 import RiderStore, { Rider } from './stores/rider'
@@ -71,9 +78,11 @@ class Series extends React.Component<{
           />
         </Popup>
         <Header />
-        <VFlex>
-          <LargeText>{series.name}</LargeText>
-        </VFlex>
+        <RootCell style={{ marginTop: 0 }}>
+          <VFlex>
+            <TitleText>{series.name} Race Series</TitleText>
+          </VFlex>
+        </RootCell>
         <RootCell>
           <VFlex>
             <LargeText>Add Rider to Series</LargeText>

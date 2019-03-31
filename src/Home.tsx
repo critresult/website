@@ -1,5 +1,11 @@
 import React from 'react'
-import { VFlex, HFlex, LargeText, RootCell } from './components/Shared'
+import {
+  VFlex,
+  HFlex,
+  LargeText,
+  RootCell,
+  TitleText,
+} from './components/Shared'
 import Header from './components/Header'
 import { inject, observer } from 'mobx-react'
 import EventStore from './stores/event'
@@ -42,9 +48,11 @@ class Home extends React.Component<{
     return (
       <>
         <Header />
-        <VFlex>
-          <LargeText>Upcoming Events</LargeText>
-        </VFlex>
+        <RootCell style={{ marginTop: 0 }}>
+          <VFlex>
+            <TitleText>Upcoming Events</TitleText>
+          </VFlex>
+        </RootCell>
         <RootCell>
           <HFlex style={{ padding: 8, flex: 1 }}>
             {this.props.event.upcomingEvents.map((_event) => {

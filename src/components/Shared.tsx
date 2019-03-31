@@ -42,6 +42,11 @@ export const LargeText = styled.div`
   margin: 8px;
 `
 
+export const TitleText = styled.div`
+  font-size: 25px;
+  margin: 8px;
+`
+
 export const RootCell = styled.div`
   background-color: ${Colors.white};
   margin: auto;

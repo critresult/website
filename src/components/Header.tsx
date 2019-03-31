@@ -110,23 +110,21 @@ class Header extends React.Component<{
           <VFlex style={{ alignItems: 'flex-end' }}>
             <HFlex>
               {this.props.promoter.userId ? (
-                <HeaderButton onClick={() => {}}>
+                <Button onClick={() => {}}>
                   {this.props.promoter.active.email || ''}
-                </HeaderButton>
+                </Button>
               ) : (
-                <HeaderButton
-                  onClick={() => this.setState({ authVisible: true })}
-                >
+                <Button onClick={() => this.setState({ authVisible: true })}>
                   Signup or Login
-                </HeaderButton>
+                </Button>
               )}
               {this.props.promoter.userId ? (
-                <HeaderButton
+                <Button
                   style={{ marginLeft: 5 }}
                   onClick={() => this.props.promoter.logout()}
                 >
                   Logout
-                </HeaderButton>
+                </Button>
               ) : null}
             </HFlex>
           </VFlex>
@@ -144,32 +142,28 @@ class Header extends React.Component<{
           <VFlex style={{ color: Colors.white }}>
             <HFlex>
               {this.props.series.all.map((series: Series, index) => (
-                <LargeText key={index}>
-                  <Button
-                    key={index}
-                    title={series.name}
-                    style={{
-                      backgroundColor: Colors.white,
-                      color: Colors.black,
-                    }}
-                    onClick={() => {
-                      this.props.history.push(`/series/${series._id}`)
-                    }}
-                  />
-                </LargeText>
+                <Button
+                  key={index}
+                  title={series.name}
+                  style={{
+                    backgroundColor: Colors.white,
+                    color: Colors.black,
+                  }}
+                  onClick={() => {
+                    this.props.history.push(`/series/${series._id}`)
+                  }}
+                />
               ))}
             </HFlex>
           </VFlex>
           <VFlex>
-            <LargeText>
-              <Button
-                title="Create Series"
-                onClick={() => {
-                  this.setState({ showingCreateSeriesPopup: true })
-                }}
-                style={{ backgroundColor: Colors.green }}
-              />
-            </LargeText>
+            <Button
+              title="Create Series"
+              onClick={() => {
+                this.setState({ showingCreateSeriesPopup: true })
+              }}
+              style={{ backgroundColor: Colors.green }}
+            />
           </VFlex>
         </HFlex>
       </>

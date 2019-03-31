@@ -44,9 +44,9 @@ export default class Button extends React.Component<{
         }}
         style={{
           margin: 4,
-          padding: 8,
-          paddingLeft: 16,
-          paddingRight: 16,
+          padding: 4,
+          paddingLeft: 8,
+          paddingRight: 8,
           fontFamily: 'Helvetica',
           cursor: 'pointer',
           backgroundColor: Colors.black,
