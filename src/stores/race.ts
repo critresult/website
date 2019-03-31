@@ -21,7 +21,7 @@ export interface Entry {
   rider?: Rider
 }
 
-export default class RaceStore extends Hydrated {
+export default class RaceStore implements Hydrated {
   @observable racesById: {
     [key: string]: Race
   } = {}

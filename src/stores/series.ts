@@ -10,7 +10,7 @@ export interface Series {
   promoterId: string
 }
 
-export default class SeriesStore extends Hydrated {
+export default class SeriesStore implements Hydrated {
   @observable all: Series[] = []
   @observable mySeries: Series[] = []
   @observable seriesById: {

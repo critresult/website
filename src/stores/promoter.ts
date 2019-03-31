@@ -8,14 +8,13 @@ export interface Promoter {
   email: string
 }
 
-export default class PromoterStore extends Hydrated {
+export default class PromoterStore implements Hydrated {
   @observable userId: string
   @observable promotersById: {
     [key: string]: Promoter
   }
 
   constructor() {
-    super()
     this.promotersById = {}
     const active = JSON.parse(localStorage.getItem('promoter'))
     if (active) {

@@ -8,7 +8,7 @@ export interface Bib {
   _id: string
 }
 
-export default class BibStore extends Hydrated {
+export default class BibStore implements Hydrated {
   @observable bibsBySeriesId: {
     [key: string]: Bib[]
   } = {}

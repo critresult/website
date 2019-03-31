@@ -14,7 +14,7 @@ export interface Event {
   races?: Race[]
 }
 
-export default class EventStore extends Hydrated {
+export default class EventStore implements Hydrated {
   @observable upcomingEvents: Event[] = []
   @observable eventsBySeriesId: {
     [key: string]: Event[]

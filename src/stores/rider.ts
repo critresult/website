@@ -12,7 +12,7 @@ export interface Rider {
   license: string
 }
 
-export default class RiderStore extends Hydrated {
+export default class RiderStore implements Hydrated {
   @observable ridersById: {
     [key: string]: Rider
   } = {}
