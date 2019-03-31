@@ -9,7 +9,7 @@
     "dev": "webpack-dev-server --config webpack.config.js",
     "lint": "eslint ./src/**.tsx",
     "now-build": "npm run build",
-    "next": "now alias set website-git-next.critresult.now.sh next.critresult.com",
+    "next": "now alias set $(now) next.critresult.com",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
