@@ -8,7 +8,8 @@
     "build": "npm run clean && webpack --config webpack.prod.js",
     "dev": "webpack-dev-server --config webpack.config.js",
     "lint": "eslint ./src/**.tsx",
-    "now-build": "npm run build",
+    "now-build": "npm run build && npm run now-next",
+    "now-next": "now alias set website-git-next.critresult.now.sh next.critresult.com",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
