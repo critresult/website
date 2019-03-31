@@ -152,7 +152,16 @@ class Series extends React.Component<{
             {events.map((event: any) => {
               const races = event.races || []
               return (
-                <div style={{ padding: 8 }} key={event._id}>
+                <div
+                  style={{
+                    backgroundColor: Colors.whiteDark,
+                    color: Colors.black,
+                    padding: 8,
+                    borderRadius: 10,
+                    margin: 8,
+                  }}
+                  key={event._id}
+                >
                   <HFlex>
                     {series.name || ''} - {event.name}
                   </HFlex>
