@@ -5,28 +5,38 @@ import Button from './Button'
 import Colors from '../Colors'
 import idx from 'idx'
 
-@inject('bib')
+@inject('bib', 'rider')
 @observer
 class BibList extends React.Component<{
   seriesId: string
   title?: string
   bib?: any
+  rider?: any
 }> {
   state = {
-    filteredBibs: null,
-    bibFilter: '',
+    filteredBibs: null as null | any[],
+    filter: '',
   }
+
   filterBibs = () => {
     const { seriesId } = this.props
     const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
-    if (!this.state.bibFilter) {
+    if (!this.state.filter) {
       this.setState({ filteredBibs: null })
       return
     }
     this.setState({
-      filteredBibs: bibs.filter(
-        (bib) => bib.bibNumber.toString().indexOf(this.state.bibFilter) !== -1
-      ),
+      filteredBibs: bibs.filter((bib: any) => {
+        const license = idx<any, string>(bib, (_) => _.rider.license) || ''
+        const firstname = idx<any, string>(bib, (_) => _.rider.firstname) || ''
+        const lastname = idx<any, string>(bib, (_) => _.rider.lastname) || ''
+        const bibMatch =
+          bib.bibNumber.toString().indexOf(this.state.filter) !== -1
+        const licenseMatch = license.indexOf(this.state.filter) !== -1
+        const firstnameMatch = firstname.indexOf(this.state.filter) !== -1
+        const lastnameMatch = lastname.indexOf(this.state.filter) !== -1
+        return bibMatch || licenseMatch || firstnameMatch || lastnameMatch
+      }),
     })
   }
 
@@ -41,12 +51,12 @@ class BibList extends React.Component<{
         </VFlex>
         <HFlex style={{ justifyContent: 'center' }}>
           <Input
-            placeholder="filter by bib"
+            placeholder="bib #, name, or license #"
             type="text"
             onChange={(e: any) => {
               this.setState(
                 {
-                  bibFilter: e.target.value,
+                  filter: e.target.value,
                 },
                 this.filterBibs
               )
