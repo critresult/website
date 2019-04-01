@@ -136,7 +136,7 @@ class Entrylist extends React.Component<{
                         )
                     }}
                   >
-                    <TiTimes size={30} color={Colors.white} />
+                    <TiTimes size={25} color={Colors.white} />
                   </Button>
                 </VFlex>
               )}
