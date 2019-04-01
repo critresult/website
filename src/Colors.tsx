@@ -7,5 +7,6 @@ export default {
   blue: '#0094FF',
   black: '#31393C',
   green: '#40B227',
-  whiteDark: '#E0E0E0',
+  whiteDark: '#EAEBEA',
+  shadow: 'rgba(49, 57, 60, 0.25)',
 }

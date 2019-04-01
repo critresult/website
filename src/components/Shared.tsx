@@ -53,5 +53,6 @@ export const RootCell = styled.div`
   margin-top: 8px;
   max-width: 1200px;
   padding: 8px;
-  border-radius: 1px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px ${Colors.shadow};
 `

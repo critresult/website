@@ -48,7 +48,13 @@ class Home extends React.Component<{
     return (
       <>
         <Header />
-        <RootCell style={{ marginTop: 0 }}>
+        <RootCell
+          style={{
+            marginTop: 0,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }}
+        >
           <VFlex>
             <TitleText>Upcoming Events</TitleText>
           </VFlex>

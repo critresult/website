@@ -78,7 +78,13 @@ class Series extends React.Component<{
           />
         </Popup>
         <Header />
-        <RootCell style={{ marginTop: 0 }}>
+        <RootCell
+          style={{
+            marginTop: 0,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }}
+        >
           <VFlex>
             <TitleText>{series.name} Race Series</TitleText>
           </VFlex>
@@ -152,16 +158,7 @@ class Series extends React.Component<{
             {events.map((event: any) => {
               const races = event.races || []
               return (
-                <div
-                  style={{
-                    backgroundColor: Colors.whiteDark,
-                    color: Colors.black,
-                    padding: 8,
-                    borderRadius: 10,
-                    margin: 8,
-                  }}
-                  key={event._id}
-                >
+                <RootCell>
                   <HFlex>
                     {series.name || ''} - {event.name}
                   </HFlex>
@@ -183,7 +180,7 @@ class Series extends React.Component<{
                       title="View Details"
                     />
                   </Link>
-                </div>
+                </RootCell>
               )
             })}
           </HFlex>

@@ -56,7 +56,13 @@ class _Event extends React.Component<{
             onCancelled={() => this.setState({ raceCreateVisible: false })}
           />
         </Popup>
-        <RootCell style={{ marginTop: 0 }}>
+        <RootCell
+          style={{
+            marginTop: 0,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }}
+        >
           <VFlex>
             <TitleText>
               {series.name} - {event.name}
