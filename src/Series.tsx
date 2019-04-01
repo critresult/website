@@ -24,6 +24,7 @@ import moment from 'moment'
 import { Link } from 'react-router-dom'
 import Popup from './components/Popup'
 import EventCreate from './components/EventCreate'
+import BibList from './components/BibList'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -35,8 +36,6 @@ class Series extends React.Component<{
   state = {
     isSearching: false,
     foundRiders: [],
-    filteredBibs: [],
-    bibNumberFilter: 0,
     promoterEmail: '',
     showingCreatePopup: false,
   }
@@ -45,7 +44,6 @@ class Series extends React.Component<{
 
   async componentDidMount() {
     await Hydrated.hydrate()
-    this.filterBibs()
   }
 
   searchChanged = (e: any) => {
@@ -63,21 +61,6 @@ class Series extends React.Component<{
         this.setState({ foundRiders: riders })
       })
       .catch(() => this.setState({ isSearching: false }))
-  }
-
-  filterBibs = () => {
-    const seriesId = this.props.match.params.id
-    const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
-    if (!this.state.bibNumberFilter) {
-      this.setState({ filteredBibs: null })
-      return
-    }
-    this.setState({
-      filteredBibs: bibs.filter(
-        (bib) =>
-          bib.bibNumber.toString().indexOf(this.state.bibNumberFilter) !== -1
-      ),
-    })
   }
 
   render() {
@@ -215,85 +198,7 @@ class Series extends React.Component<{
           </HFlex>
         </RootCell>
         <RootCell>
-          <VFlex>
-            <LargeText>Active Bibs ({bibs.length})</LargeText>
-          </VFlex>
-          <HFlex style={{ justifyContent: 'center' }}>
-            <Input
-              placeholder="filter by bib"
-              type="text"
-              onChange={(e: any) => {
-                this.setState(
-                  {
-                    bibNumberFilter: e.target.value,
-                  },
-                  this.filterBibs
-                )
-              }}
-            />
-          </HFlex>
-          <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
-            <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
-            <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
-            <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
-            <VFlex style={{ minWidth: '15%' }}>License</VFlex>
-            <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
-            <VFlex style={{ flex: 1 }} />
-          </HFlex>
-          {(this.state.filteredBibs || bibs)
-            .slice()
-            .sort((a, b) => (a.bibNumber > b.bibNumber ? 1 : -1))
-            .map((bib) => (
-              <HFlex
-                key={bib._id}
-                style={{
-                  justifyContent: 'space-between',
-                  margin: 4,
-                  marginBottom: 0,
-                }}
-              >
-                <VFlex style={{ minWidth: '15%' }}>{bib.bibNumber}</VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {idx(bib, (_: any) => _.rider.firstname)}
-                </VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {idx(bib, (_: any) => _.rider.lastname)}
-                </VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {idx(bib, (_: any) => _.rider.license) || 'One Day'}
-                </VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {idx(bib, (_: any) => _.rider.transponder) || 'none'}
-                </VFlex>
-                <VFlex style={{ flex: 1 }}>
-                  <HFlex>
-                    <Button
-                      title="Edit"
-                      style={{
-                        backgroundColor: Colors.yellow,
-                        color: Colors.black,
-                        flex: 1,
-                      }}
-                      onClick={() => {}}
-                    />
-                    <Button
-                      title="Delete"
-                      style={{ backgroundColor: Colors.pink, flex: 1 }}
-                      onClick={() => {
-                        confirm(
-                          'Are you sure you want to delete this bib? Any race entries will also be deleted.'
-                        )
-                        return this.props.bib
-                          .delete(bib._id)
-                          .then(() =>
-                            this.props.bib.loadBibsForSeries(seriesId)
-                          )
-                      }}
-                    />
-                  </HFlex>
-                </VFlex>
-              </HFlex>
-            ))}
+          <BibList seriesId={seriesId} />
         </RootCell>
         <Footer />
       </>
