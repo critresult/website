@@ -25,23 +25,23 @@ export default class Button extends React.Component<{
     this._isMounted = false
   }
 
+  handleClick = () => {
+    if (!this.props.onClick) return
+    const ret = this.props.onClick()
+    this.setState({ internallyAnimating: true })
+    Promise.resolve(ret)
+      .then(
+        () => this._isMounted && this.setState({ internallyAnimating: false })
+      )
+      .catch(
+        () => this._isMounted && this.setState({ internallyAnimating: false })
+      )
+  }
+
   render() {
+    const animating = this.state.internallyAnimating || this.props.animating
     return (
       <div
-        onClick={() => {
-          if (!this.props.onClick) return
-          const ret = this.props.onClick()
-          this.setState({ internallyAnimating: true })
-          Promise.resolve(ret)
-            .then(
-              () =>
-                this._isMounted && this.setState({ internallyAnimating: false })
-            )
-            .catch(
-              () =>
-                this._isMounted && this.setState({ internallyAnimating: false })
-            )
-        }}
         style={{
           margin: 4,
           padding: 4,
@@ -56,11 +56,21 @@ export default class Button extends React.Component<{
         }}
       >
         <VFlex style={{ justifyContent: 'center' }}>
-          {this.state.internallyAnimating || this.props.animating ? (
+          <div
+            style={{
+              opacity: animating ? 0 : 1,
+            }}
+          >
+            {this.props.title || this.props.children}
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              opacity: animating ? 1 : 0,
+            }}
+          >
             <img src={rings} height="15" />
-          ) : (
-            this.props.title || this.props.children
-          )}
+          </div>
         </VFlex>
       </div>
     )
