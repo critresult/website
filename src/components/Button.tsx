@@ -42,6 +42,7 @@ export default class Button extends React.Component<{
     const animating = this.state.internallyAnimating || this.props.animating
     return (
       <div
+        onClick={this.handleClick}
         style={{
           margin: 4,
           padding: 4,
