@@ -12,6 +12,9 @@ export default class BibStore implements Hydrated {
   @observable bibsBySeriesId: {
     [key: string]: Bib[]
   } = {}
+  @observable bibsByRiderId: {
+    [key: string]: Bib[]
+  } = {}
 
   async hydrate() {
     const { data } = await axios.get('/bibs', {
@@ -20,6 +23,7 @@ export default class BibStore implements Hydrated {
       },
     })
     this.bibsBySeriesId = groupby(data, 'seriesId')
+    this.bibsByRiderId = groupby(data, 'riderId')
   }
 
   async loadBibsForSeries(seriesId: string) {

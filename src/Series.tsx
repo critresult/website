@@ -35,6 +35,8 @@ class Series extends React.Component<{
   state = {
     isSearching: false,
     foundRiders: [],
+    filteredBibs: [],
+    bibNumberFilter: 0,
     promoterEmail: '',
     showingCreatePopup: false,
   }
@@ -43,6 +45,7 @@ class Series extends React.Component<{
 
   async componentDidMount() {
     await Hydrated.hydrate()
+    this.filterBibs()
   }
 
   searchChanged = (e: any) => {
@@ -60,6 +63,21 @@ class Series extends React.Component<{
         this.setState({ foundRiders: riders })
       })
       .catch(() => this.setState({ isSearching: false }))
+  }
+
+  filterBibs = () => {
+    const seriesId = this.props.match.params.id
+    const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
+    if (!this.state.bibNumberFilter) {
+      this.setState({ filteredBibs: null })
+      return
+    }
+    this.setState({
+      filteredBibs: bibs.filter(
+        (bib) =>
+          bib.bibNumber.toString().indexOf(this.state.bibNumberFilter) !== -1
+      ),
+    })
   }
 
   render() {
@@ -158,7 +176,7 @@ class Series extends React.Component<{
             {events.map((event: any) => {
               const races = event.races || []
               return (
-                <RootCell>
+                <RootCell key={event._id}>
                   <HFlex>
                     {series.name || ''} - {event.name}
                   </HFlex>
@@ -200,6 +218,20 @@ class Series extends React.Component<{
           <VFlex>
             <LargeText>Active Bibs ({bibs.length})</LargeText>
           </VFlex>
+          <HFlex style={{ justifyContent: 'center' }}>
+            <Input
+              placeholder="filter by bib"
+              type="text"
+              onChange={(e: any) => {
+                this.setState(
+                  {
+                    bibNumberFilter: e.target.value,
+                  },
+                  this.filterBibs
+                )
+              }}
+            />
+          </HFlex>
           <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
             <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
             <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
@@ -208,7 +240,7 @@ class Series extends React.Component<{
             <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
             <VFlex style={{ flex: 1 }} />
           </HFlex>
-          {bibs
+          {(this.state.filteredBibs || bibs)
             .slice()
             .sort((a, b) => (a.bibNumber > b.bibNumber ? 1 : -1))
             .map((bib) => (
