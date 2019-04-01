@@ -41,7 +41,7 @@ class EventCreate extends React.Component<{
               <HFlex>
                 Event Name:{' '}
                 <Input
-                  valid
+                  valid={!!this.state.eventData.name}
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -56,7 +56,6 @@ class EventCreate extends React.Component<{
               <HFlex>
                 Event Date:{' '}
                 <Input
-                  valid
                   type="date"
                   onChange={(e: any) => {
                     const date = new Date(e.target.value).toISOString()

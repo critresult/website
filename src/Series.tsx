@@ -97,7 +97,6 @@ class Series extends React.Component<{
               Search:
               <Input
                 ref={this.searchRef}
-                valid
                 type="text"
                 placeholder="firstname, lastname, or license #"
                 style={{ minWidth: 200 }}

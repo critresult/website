@@ -50,7 +50,7 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 First Name:{' '}
                 <Input
-                  valid
+                  valid={!!this.state.riderData.firstname}
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -65,7 +65,7 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 Last Name:{' '}
                 <Input
-                  valid
+                  valid={!!this.state.riderData.lastname}
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -80,7 +80,6 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 Email:{' '}
                 <Input
-                  valid
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -95,7 +94,6 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 Phone:{' '}
                 <Input
-                  valid
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -108,9 +106,8 @@ class RiderCreate extends React.Component<{
                 />
               </HFlex>
               <HFlex>
-                License Number:{' '}
+                License #:{' '}
                 <Input
-                  valid
                   type="text"
                   placeholder="Empty for one day license"
                   onChange={(e: any) => {
@@ -126,7 +123,6 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 Birthdate:{' '}
                 <Input
-                  valid
                   type="date"
                   onChange={(e: any) => {
                     this.setState({
@@ -141,7 +137,6 @@ class RiderCreate extends React.Component<{
               <HFlex>
                 Team:{' '}
                 <Input
-                  valid
                   type="text"
                   onChange={(e: any) => {
                     this.setState({
@@ -157,7 +152,7 @@ class RiderCreate extends React.Component<{
                 <HFlex>
                   Bib #:{' '}
                   <Input
-                    valid
+                    valid={!!this.state.bibNumber}
                     type="text"
                     onChange={(e: any) => {
                       this.setState({

@@ -19,10 +19,19 @@ export const Input = styled.input<{ valid?: boolean }>`
   margin: 5px;
   padding: 5px;
   background-color: transparent;
-  border: none;
+  border-radius: 8px;
+  border: solid 2px
+    ${(props) => {
+      if (props.valid === true) {
+        return Colors.green
+      } else if (props.valid === false) {
+        return Colors.blue
+      }
+      return Colors.black
+    }};
   box-shadow: none;
   outline-width: 0px;
-  border-bottom: 1px solid ${(p) => (!p.valid ? Colors.pink : Colors.blue)};
+  min-width: 200px;
 `
 
 export const ModalContainer = styled.div`
