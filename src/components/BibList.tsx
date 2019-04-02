@@ -97,13 +97,15 @@ class BibList extends React.Component<{
         {(this.state.filteredBibs || bibs)
           .slice()
           .sort((a: Bib, b: Bib) => (a.bibNumber > b.bibNumber ? 1 : -1))
-          .map((bib: Bib) => (
+          .map((bib: Bib, index: number) => (
             <HFlex
               key={bib._id}
               style={{
                 justifyContent: 'space-between',
                 margin: 4,
                 marginBottom: 0,
+                backgroundColor:
+                  index % 2 === 0 ? Colors.whiteDark : Colors.white,
               }}
             >
               <VFlex style={{ minWidth: '5%' }}>{bib.bibNumber}</VFlex>
