@@ -114,9 +114,9 @@ class RiderEdit extends React.Component<{
             Team:{' '}
             <Input
               type="text"
-              placeholder={rider.team}
+              placeholder={rider.teamName}
               onChange={(e: any) => {
-                this.updateRiderData('team', e.target.value)
+                this.updateRiderData('teamName', e.target.value)
               }}
             />
           </HFlex>

@@ -140,7 +140,7 @@ class RiderCreate extends React.Component<{
                 this.setState({
                   riderData: {
                     ...this.state.riderData,
-                    team: e.target.value,
+                    teamName: e.target.value,
                   },
                 })
               }}
