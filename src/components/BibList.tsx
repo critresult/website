@@ -85,9 +85,9 @@ class BibList extends React.Component<{
         </HFlex>
         <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
           <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
-          <VFlex style={{ minWidth: '10%' }}>License</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
+          <VFlex style={{ minWidth: '10%' }}>License #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Renting Transponder</VFlex>
           <VFlex style={{ flex: 1 }} />
