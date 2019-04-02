@@ -159,6 +159,12 @@ class BibList extends React.Component<{
                           const transponder = this.state
                             .rentalTransponderByRiderId[bib.riderId]
                           if (!transponder) return
+                          if (idx(bib, (_: any) => _.rider.transponder)) {
+                            const confirmed = confirm(
+                              'This rider already has a transponder. Overwrite?'
+                            )
+                            if (!confirmed) return
+                          }
                           return this.props.rider
                             .update(bib.riderId, {
                               transponder,
@@ -197,9 +203,11 @@ class BibList extends React.Component<{
                     title="Delete"
                     style={{ backgroundColor: Colors.pink, flex: 1 }}
                     onClick={() => {
-                      confirm(
-                        'Are you sure you want to delete this bib? Any race entries will also be deleted.'
-                      )
+                      if (
+                        !confirm(
+                          'Are you sure you want to delete this bib? Any race entries will also be deleted.'
+                        )
+                      ) return
                       return this.props.bib
                         .delete(bib._id)
                         .then(() =>
