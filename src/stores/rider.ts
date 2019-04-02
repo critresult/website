@@ -34,10 +34,10 @@ export default class RiderStore implements Hydrated {
     }
   }
 
-  async update(where: any, changes: any) {
+  async update(where: string | object, changes: any) {
     try {
       await axios.put('/riders', {
-        where,
+        where: typeof where === 'string' ? { _id: where } : where,
         changes,
         token: PromoterStore.activeToken(),
       })

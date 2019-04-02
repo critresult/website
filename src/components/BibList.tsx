@@ -20,6 +20,7 @@ class BibList extends React.Component<{
     filter: '',
     showingRiderEditPopup: false,
     editRiderId: '',
+    rentalTransponderByRiderId: {},
   }
 
   filterBibs = () => {
@@ -86,7 +87,7 @@ class BibList extends React.Component<{
           <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>License</VFlex>
+          <VFlex style={{ minWidth: '10%' }}>License</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Renting Transponder</VFlex>
           <VFlex style={{ flex: 1 }} />
@@ -110,7 +111,7 @@ class BibList extends React.Component<{
               <VFlex style={{ minWidth: '15%' }}>
                 {idx(bib, (_: any) => _.rider.lastname)}
               </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
+              <VFlex style={{ minWidth: '10%' }}>
                 {idx(bib, (_: any) => _.rider.license) || 'One Day'}
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
@@ -118,32 +119,61 @@ class BibList extends React.Component<{
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 <HFlex>
-                  {bib.hasRentalTransponder ? 'YES' : 'NO'}
                   {bib.hasRentalTransponder ? (
                     <Button
                       title="Return"
                       style={{ backgroundColor: Colors.green }}
                       onClick={() =>
-                        this.props.bib
-                          .update(bib._id, { hasRentalTransponder: false })
+                        this.props.rider
+                          .update(bib.riderId, {
+                            transponder: '',
+                          })
+                          .then(() =>
+                            this.props.bib.update(bib._id, {
+                              hasRentalTransponder: false,
+                            })
+                          )
                           .then(() =>
                             this.props.bib.loadBibsForSeries(bib.seriesId)
                           )
                       }
                     />
                   ) : (
-                    <Button
-                      title="Rent"
-                      onClick={() =>
-                        this.props.bib
-                          .update(bib._id, {
-                            hasRentalTransponder: true,
+                    <HFlex>
+                      <Input
+                        type="text"
+                        placeholder="Transponder ID"
+                        style={{ minWidth: 20 }}
+                        onChange={(e: any) => {
+                          this.setState({
+                            rentalTransponderByRiderId: {
+                              ...this.state.rentalTransponderByRiderId,
+                              [bib.riderId]: e.target.value,
+                            },
                           })
-                          .then(() =>
-                            this.props.bib.loadBibsForSeries(bib.seriesId)
-                          )
-                      }
-                    />
+                        }}
+                      />
+                      <Button
+                        title="Rent"
+                        onClick={() => {
+                          const transponder = this.state
+                            .rentalTransponderByRiderId[bib.riderId]
+                          if (!transponder) return
+                          return this.props.rider
+                            .update(bib.riderId, {
+                              transponder,
+                            })
+                            .then(() =>
+                              this.props.bib.update(bib._id, {
+                                hasRentalTransponder: true,
+                              })
+                            )
+                            .then(() =>
+                              this.props.bib.loadBibsForSeries(bib.seriesId)
+                            )
+                        }}
+                      />
+                    </HFlex>
                   )}
                 </HFlex>
               </VFlex>
