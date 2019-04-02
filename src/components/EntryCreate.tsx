@@ -47,12 +47,14 @@ class EntryCreate extends React.Component<{
             placeholder="firstname, lastname, or license #"
             style={{ minWidth: 200 }}
             onChange={(e: any) => {
+              // Only search once three or more characters are entered
+              if (e.target.value.length < 3) return
               this.setState({ isSearching: true })
               this.props.rider
                 .search(e.target.value)
                 .then((riders) => {
                   this.setState({ isSearching: false })
-                  this.setState({ foundRiders: riders.slice(0, 5) })
+                  this.setState({ foundRiders: riders.slice(0, 10) })
                 })
                 .catch(() => this.setState({ isSearching: false }))
             }}
