@@ -82,6 +82,7 @@ class EntryCreate extends React.Component<{
                 <HFlex>{`Category: ${rider.racingCategoryRoad}`}</HFlex>
                 <HFlex>{`License: ${rider.license}`}</HFlex>
                 <HFlex>{`Transponder: ${rider.transponder || 'none'}`}</HFlex>
+                <HFlex>{`Team: ${rider.teamName}`}</HFlex>
               </VFlex>
               <VFlex>
                 {bibsByRiderId[rider._id] ? (
