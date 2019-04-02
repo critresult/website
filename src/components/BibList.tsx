@@ -56,6 +56,11 @@ class BibList extends React.Component<{
                 showingRiderEditPopup: false,
               })
             }}
+            onUpdated={() => {
+              this.setState({
+                showingRiderEditPopup: false,
+              })
+            }}
           />
         </Popup>
         <VFlex>

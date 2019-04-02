@@ -29,6 +29,18 @@ class RiderEdit extends React.Component<{
     })
   }
 
+  update = () =>
+    this.props.rider
+      .update(
+        {
+          _id: this.props.riderId,
+        },
+        this.state.riderData
+      )
+      .then(() => this.props.rider.load(this.props.riderId))
+      .then(this.props.onUpdated || (() => {}))
+      .catch((err) => console.log('Error updating rider', err))
+
   render() {
     const rider =
       this.props.rider.ridersById[this.props.riderId] || ({} as Rider)
@@ -89,6 +101,16 @@ class RiderEdit extends React.Component<{
             />
           </HFlex>
           <HFlex>
+            Transponder:{' '}
+            <Input
+              type="text"
+              placeholder={rider.transponder}
+              onChange={(e: any) => {
+                this.updateRiderData('transponder', e.target.value)
+              }}
+            />
+          </HFlex>
+          <HFlex>
             Team:{' '}
             <Input
               type="text"
@@ -99,7 +121,7 @@ class RiderEdit extends React.Component<{
             />
           </HFlex>
           <HFlex>
-            <Button title="Update Rider" onClick={() => {}} />
+            <Button title="Update Rider" onClick={this.update} />
             <Button
               title="Cancel"
               onClick={this.props.onCancelled || (() => {})}
