@@ -54,6 +54,19 @@ export default class BibStore implements Hydrated {
     }
   }
 
+  async update(where: string | object, changes: any) {
+    try {
+      await axios.put('/bibs', {
+        where: typeof where === 'string' ? { _id: where } : where,
+        changes,
+        token: PromoterStore.activeToken(),
+      })
+    } catch (err) {
+      console.log('Error updating document', err)
+      throw err
+    }
+  }
+
   async delete(_id: string) {
     try {
       await axios.delete('/bibs', {

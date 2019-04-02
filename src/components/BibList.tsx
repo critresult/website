@@ -83,11 +83,12 @@ class BibList extends React.Component<{
           />
         </HFlex>
         <HFlex style={{ justifyContent: 'space-between', margin: 16 }}>
-          <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
+          <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Firstname</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Lastname</VFlex>
           <VFlex style={{ minWidth: '15%' }}>License</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Renting Transponder</VFlex>
           <VFlex style={{ flex: 1 }} />
         </HFlex>
         {(this.state.filteredBibs || bibs)
@@ -102,7 +103,7 @@ class BibList extends React.Component<{
                 marginBottom: 0,
               }}
             >
-              <VFlex style={{ minWidth: '15%' }}>{bib.bibNumber}</VFlex>
+              <VFlex style={{ minWidth: '5%' }}>{bib.bibNumber}</VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {idx(bib, (_: any) => _.rider.firstname)}
               </VFlex>
@@ -114,6 +115,37 @@ class BibList extends React.Component<{
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {idx(bib, (_: any) => _.rider.transponder) || 'none'}
+              </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                <HFlex>
+                  {bib.hasRentalTransponder ? 'YES' : 'NO'}
+                  {bib.hasRentalTransponder ? (
+                    <Button
+                      title="Return"
+                      style={{ backgroundColor: Colors.green }}
+                      onClick={() =>
+                        this.props.bib
+                          .update(bib._id, { hasRentalTransponder: false })
+                          .then(() =>
+                            this.props.bib.loadBibsForSeries(bib.seriesId)
+                          )
+                      }
+                    />
+                  ) : (
+                    <Button
+                      title="Rent"
+                      onClick={() =>
+                        this.props.bib
+                          .update(bib._id, {
+                            hasRentalTransponder: true,
+                          })
+                          .then(() =>
+                            this.props.bib.loadBibsForSeries(bib.seriesId)
+                          )
+                      }
+                    />
+                  )}
+                </HFlex>
               </VFlex>
               <VFlex style={{ flex: 1 }}>
                 <HFlex>
