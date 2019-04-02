@@ -43,7 +43,6 @@ class _Event extends React.Component<{
     const event = this.props.event.eventsById[eventId] || ({} as Event)
     const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
-    const dateFormat = 'MMMM Do YYYY'
     const startTime = moment(event.startDate)
     const hours =
       idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0]) || 0
@@ -75,7 +74,7 @@ class _Event extends React.Component<{
             <LargeText>
               {moment(event.startDate)
                 .utc()
-                .format(dateFormat)}{' '}
+                .format('MMMM Do YYYY')}{' '}
               ({dayDifference})
             </LargeText>
             {event.startDate === event.endDate ? null : (
