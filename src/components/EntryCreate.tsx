@@ -48,6 +48,10 @@ class EntryCreate extends React.Component<{
             style={{ minWidth: 200 }}
             onChange={(e: any) => {
               // Only search once three or more characters are entered
+              if (!e.target.value) {
+                this.setState({ foundRiders: [] })
+                return
+              }
               if (e.target.value.length < 3) return
               this.setState({ isSearching: true })
               this.props.rider
@@ -73,8 +77,11 @@ class EntryCreate extends React.Component<{
               key={rider._id}
               style={{
                 marginTop: 8,
+                marginBottom: 8,
+                alignItems: 'space-between',
                 justifyContent: 'space-between',
                 flexWrap: 'nowrap',
+                minWidth: '100%',
               }}
             >
               <VFlex style={{ alignItems: 'flex-start' }}>
