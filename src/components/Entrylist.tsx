@@ -101,10 +101,23 @@ class Entrylist extends React.Component<{
         <Popup visible={this.state.createEntryVisible}>
           <TabSelector tabs={tabs} />
         </Popup>
-        <EntryCell style={{ justifyContent: 'center' }}>
+        <EntryCell
+          style={{
+            justifyContent: 'space-between',
+            alignItems: 'space-between',
+          }}
+        >
+          <Button title="Add Entry" style={{ opacity: 0 }} onClick={() => {}} />
           <LargeText>
             {race.name} - {`${entries.length} entries`}
           </LargeText>
+          <Button
+            title="Add Entry"
+            style={{ backgroundColor: Colors.green }}
+            onClick={() => {
+              this.setState({ createEntryVisible: true })
+            }}
+          />
         </EntryCell>
         <EntryCell>
           <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
@@ -178,13 +191,7 @@ class Entrylist extends React.Component<{
               }}
             />
           </HFlex>
-          <Button
-            title="Add Entry"
-            style={{ backgroundColor: Colors.green }}
-            onClick={() => {
-              this.setState({ createEntryVisible: true })
-            }}
-          />
+          <Button title="Add Entry" style={{ opacity: 0 }} onClick={() => {}} />
         </HFlex>
       </>
     )
