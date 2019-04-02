@@ -45,6 +45,7 @@ class Entrylist extends React.Component<{
 
   exportCSV = () => {
     this.setState({ exportingCSV: true })
+    const race = this.props.race.racesById[this.props.raceId] || ({} as Race)
     this.props.race
       .loadEntries(this.props.raceId)
       .then(() => {
@@ -53,12 +54,27 @@ class Entrylist extends React.Component<{
           [
             entry.rider.license,
             'ANN',
-            entry.bib,
+            entry.bib.bibNumber,
+            '',
             entry.rider.transponder,
+            race.name,
             entry.rider.firstname,
             entry.rider.lastname,
-            entry.rider.team,
+            entry.rider.teamName,
           ].join(', ')
+        )
+        rows.unshift(
+          [
+            'RacerId',
+            'Type',
+            'Bib',
+            'RentalID',
+            'Transponder',
+            'Event',
+            'FirstName',
+            'LastName',
+            'Team',
+          ].join(',')
         )
         const csvContent = `data:text/csv;charset=utf-8,${rows.join('\r\n')}`
         const link = document.createElement('a')
