@@ -1,7 +1,8 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import EventStore from '../stores/event'
-import RaceStore, { Entry } from '../stores/race'
+import RaceStore, { Race } from '../stores/race'
+import { Entry } from '../stores/entry'
 import styled from 'styled-components'
 import { HFlex, VFlex, LargeText } from './Shared'
 import Button from './Button'
@@ -71,7 +72,7 @@ class Entrylist extends React.Component<{
   }
 
   render() {
-    const race = this.props.race.racesById[this.props.raceId] || {}
+    const race = this.props.race.racesById[this.props.raceId] || ({} as Race)
     const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
     const tabs = [
       {

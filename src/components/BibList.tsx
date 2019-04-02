@@ -8,13 +8,14 @@ import RiderEdit from './RiderEdit'
 import Popup from './Popup'
 import RentTransponder from './RentTransponder'
 import Hydrated from 'hydrated'
+import BibStore, { Bib } from '../stores/bib'
 
 @inject('bib', 'rider')
 @observer
 class BibList extends React.Component<{
   seriesId: string
   title?: string
-  bib?: any
+  bib?: BibStore
   rider?: any
 }> {
   state = {
@@ -22,7 +23,6 @@ class BibList extends React.Component<{
     filter: '',
     showingRiderEditPopup: false,
     editRiderId: '',
-    rentalTransponderByRiderId: {},
   }
 
   filterBibs = () => {
@@ -96,8 +96,8 @@ class BibList extends React.Component<{
         </HFlex>
         {(this.state.filteredBibs || bibs)
           .slice()
-          .sort((a, b) => (a.bibNumber > b.bibNumber ? 1 : -1))
-          .map((bib) => (
+          .sort((a: Bib, b: Bib) => (a.bibNumber > b.bibNumber ? 1 : -1))
+          .map((bib: Bib) => (
             <HFlex
               key={bib._id}
               style={{

@@ -2,7 +2,7 @@ import React from 'react'
 import { VFlex, HFlex, ModalContainer, Input } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
-import EventStore from '../stores/event'
+import EventStore, { Event } from '../stores/event'
 import SeriesStore from '../stores/series'
 import { withRouter } from 'react-router-dom'
 
@@ -29,7 +29,7 @@ class EventCreate extends React.Component<{
       .create({
         ...this.state.eventData,
         seriesId: this.selectRef.current.value,
-      })
+      } as Event)
       .then((created: any) => this.props.history.push(`/event/${created._id}`))
 
   render() {

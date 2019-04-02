@@ -1,6 +1,6 @@
 import React from 'react'
 import Colors from '../Colors'
-import { IoLogoGithub } from 'react-icons/io'
+import { TiSocialGithub } from 'react-icons/ti'
 import { VFlex } from './Shared'
 
 class Footer extends React.Component<{}> {
@@ -15,7 +15,7 @@ class Footer extends React.Component<{}> {
         }}
       >
         <a href="https://github.com/critresult" target="_blank">
-          <IoLogoGithub color={Colors.black} size={50} />
+          <TiSocialGithub color={Colors.black} size={50} />
         </a>
       </VFlex>
     )
