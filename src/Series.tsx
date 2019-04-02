@@ -121,9 +121,6 @@ class Series extends React.Component<{
           ))}
         </RootCell>
         <RootCell>
-          <AvailableBibs seriesId={seriesId} />
-        </RootCell>
-        <RootCell>
           <VFlex>
             <LargeText>Promoters</LargeText>
             <VFlex style={{ margin: 8 }}>

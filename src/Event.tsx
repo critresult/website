@@ -21,6 +21,7 @@ import Entrylist from './components/Entrylist'
 import Footer from './components/Footer'
 import Hydrated from 'hydrated'
 import idx from 'idx'
+import AvailableBibs from './components/AvailableBibs'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer
@@ -105,6 +106,9 @@ class _Event extends React.Component<{
               onClick={() => this.setState({ raceCreateVisible: true })}
             />
           </HFlex>
+        </RootCell>
+        <RootCell>
+          <AvailableBibs seriesId={event.seriesId} />
         </RootCell>
         {races.map((race: Race) => (
           <RootCell key={race._id}>

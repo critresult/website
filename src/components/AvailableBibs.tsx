@@ -114,6 +114,39 @@ class AvailableBibs extends React.Component<{
                 <NumberLine key={num}>{num}</NumberLine>
               ))}
           </VFlex>
+          <VFlex style={{ margin: 8 }}>
+            <HFlex>
+              <LargeText>700-799</LargeText>
+            </HFlex>
+            {available
+              .filter((a) => a > 699 && a < 800)
+              .slice(0, 5)
+              .map((num) => (
+                <NumberLine key={num}>{num}</NumberLine>
+              ))}
+          </VFlex>
+          <VFlex style={{ margin: 8 }}>
+            <HFlex>
+              <LargeText>800-899</LargeText>
+            </HFlex>
+            {available
+              .filter((a) => a > 799 && a < 900)
+              .slice(0, 5)
+              .map((num) => (
+                <NumberLine key={num}>{num}</NumberLine>
+              ))}
+          </VFlex>
+          <VFlex style={{ margin: 8 }}>
+            <HFlex>
+              <LargeText>900-900</LargeText>
+            </HFlex>
+            {available
+              .filter((a) => a > 899 && a < 1000)
+              .slice(0, 5)
+              .map((num) => (
+                <NumberLine key={num}>{num}</NumberLine>
+              ))}
+          </VFlex>
         </HFlex>
       </VFlex>
     )
