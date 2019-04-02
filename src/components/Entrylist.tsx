@@ -11,6 +11,9 @@ import RiderCreate from './RiderCreate'
 import TabSelector from './TabSelector'
 import EntryCreate from './EntryCreate'
 import { TiTimes } from 'react-icons/ti'
+import RentTransponder from './RentTransponder'
+import Hydrated from 'hydrated'
+import BibStore from '../stores/bib'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -21,7 +24,7 @@ const EntryCell = styled(HFlex)`
   min-width: 600px;
 `
 
-@inject('event', 'race')
+@inject('event', 'race', 'bib')
 @observer
 class Entrylist extends React.Component<{
   seriesId: string
@@ -29,6 +32,7 @@ class Entrylist extends React.Component<{
   editable?: boolean
   event?: EventStore
   race?: RaceStore
+  bib?: BibStore
 }> {
   state = {
     createEntryVisible: false,
@@ -105,8 +109,9 @@ class Entrylist extends React.Component<{
           <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>License #</VFlex>
+          <VFlex style={{ minWidth: '10%' }}>License #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Rental Transponder</VFlex>
           {this.props.editable === false ? null : <VFlex style={{ flex: 1 }} />}
         </EntryCell>
         {entries.map((entry: Entry) =>
@@ -117,11 +122,17 @@ class Entrylist extends React.Component<{
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
               <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
+              <VFlex style={{ minWidth: '10%' }}>
                 {entry.rider.license || 'One Day'}
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {entry.rider.transponder || 'none'}
+              </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>
+                <RentTransponder
+                  bibId={entry.bibId}
+                  onUpdated={() => Hydrated.hydrate('race')}
+                />
               </VFlex>
               {this.props.editable === false ? null : (
                 <VFlex style={{ flex: 1 }}>

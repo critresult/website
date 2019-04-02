@@ -3,9 +3,14 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import Hydrated from 'hydrated'
 import groupby from 'lodash.groupby'
+import keyby from 'lodash.keyby'
 
 export interface Bib {
   _id: string
+  seriesId: string
+  riderId: string
+  bibNumber: number
+  hasRentalTransponder?: boolean
 }
 
 export default class BibStore implements Hydrated {
@@ -15,6 +20,9 @@ export default class BibStore implements Hydrated {
   @observable bibsByRiderId: {
     [key: string]: Bib[]
   } = {}
+  @observable bibsById: {
+    [key: string]: Bib
+  } = {}
 
   async hydrate() {
     const { data } = await axios.get('/bibs', {
@@ -22,6 +30,7 @@ export default class BibStore implements Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
+    this.bibsById = keyby(data, '_id')
     this.bibsBySeriesId = groupby(data, 'seriesId')
     this.bibsByRiderId = groupby(data, 'riderId')
   }
@@ -37,6 +46,21 @@ export default class BibStore implements Hydrated {
       this.bibsBySeriesId[seriesId] = data
     } catch (err) {
       console.log('Error loading bibs for series', err)
+      throw err
+    }
+  }
+
+  async loadById(_id: string) {
+    try {
+      const { data } = await axios.get('/bibs', {
+        params: {
+          _id,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      this.bibsById[data._id] = data
+    } catch (err) {
+      console.log('Error loading bib by id', err)
       throw err
     }
   }

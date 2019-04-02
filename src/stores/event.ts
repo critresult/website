@@ -2,7 +2,8 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
 import uniqBy from 'lodash.uniqby'
-import { Race, Entry } from './race'
+import { Race } from './race'
+import { Entry } from './entry'
 import Hydrated from 'hydrated'
 import groupby from 'lodash.groupby'
 
@@ -23,7 +24,7 @@ export default class EventStore implements Hydrated {
   @observable eventsById: {
     [key: string]: Event
   } = {}
-  @observable entriesByEvent: {
+  @observable entriesByEventId: {
     [key: string]: Entry[]
   } = {}
 
@@ -55,7 +56,13 @@ export default class EventStore implements Hydrated {
 
   async loadEntries(_id: string) {
     try {
-      await axios.get('/events')
+      const { data } = await axios.get('/events/entries', {
+        params: {
+          _id,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      this.entriesByEventId[_id] = data
     } catch (err) {
       console.log('Error loading entries', err)
       throw err

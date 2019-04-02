@@ -3,6 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import { Rider } from './rider'
 import Hydrated from 'hydrated'
+import { Entry } from './entry'
 
 export interface Race {
   _id: string
@@ -10,15 +11,6 @@ export interface Race {
   scheduledStartTime: string
   seriesId: string
   eventId: string
-}
-
-export interface Entry {
-  _id: string
-  riderId: string
-  raceId: string
-  bib: string
-  race?: Race
-  rider?: Rider
 }
 
 export default class RaceStore implements Hydrated {
@@ -35,11 +27,10 @@ export default class RaceStore implements Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
-    data.forEach((model: any) => {
+    for (const model of data) {
       this.racesById[model._id] = model
-      if (this.entriesByRaceId[model._id]) return
-      this.loadEntries(model._id)
-    })
+      await this.loadEntries(model._id)
+    }
   }
 
   async addEntry(raceId: string, riderId: string, bibId: string) {

@@ -6,6 +6,8 @@ import Colors from '../Colors'
 import idx from 'idx'
 import RiderEdit from './RiderEdit'
 import Popup from './Popup'
+import RentTransponder from './RentTransponder'
+import Hydrated from 'hydrated'
 
 @inject('bib', 'rider')
 @observer
@@ -118,72 +120,12 @@ class BibList extends React.Component<{
                 {idx(bib, (_: any) => _.rider.transponder) || 'none'}
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
-                <HFlex>
-                  {bib.hasRentalTransponder ? (
-                    <Button
-                      title="Return"
-                      style={{ backgroundColor: Colors.green }}
-                      onClick={() =>
-                        this.props.rider
-                          .update(bib.riderId, {
-                            transponder: '',
-                          })
-                          .then(() =>
-                            this.props.bib.update(bib._id, {
-                              hasRentalTransponder: false,
-                            })
-                          )
-                          .then(() =>
-                            this.props.bib.loadBibsForSeries(bib.seriesId)
-                          )
-                          .then(() => this.filterBibs())
-                      }
-                    />
-                  ) : (
-                    <HFlex>
-                      <Input
-                        type="text"
-                        placeholder="Transponder ID"
-                        style={{ minWidth: 20 }}
-                        onChange={(e: any) => {
-                          this.setState({
-                            rentalTransponderByRiderId: {
-                              ...this.state.rentalTransponderByRiderId,
-                              [bib.riderId]: e.target.value,
-                            },
-                          })
-                        }}
-                      />
-                      <Button
-                        title="Rent"
-                        onClick={() => {
-                          const transponder = this.state
-                            .rentalTransponderByRiderId[bib.riderId]
-                          if (!transponder) return
-                          if (idx(bib, (_: any) => _.rider.transponder)) {
-                            const confirmed = confirm(
-                              'This rider already has a transponder. Overwrite?'
-                            )
-                            if (!confirmed) return
-                          }
-                          return this.props.rider
-                            .update(bib.riderId, {
-                              transponder,
-                            })
-                            .then(() =>
-                              this.props.bib.update(bib._id, {
-                                hasRentalTransponder: true,
-                              })
-                            )
-                            .then(() =>
-                              this.props.bib.loadBibsForSeries(bib.seriesId)
-                            )
-                            .then(() => this.filterBibs())
-                        }}
-                      />
-                    </HFlex>
-                  )}
-                </HFlex>
+                <RentTransponder
+                  bibId={bib._id}
+                  onUpdated={() =>
+                    Hydrated.hydrate('bib').then(() => this.filterBibs())
+                  }
+                />
               </VFlex>
               <VFlex style={{ flex: 1 }}>
                 <HFlex>
