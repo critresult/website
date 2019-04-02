@@ -136,6 +136,7 @@ class BibList extends React.Component<{
                           .then(() =>
                             this.props.bib.loadBibsForSeries(bib.seriesId)
                           )
+                          .then(() => this.filterBibs())
                       }
                     />
                   ) : (
@@ -177,6 +178,7 @@ class BibList extends React.Component<{
                             .then(() =>
                               this.props.bib.loadBibsForSeries(bib.seriesId)
                             )
+                            .then(() => this.filterBibs())
                         }}
                       />
                     </HFlex>
