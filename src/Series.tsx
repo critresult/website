@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom'
 import Popup from './components/Popup'
 import EventCreate from './components/EventCreate'
 import BibList from './components/BibList'
+import AvailableBibs from './components/AvailableBibs'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -118,6 +119,9 @@ class Series extends React.Component<{
               bibNumber={(bibsByRiderId[_rider._id] || {}).bibNumber}
             />
           ))}
+        </RootCell>
+        <RootCell>
+          <AvailableBibs seriesId={seriesId} />
         </RootCell>
         <RootCell>
           <VFlex>

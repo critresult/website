@@ -35,6 +35,25 @@ export default class BibStore implements Hydrated {
     this.bibsByRiderId = groupby(data, 'riderId')
   }
 
+  availableBibsForSeriesId(seriesId: string) {
+    const bibs = this.bibsBySeriesId[seriesId] || []
+    const bibNumbers = bibs.map((bib) => +bib.bibNumber)
+    bibNumbers.sort((b1, b2) => b1 - b2)
+    const available = []
+    let lastNumber = 0
+    for (const num of bibNumbers) {
+      if (num - lastNumber === 1) {
+        lastNumber = num
+        continue
+      }
+      for (let x = 1; x < num - lastNumber; x++) {
+        available.push(lastNumber + x)
+      }
+      lastNumber = num
+    }
+    return available
+  }
+
   async loadBibsForSeries(seriesId: string) {
     try {
       const { data } = await axios.get('/bibs', {
