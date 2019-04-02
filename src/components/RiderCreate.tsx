@@ -41,6 +41,15 @@ class RiderCreate extends React.Component<{
     ;(this.props.onCreated || (() => {}))()
   }
 
+  updateRiderData = (key: string, value: any) => {
+    this.setState({
+      riderData: {
+        ...this.state.riderData,
+        [key]: value,
+      },
+    })
+  }
+
   render() {
     return (
       <ModalContainer>
@@ -51,12 +60,7 @@ class RiderCreate extends React.Component<{
               valid={!!this.state.riderData.firstname}
               type="text"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    firstname: e.target.value,
-                  },
-                })
+                this.updateRiderData('firstname', e.target.value)
               }}
             />
           </HFlex>
@@ -66,12 +70,7 @@ class RiderCreate extends React.Component<{
               valid={!!this.state.riderData.lastname}
               type="text"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    lastname: e.target.value,
-                  },
-                })
+                this.updateRiderData('lastname', e.target.value)
               }}
             />
           </HFlex>
@@ -80,12 +79,7 @@ class RiderCreate extends React.Component<{
             <Input
               type="text"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    email: e.target.value,
-                  },
-                })
+                this.updateRiderData('email', e.target.value)
               }}
             />
           </HFlex>
@@ -94,12 +88,7 @@ class RiderCreate extends React.Component<{
             <Input
               type="text"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    phone: e.target.value,
-                  },
-                })
+                this.updateRiderData('phone', e.target.value)
               }}
             />
           </HFlex>
@@ -109,26 +98,7 @@ class RiderCreate extends React.Component<{
               type="text"
               placeholder="Empty for one day license"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    license: e.target.value,
-                  },
-                })
-              }}
-            />
-          </HFlex>
-          <HFlex>
-            Birthdate:{' '}
-            <Input
-              type="date"
-              onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    birthdate: e.target.value,
-                  },
-                })
+                this.updateRiderData('license', e.target.value)
               }}
             />
           </HFlex>
@@ -137,12 +107,7 @@ class RiderCreate extends React.Component<{
             <Input
               type="text"
               onChange={(e: any) => {
-                this.setState({
-                  riderData: {
-                    ...this.state.riderData,
-                    teamName: e.target.value,
-                  },
-                })
+                this.updateRiderData('teamName', e.target.value)
               }}
             />
           </HFlex>
