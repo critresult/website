@@ -43,136 +43,132 @@ class RiderCreate extends React.Component<{
 
   render() {
     return (
-      <VFlex>
-        <HFlex style={{ borderRadius: 5 }}>
-          <ModalContainer>
-            <VFlex style={{ padding: 10 }}>
-              <HFlex>
-                First Name:{' '}
-                <Input
-                  valid={!!this.state.riderData.firstname}
-                  type="text"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        firstname: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                Last Name:{' '}
-                <Input
-                  valid={!!this.state.riderData.lastname}
-                  type="text"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        lastname: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                Email:{' '}
-                <Input
-                  type="text"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        email: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                Phone:{' '}
-                <Input
-                  type="text"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        phone: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                License #:{' '}
-                <Input
-                  type="text"
-                  placeholder="Empty for one day license"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        license: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                Birthdate:{' '}
-                <Input
-                  type="date"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        birthdate: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              <HFlex>
-                Team:{' '}
-                <Input
-                  type="text"
-                  onChange={(e: any) => {
-                    this.setState({
-                      riderData: {
-                        ...this.state.riderData,
-                        team: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </HFlex>
-              {this.props.seriesId ? (
-                <HFlex>
-                  Bib #:{' '}
-                  <Input
-                    valid={!!this.state.bibNumber}
-                    type="text"
-                    onChange={(e: any) => {
-                      this.setState({
-                        bibNumber: e.target.value,
-                      })
-                    }}
-                  />
-                </HFlex>
-              ) : null}
-              <HFlex>
-                <Button title="Create Rider" onClick={this.createRider} />
-                <Button
-                  title="Cancel"
-                  onClick={this.props.onCancelled || (() => {})}
-                />
-              </HFlex>
-            </VFlex>
-          </ModalContainer>
-        </HFlex>
-      </VFlex>
+      <ModalContainer>
+        <VFlex style={{ padding: 10 }}>
+          <HFlex>
+            First Name:{' '}
+            <Input
+              valid={!!this.state.riderData.firstname}
+              type="text"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    firstname: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            Last Name:{' '}
+            <Input
+              valid={!!this.state.riderData.lastname}
+              type="text"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    lastname: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            Email:{' '}
+            <Input
+              type="text"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    email: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            Phone:{' '}
+            <Input
+              type="text"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    phone: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            License #:{' '}
+            <Input
+              type="text"
+              placeholder="Empty for one day license"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    license: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            Birthdate:{' '}
+            <Input
+              type="date"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    birthdate: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          <HFlex>
+            Team:{' '}
+            <Input
+              type="text"
+              onChange={(e: any) => {
+                this.setState({
+                  riderData: {
+                    ...this.state.riderData,
+                    team: e.target.value,
+                  },
+                })
+              }}
+            />
+          </HFlex>
+          {this.props.seriesId ? (
+            <HFlex>
+              Bib #:{' '}
+              <Input
+                valid={!!this.state.bibNumber}
+                type="text"
+                onChange={(e: any) => {
+                  this.setState({
+                    bibNumber: e.target.value,
+                  })
+                }}
+              />
+            </HFlex>
+          ) : null}
+          <HFlex>
+            <Button title="Create Rider" onClick={this.createRider} />
+            <Button
+              title="Cancel"
+              onClick={this.props.onCancelled || (() => {})}
+            />
+          </HFlex>
+        </VFlex>
+      </ModalContainer>
     )
   }
 }

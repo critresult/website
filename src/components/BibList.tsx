@@ -4,6 +4,8 @@ import { VFlex, HFlex, Input, LargeText } from './Shared'
 import Button from './Button'
 import Colors from '../Colors'
 import idx from 'idx'
+import RiderEdit from './RiderEdit'
+import Popup from './Popup'
 
 @inject('bib', 'rider')
 @observer
@@ -16,6 +18,8 @@ class BibList extends React.Component<{
   state = {
     filteredBibs: null as null | any[],
     filter: '',
+    showingRiderEditPopup: false,
+    editRiderId: '',
   }
 
   filterBibs = () => {
@@ -44,6 +48,16 @@ class BibList extends React.Component<{
     const bibs = this.props.bib.bibsBySeriesId[this.props.seriesId] || []
     return (
       <>
+        <Popup visible={this.state.showingRiderEditPopup}>
+          <RiderEdit
+            riderId={this.state.editRiderId}
+            onCancelled={() => {
+              this.setState({
+                showingRiderEditPopup: false,
+              })
+            }}
+          />
+        </Popup>
         <VFlex>
           <LargeText>
             {this.props.title || `Active Bibs (${bibs.length})`}
@@ -105,7 +119,12 @@ class BibList extends React.Component<{
                       color: Colors.black,
                       flex: 1,
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      this.setState({
+                        showingRiderEditPopup: true,
+                        editRiderId: bib.riderId,
+                      })
+                    }}
                   />
                   <Button
                     title="Delete"
