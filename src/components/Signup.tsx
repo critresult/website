@@ -1,5 +1,4 @@
 import React from 'react'
-import Colors from '../Colors'
 import { HFlex, VFlex, Input, ModalContainer } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
