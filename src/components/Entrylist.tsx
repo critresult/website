@@ -102,9 +102,9 @@ class Entrylist extends React.Component<{
           </LargeText>
         </EntryCell>
         <EntryCell>
+          <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
-          <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>License #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
           {this.props.editable === false ? null : <VFlex style={{ flex: 1 }} />}
@@ -112,11 +112,11 @@ class Entrylist extends React.Component<{
         {entries.map((entry: Entry) =>
           !entry.rider ? null : (
             <EntryCell key={entry._id}>
-              <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
               <VFlex style={{ minWidth: '5%' }}>
                 {(entry.bib || {}).bibNumber}
               </VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
+              <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
               <VFlex style={{ minWidth: '15%' }}>
                 {entry.rider.license || 'One Day'}
               </VFlex>
