@@ -10,6 +10,7 @@ import {
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
 import RaceStore, { Race } from './stores/race'
+import SeriesStore from './stores/series'
 import moment from 'moment'
 import Popup from './components/Popup'
 import Button from './components/Button'
@@ -19,12 +20,14 @@ import { withRouter } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import Footer from './components/Footer'
 import Hydrated from 'hydrated'
+import idx from 'idx'
 
 @inject('promoter', 'event', 'race', 'series')
 @observer
 class _Event extends React.Component<{
   event: EventStore
   race: RaceStore
+  series: SeriesStore
   match: any
 }> {
   state = {
@@ -41,9 +44,11 @@ class _Event extends React.Component<{
     const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
     const dateFormat = 'MMMM Do YYYY'
-    const dayDifference = moment(event.startDate)
-      .utc()
-      .fromNow()
+    const startTime = moment(event.startDate)
+    const hours =
+      idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0]) || 0
+    startTime.add(hours as number | string, 'h')
+    const dayDifference = startTime.fromNow()
     return (
       <>
         <Header />

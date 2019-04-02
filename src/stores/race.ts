@@ -7,7 +7,7 @@ import Hydrated from 'hydrated'
 export interface Race {
   _id: string
   name: string
-  scheduledStart: string
+  scheduledStartTime: string
   seriesId: string
   eventId: string
 }

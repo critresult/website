@@ -12,6 +12,7 @@ export interface Event {
   startDate: string
   endDate: string
   races?: Race[]
+  seriesId: string
 }
 
 export default class EventStore implements Hydrated {
