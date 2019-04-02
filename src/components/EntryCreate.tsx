@@ -54,7 +54,7 @@ class EntryCreate extends React.Component<{
                 .search(e.target.value)
                 .then((riders) => {
                   this.setState({ isSearching: false })
-                  this.setState({ foundRiders: riders.slice(0, 10) })
+                  this.setState({ foundRiders: riders.slice(0, 100) })
                 })
                 .catch(() => this.setState({ isSearching: false }))
             }}
@@ -67,86 +67,96 @@ class EntryCreate extends React.Component<{
             />
           ) : null}
         </HFlex>
-        {this.state.foundRiders.map((rider: Rider) => (
-          <HFlex key={rider._id} style={{ flexWrap: 'nowrap' }}>
-            <VFlex style={{ alignItems: 'flex-start' }}>
-              <HFlex>{`${rider.firstname} ${rider.lastname}`}</HFlex>
-              <HFlex>{`License: ${rider.license}`}</HFlex>
-              <HFlex>{`Transponder: ${rider.transponder || 'none'}`}</HFlex>
-            </VFlex>
-            <VFlex>
-              {bibsByRiderId[rider._id] ? (
-                <HFlex>
-                  Bib #{bibsByRiderId[rider._id].bibNumber}
-                  <Button
-                    title="Add Entry"
-                    onClick={() =>
-                      this.props.race
-                        .addEntry(
-                          this.props.raceId,
-                          rider._id,
-                          bibsByRiderId[rider._id]._id
-                        )
-                        .then(() =>
-                          Promise.all([
-                            this.props.race.load(this.props.raceId),
-                            this.props.race.loadEntries(this.props.raceId),
-                          ])
-                        )
-                        .then(() => {
-                          this.searchRef.current.value = ''
-                          this.searchRef.current.focus()
-                          this.setState({ foundRiders: [] })
-                        })
-                    }
-                  />
-                </HFlex>
-              ) : (
-                <>
-                  <Input
-                    valid
-                    type="text"
-                    placeholder="Bib Number"
-                    onChange={(e: any) => {
-                      rider.__bib = e.target.value
-                    }}
-                  />
-                  <Button
-                    animating={this.state.isLoading}
-                    title="Add"
-                    onClick={() =>
-                      this.props.bib
-                        .create({
-                          bibNumber: rider.__bib,
-                          riderId: rider._id,
-                          seriesId: race.seriesId,
-                        })
-                        .then((bib) =>
-                          this.props.race.addEntry(
+        <VFlex style={{ maxHeight: 500, overflowY: 'scroll' }}>
+          {this.state.foundRiders.map((rider: Rider) => (
+            <HFlex
+              key={rider._id}
+              style={{
+                marginTop: 8,
+                justifyContent: 'space-between',
+                flexWrap: 'nowrap',
+              }}
+            >
+              <VFlex style={{ alignItems: 'flex-start' }}>
+                <HFlex>{`${rider.firstname} ${rider.lastname}`}</HFlex>
+                <HFlex>{`Category: ${rider.racingCategoryRoad}`}</HFlex>
+                <HFlex>{`License: ${rider.license}`}</HFlex>
+                <HFlex>{`Transponder: ${rider.transponder || 'none'}`}</HFlex>
+              </VFlex>
+              <VFlex>
+                {bibsByRiderId[rider._id] ? (
+                  <HFlex>
+                    Bib #{bibsByRiderId[rider._id].bibNumber}
+                    <Button
+                      title="Add Entry"
+                      onClick={() =>
+                        this.props.race
+                          .addEntry(
                             this.props.raceId,
                             rider._id,
-                            bib._id
+                            bibsByRiderId[rider._id]._id
                           )
-                        )
-                        .then(() =>
-                          Promise.all([
-                            this.props.race.load(this.props.raceId),
-                            this.props.race.loadEntries(this.props.raceId),
-                            this.props.bib.loadBibsForSeries(race.seriesId),
-                          ])
-                        )
-                        .then(() => {
-                          this.searchRef.current.value = ''
-                          this.searchRef.current.focus()
-                          this.setState({ foundRiders: [] })
-                        })
-                    }
-                  />
-                </>
-              )}
-            </VFlex>
-          </HFlex>
-        ))}
+                          .then(() =>
+                            Promise.all([
+                              this.props.race.load(this.props.raceId),
+                              this.props.race.loadEntries(this.props.raceId),
+                            ])
+                          )
+                          .then(() => {
+                            this.searchRef.current.value = ''
+                            this.searchRef.current.focus()
+                            this.setState({ foundRiders: [] })
+                          })
+                      }
+                    />
+                  </HFlex>
+                ) : (
+                  <>
+                    <Input
+                      valid
+                      type="text"
+                      placeholder="Bib Number"
+                      onChange={(e: any) => {
+                        rider.__bib = e.target.value
+                      }}
+                    />
+                    <Button
+                      animating={this.state.isLoading}
+                      title="Add"
+                      onClick={() =>
+                        this.props.bib
+                          .create({
+                            bibNumber: rider.__bib,
+                            riderId: rider._id,
+                            seriesId: race.seriesId,
+                          })
+                          .then((bib) =>
+                            this.props.race.addEntry(
+                              this.props.raceId,
+                              rider._id,
+                              bib._id
+                            )
+                          )
+                          .then(() =>
+                            Promise.all([
+                              this.props.race.load(this.props.raceId),
+                              this.props.race.loadEntries(this.props.raceId),
+                              this.props.bib.loadBibsForSeries(race.seriesId),
+                            ])
+                          )
+                          .then(() => {
+                            this.searchRef.current.value = ''
+                            this.searchRef.current.focus()
+                            this.setState({ foundRiders: [] })
+                          })
+                      }
+                    />
+                  </>
+                )}
+              </VFlex>
+            </HFlex>
+          ))}
+        </VFlex>
         <HFlex>
           <Button title="Done" onClick={this.props.onFinished || (() => {})} />
         </HFlex>
