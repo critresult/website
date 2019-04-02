@@ -104,7 +104,7 @@ class Entrylist extends React.Component<{
         <EntryCell>
           <VFlex style={{ minWidth: '15%' }}>First Name</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>Bib #</VFlex>
+          <VFlex style={{ minWidth: '5%' }}>Bib #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>License</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
           {this.props.editable === false ? null : <VFlex style={{ flex: 1 }} />}
@@ -114,7 +114,7 @@ class Entrylist extends React.Component<{
             <EntryCell key={entry._id}>
               <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
               <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
+              <VFlex style={{ minWidth: '5%' }}>
                 {(entry.bib || {}).bibNumber}
               </VFlex>
               <VFlex style={{ minWidth: '15%' }}>
