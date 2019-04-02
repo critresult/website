@@ -91,7 +91,7 @@ class BibList extends React.Component<{
           <VFlex style={{ minWidth: '15%' }}>Last Name</VFlex>
           <VFlex style={{ minWidth: '10%' }}>License #</VFlex>
           <VFlex style={{ minWidth: '15%' }}>Transponder</VFlex>
-          <VFlex style={{ minWidth: '15%' }}>Renting Transponder</VFlex>
+          <VFlex style={{ minWidth: '15%' }}>Rental Transponder</VFlex>
           <VFlex style={{ flex: 1 }} />
         </HFlex>
         {(this.state.filteredBibs || bibs)
