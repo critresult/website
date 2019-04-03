@@ -8,7 +8,7 @@ export default class Button extends React.Component<{
   title?: string
   animating?: boolean
   style?: any
-  onClick?: () => void | Promise<any>
+  onClick?: (...args: any[]) => void | Promise<any>
 }> {
   // Tracking isMounted helps prevent making state changes in async functions
   // once we've been unmounted
