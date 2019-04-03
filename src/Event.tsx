@@ -44,6 +44,16 @@ class _Event extends React.Component<{
     const event = this.props.event.eventsById[eventId] || ({} as Event)
     const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
+    const _riders = {}
+    const allRiders = []
+    const totalRacers = races.forEach(race => {
+      const entries = this.props.race.entriesByRaceId[race._id] || []
+      allRiders.push(...entries)
+    })
+    allRiders.filter((rider) => {
+      if (_riders[rider._id]) return false
+      return true
+    })
     const startTime = moment(event.startDate)
     const hours =
       idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0]) || 0
@@ -70,7 +80,7 @@ class _Event extends React.Component<{
         >
           <VFlex>
             <TitleText>
-              {series.name} - {event.name}
+              {series.name} - {event.name} - {allRiders.length} Riders
             </TitleText>
             <LargeText>
               {moment(event.startDate)
