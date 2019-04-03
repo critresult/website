@@ -24,7 +24,7 @@ export default class AvailableBibs extends React.Component<{
     return (
       <VFlex>
         <TitleText>Available Bib Numbers</TitleText>
-        <HFlex>
+        <HFlex style={{ justifyContent: 'center' }}>
           <VFlex style={{ margin: 8 }}>
             <HFlex>
               <LargeText>0-99</LargeText>
@@ -126,7 +126,7 @@ export default class AvailableBibs extends React.Component<{
           </VFlex>
           <VFlex style={{ margin: 8 }}>
             <HFlex>
-              <LargeText>900-900</LargeText>
+              <LargeText>900-999</LargeText>
             </HFlex>
             {available
               .filter((a) => a > 899 && a < 1000)

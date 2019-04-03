@@ -60,7 +60,7 @@ export const RootCell = styled.div`
   background-color: ${Colors.white};
   margin: auto;
   margin-top: 8px;
-  max-width: 1200px;
+  max-width: 1000px;
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0px 1px 2px ${Colors.shadow};
