@@ -3,7 +3,7 @@ import { VFlex, HFlex, ModalContainer, Input } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import RaceStore from '../stores/race'
-import EventStore, { Event } from '../stores/event'
+import EventStore from '../stores/event'
 
 @inject('event', 'race')
 @observer
@@ -26,7 +26,7 @@ export default class RaceCreate extends React.Component<{
   }
 
   render() {
-    const event = this.props.event.eventsById[this.props.eventId] || ({} as Event)
+    const event = this.props.event.eventsById(this.props.eventId)
     return (
       <VFlex>
         <HFlex style={{ borderRadius: 5 }}>

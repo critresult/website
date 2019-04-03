@@ -25,6 +25,7 @@ import Popup from './components/Popup'
 import EventCreate from './components/EventCreate'
 import BibList from './components/BibList'
 import AvailableBibs from './components/AvailableBibs'
+import EventStore from './stores/event'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -32,6 +33,7 @@ export default class Series extends React.Component<{
   series?: SeriesStore
   bib?: BibStore
   rider?: RiderStore
+  event?: EventStore
 }> {
   state = {
     isSearching: false,
@@ -69,7 +71,7 @@ export default class Series extends React.Component<{
     const bibs = this.props.bib.bibsBySeriesId(seriesId)
     const bibsByRiderId = keyby(bibs, 'riderId')
     const promoters = this.props.series.promotersBySeriesId[seriesId] || []
-    const events = this.props.event.eventsBySeriesId[seriesId] || []
+    const events = this.props.event.eventsBySeriesId(seriesId)
 
     return (
       <>

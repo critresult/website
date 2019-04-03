@@ -46,7 +46,7 @@ export default class _Event extends React.Component<
 
   render() {
     const eventId = this.props.match.params.id
-    const event = this.props.event.eventsById[eventId] || ({} as Event)
+    const event = this.props.event.eventsById(eventId)
     const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
     const allEntries = [] as Entry[]

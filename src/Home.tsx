@@ -61,7 +61,7 @@ export default class Home extends React.Component<{
         <RootCell>
           <HFlex style={{ padding: 8, flex: 1 }}>
             {this.props.event.upcomingEvents.map((_event) => {
-              const event = this.props.event.eventsById[_event._id] || {}
+              const event = this.props.event.eventsById(_event._id)
               const series = this.props.series.seriesById[event.seriesId] || {}
               const races = event.races || []
               return (

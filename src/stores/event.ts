@@ -18,15 +18,27 @@ export interface Event {
 
 export default class EventStore implements Hydrated {
   @observable upcomingEvents: Event[] = []
-  @observable eventsBySeriesId: {
+  @observable _eventsBySeriesId: {
     [key: string]: Event[]
   } = {}
-  @observable eventsById: {
+  @observable _eventsById: {
     [key: string]: Event
   } = {}
-  @observable entriesByEventId: {
+  @observable _entriesByEventId: {
     [key: string]: Entry[]
   } = {}
+
+  eventsBySeriesId(id: string): Event[] {
+    return this._eventsBySeriesId[id] || []
+  }
+
+  eventsById(id: string): Event {
+    return this._eventsById[id] || ({} as Event)
+  }
+
+  entriesByEventId(id: string): Entry[] {
+    return this._entriesByEventId[id] || []
+  }
 
   async hydrate() {
     await this.loadUpcoming()
@@ -35,8 +47,8 @@ export default class EventStore implements Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
-    data.forEach((model: any) => (this.eventsById[model._id] = model))
-    this.eventsBySeriesId = groupby(data, 'seriesId')
+    data.forEach((model: any) => (this._eventsById[model._id] = model))
+    this._eventsBySeriesId = groupby(data, 'seriesId')
   }
 
   async load(_id: string) {
@@ -47,7 +59,7 @@ export default class EventStore implements Hydrated {
           _id,
         },
       })
-      this.eventsById[_id] = data
+      this._eventsById[_id] = data
     } catch (err) {
       console.log('Error loading event by id', err)
       throw err
@@ -62,7 +74,7 @@ export default class EventStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.entriesByEventId[_id] = data
+      this._entriesByEventId[_id] = data
     } catch (err) {
       console.log('Error loading entries', err)
       throw err
@@ -86,7 +98,7 @@ export default class EventStore implements Hydrated {
         ...eventData,
         token: PromoterStore.activeToken(),
       })
-      this.eventsById[data._id] = data
+      this._eventsById[data._id] = data
       return data
     } catch (err) {
       console.log('Error creating event', err)
@@ -115,7 +127,7 @@ export default class EventStore implements Hydrated {
         }
       )
       this.upcomingEvents.forEach(
-        (event) => (this.eventsById[event._id] = event)
+        (event) => (this._eventsById[event._id] = event)
       )
     } catch (err) {
       console.log('Error loading upcoming events', err)
