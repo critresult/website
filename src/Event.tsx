@@ -10,6 +10,7 @@ import {
 import Header from './components/Header'
 import EventStore, { Event } from './stores/event'
 import RaceStore, { Race } from './stores/race'
+import { Entry } from './stores/entry'
 import SeriesStore from './stores/series'
 import moment from 'moment'
 import Popup from './components/Popup'
@@ -22,6 +23,7 @@ import Footer from './components/Footer'
 import Hydrated from 'hydrated'
 import idx from 'idx'
 import AvailableBibs from './components/AvailableBibs'
+import uniqby from 'lodash.uniqby'
 
 @(withRouter as any)
 @inject('promoter', 'event', 'race', 'series')
@@ -47,16 +49,12 @@ export default class _Event extends React.Component<
     const event = this.props.event.eventsById[eventId] || ({} as Event)
     const series = this.props.series.seriesById[event.seriesId] || {}
     const races = event.races || []
-    const _riders = {}
-    const allRiders = []
-    const totalRacers = races.forEach((race) => {
+    const allEntries = [] as Entry[]
+    races.forEach((race) => {
       const entries = this.props.race.entriesByRaceId[race._id] || []
-      allRiders.push(...entries)
+      allEntries.push(...entries)
     })
-    allRiders.filter((rider) => {
-      if (_riders[rider._id]) return false
-      return true
-    })
+    const uniqRidersLength = uniqby(allEntries, 'riderId').length
     const startTime = moment(event.startDate)
     const hours =
       idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0]) || 0
@@ -83,7 +81,7 @@ export default class _Event extends React.Component<
         >
           <VFlex>
             <TitleText>
-              {series.name} - {event.name} - {allRiders.length} Riders
+              {series.name} - {event.name} - {uniqRidersLength} Riders
             </TitleText>
             <LargeText>
               {moment(event.startDate)
