@@ -42,8 +42,7 @@ export default class RiderEdit extends React.Component<{
       .catch((err) => console.log('Error updating rider', err))
 
   render() {
-    const rider =
-      this.props.rider.ridersById[this.props.riderId] || ({} as Rider)
+    const rider = this.props.rider.ridersById(this.props.riderId)
     return (
       <ModalContainer>
         <LargeText>Edit Rider</LargeText>

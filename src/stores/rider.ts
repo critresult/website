@@ -13,9 +13,13 @@ export interface Rider {
 }
 
 export default class RiderStore implements Hydrated {
-  @observable ridersById: {
+  @observable _ridersById: {
     [key: string]: Rider
   } = {}
+
+  ridersById(id: string): Rider {
+    return this._ridersById[id] || ({} as Rider)
+  }
 
   async hydrate() {}
 
@@ -27,7 +31,7 @@ export default class RiderStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.ridersById[_id] = data
+      this._ridersById[_id] = data
     } catch (err) {
       console.log('Error loading rider by id', err)
       throw err
@@ -77,7 +81,7 @@ export default class RiderStore implements Hydrated {
         created.push(...data)
         await new Promise((r) => setTimeout(r, 1000))
       }
-      created.map((model: Rider) => (this.ridersById[model._id] = model))
+      created.map((model: Rider) => (this._ridersById[model._id] = model))
     } catch (err) {
       console.log('Error creating many models', err)
       throw err
@@ -90,7 +94,7 @@ export default class RiderStore implements Hydrated {
         ...riderData,
         token: PromoterStore.activeToken(),
       })
-      this.ridersById[data._id] = data
+      this._ridersById[data._id] = data
       return data
     } catch (err) {
       console.log('Error creating rider', err)

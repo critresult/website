@@ -50,7 +50,7 @@ export default class BibStore implements Hydrated {
         lastNumber = num
         continue
       }
-      for (let x = 1; x < num - lastNumber; x++) {
+      for (let x = 1; x < num - lastNumber; x += 1) {
         available.push(lastNumber + x)
       }
       lastNumber = num
