@@ -30,7 +30,7 @@ export default class PromoterStore implements Hydrated {
 
   @computed
   get active() {
-    return this.promotersById[this.userId] || {}
+    return this.promotersById[this.userId] || ({} as Promoter)
   }
 
   @computed

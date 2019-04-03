@@ -1,35 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
 import Colors from '../Colors'
-import { HFlex, VFlex, LargeText } from './Shared'
+import { HFlex, VFlex } from './Shared'
 import Popup from './Popup'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
 import Signup from './Signup'
 import Login from './Login'
 import TabSelector from './TabSelector'
-import { Link } from 'react-router-dom'
+import { withRouter, Link, RouteComponentProps } from 'react-router-dom'
 import Button from './Button'
-import { TiPlus } from 'react-icons/ti'
-import EventCreate from './EventCreate'
 import SeriesCreate from './SeriesCreate'
 import SeriesStore, { Series } from '../stores/series'
-import { withRouter } from 'react-router-dom'
 
 const UpperHeader = styled(HFlex)`
   background-color: ${Colors.blue};
   justify-content: space-between;
-  height: 30px;
   font-family: Helvetica;
   padding: 20px;
   color: ${Colors.white};
+  border-bottom: solid 2px ${Colors.black};
 `
 
 const LowerHeader = styled(HFlex)`
+  border-bottom: solid 1px ${Colors.blue};
   background-color: ${Colors.black};
-  height: 2px;
-  color: ${Colors.white};
-  font-family: Helvetica;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
 `
 
 const TitleSpan = styled(Link)`
@@ -38,23 +36,17 @@ const TitleSpan = styled(Link)`
   text-decoration: none;
 `
 
-const HeaderButton = styled.span`
-  padding: 5px;
-  background-color: ${Colors.black};
-  border-radius: 5px;
-  color: ${Colors.white};
-  cursor: pointer;
-`
-
+@(withRouter as any)
 @inject('promoter', 'series')
 @observer
-class Header extends React.Component<{
-  promoter?: PromoterStore
-  series?: SeriesStore
-}> {
+class Header extends React.Component<
+  RouteComponentProps & {
+    promoter?: PromoterStore
+    series?: SeriesStore
+  }
+> {
   state = {
     authVisible: false,
-    showingCreatePopup: false,
     showingCreateSeriesPopup: false,
   }
   onAuthenticated = () => this.setState({ authVisible: false })
@@ -98,11 +90,6 @@ class Header extends React.Component<{
             }
           />
         </Popup>
-        <Popup visible={this.state.showingCreatePopup}>
-          <EventCreate
-            onCancelled={() => this.setState({ showingCreatePopup: false })}
-          />
-        </Popup>
         <UpperHeader>
           <VFlex style={{ alignItems: 'flex-start' }}>
             <TitleSpan to="/">CritResult</TitleSpan>
@@ -129,16 +116,7 @@ class Header extends React.Component<{
             </HFlex>
           </VFlex>
         </UpperHeader>
-        <LowerHeader />
-        <HFlex
-          style={{
-            borderBottom: `solid 1px ${Colors.blue}`,
-            backgroundColor: Colors.black,
-            justifyContent: 'space-between',
-            paddingLeft: 20,
-            paddingRight: 20,
-          }}
-        >
+        <LowerHeader>
           <VFlex style={{ color: Colors.white }}>
             <HFlex>
               {this.props.series.all.map((series: Series, index) => (
@@ -165,11 +143,11 @@ class Header extends React.Component<{
               style={{ backgroundColor: Colors.green }}
             />
           </VFlex>
-        </HFlex>
+        </LowerHeader>
       </>
     )
   }
 }
 
 // Goddamn decorator export linting issues
-export default withRouter(Header)
+export default Header
