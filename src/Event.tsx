@@ -56,8 +56,9 @@ export default class _Event extends React.Component<
     })
     const uniqRidersLength = uniqby(allEntries, 'riderId').length
     const startTime = moment(event.startDate)
-    const hours =
-      idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0]) || 0
+    const hours = races.length
+      ? idx(races, (_: any) => _[0].scheduledStartTime.split(':')[0])
+      : 0
     startTime.add(hours as number | string, 'h')
     const dayDifference = startTime.fromNow()
     return (
