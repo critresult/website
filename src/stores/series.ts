@@ -13,12 +13,20 @@ export interface Series {
 export default class SeriesStore implements Hydrated {
   @observable all: Series[] = []
   @observable mySeries: Series[] = []
-  @observable seriesById: {
+  @observable _seriesById: {
     [key: string]: Series
   } = {}
-  @observable promotersBySeriesId: {
+  @observable _promotersBySeriesId: {
     [key: string]: Promoter[]
   } = {}
+
+  seriesById(id: string): Series {
+    return this._seriesById[id] || ({} as Series)
+  }
+
+  promotersBySeriesId(id: string): Promoter[] {
+    return this._promotersBySeriesId[id] || []
+  }
 
   async hydrate() {
     await this.load()
@@ -33,7 +41,7 @@ export default class SeriesStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.promotersBySeriesId[seriesId] = data
+      this._promotersBySeriesId[seriesId] = data
     } catch (err) {
       console.log('Error loading promoters for series', err)
       throw err
@@ -54,7 +62,7 @@ export default class SeriesStore implements Hydrated {
         this.all.push(...data)
       }
       this.all = uniqby(this.all, '_id')
-      this.all.forEach((series) => (this.seriesById[series._id] = series))
+      this.all.forEach((series) => (this._seriesById[series._id] = series))
     } catch (err) {
       console.log('Error loading rider by id', err)
       throw err
@@ -81,7 +89,7 @@ export default class SeriesStore implements Hydrated {
         ...seriesData,
         token: PromoterStore.activeToken(),
       })
-      this.seriesById[data._id] = data
+      this._seriesById[data._id] = data
     } catch (err) {
       console.log('Error creating series', err)
       throw err

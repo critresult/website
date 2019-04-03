@@ -10,7 +10,7 @@ import RiderStore, { Rider } from '../stores/rider'
 export default class SeriesBibCell extends React.Component<{
   seriesId: string
   _rider: Rider
-  bibNumber?: string
+  bibNumber?: string | number
   bib?: BibStore
   rider?: RiderStore
 }> {

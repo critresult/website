@@ -9,7 +9,7 @@ import {
   TitleText,
 } from './components/Shared'
 import SeriesStore from './stores/series'
-import BibStore from './stores/bib'
+import BibStore, { Bib } from './stores/bib'
 import RiderStore, { Rider } from './stores/rider'
 import Header from './components/Header'
 import Button from './components/Button'
@@ -24,7 +24,6 @@ import { Link } from 'react-router-dom'
 import Popup from './components/Popup'
 import EventCreate from './components/EventCreate'
 import BibList from './components/BibList'
-import AvailableBibs from './components/AvailableBibs'
 import EventStore from './stores/event'
 
 @inject('series', 'event', 'rider', 'bib')
@@ -37,12 +36,12 @@ export default class Series extends React.Component<{
 }> {
   state = {
     isSearching: false,
-    foundRiders: [],
+    foundRiders: [] as Rider[],
     promoterEmail: '',
     showingCreatePopup: false,
   }
 
-  searchRef = React.createRef()
+  searchRef = React.createRef<any>()
 
   async componentDidMount() {
     await Hydrated.hydrate()
@@ -67,12 +66,11 @@ export default class Series extends React.Component<{
 
   render() {
     const seriesId = this.props.match.params.id
-    const series = this.props.series.seriesById[seriesId] || {}
+    const series = this.props.series.seriesById(seriesId)
     const bibs = this.props.bib.bibsBySeriesId(seriesId)
     const bibsByRiderId = keyby(bibs, 'riderId')
-    const promoters = this.props.series.promotersBySeriesId[seriesId] || []
+    const promoters = this.props.series.promotersBySeriesId(seriesId)
     const events = this.props.event.eventsBySeriesId(seriesId)
-
     return (
       <>
         <Popup visible={this.state.showingCreatePopup}>
@@ -118,7 +116,7 @@ export default class Series extends React.Component<{
               key={_rider._id}
               seriesId={seriesId}
               _rider={_rider}
-              bibNumber={(bibsByRiderId[_rider._id] || {}).bibNumber}
+              bibNumber={(bibsByRiderId[_rider._id] || ({} as Bib)).bibNumber}
             />
           ))}
         </RootCell>
