@@ -2,7 +2,7 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { HFlex, Input } from './Shared'
 import Button from './Button'
-import BibStore, { Bib } from '../stores/bib'
+import BibStore from '../stores/bib'
 import RiderStore from '../stores/rider'
 import Colors from '../Colors'
 import idx from 'idx'
@@ -19,7 +19,7 @@ export default class RentTransponder extends React.Component<{
     rentalTransponder: '',
   }
   render() {
-    const bib = this.props.bib.bibsById[this.props.bibId] || ({} as Bib)
+    const bib = this.props.bib.bibsById(this.props.bibId)
     return (
       <>
         <HFlex>

@@ -27,7 +27,7 @@ export default class BibList extends React.Component<{
 
   filterBibs = () => {
     const { seriesId } = this.props
-    const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
+    const bibs = this.props.bib.bibsBySeriesId(seriesId)
     if (!this.state.filter) {
       this.setState({ filteredBibs: null })
       return
@@ -48,7 +48,7 @@ export default class BibList extends React.Component<{
   }
 
   render() {
-    const bibs = this.props.bib.bibsBySeriesId[this.props.seriesId] || []
+    const bibs = this.props.bib.bibsBySeriesId(this.props.seriesId)
     return (
       <>
         <Popup visible={this.state.showingRiderEditPopup}>

@@ -18,7 +18,7 @@ export default class Signup extends React.Component<{
     isLoading: false,
   }
 
-  inputRef = React.createRef()
+  inputRef = React.createRef<any>()
 
   componentDidMount() {
     this.inputRef.current.focus()

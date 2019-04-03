@@ -22,7 +22,7 @@ export default class EntryCreate extends React.Component<{
     foundRiders: [] as Rider[],
   }
 
-  searchRef = React.createRef()
+  searchRef = React.createRef<any>()
 
   componentDidMount() {
     const race = this.props.race.racesById[this.props.raceId] || {}
@@ -33,7 +33,7 @@ export default class EntryCreate extends React.Component<{
   render() {
     const race = this.props.race.racesById[this.props.raceId] || {}
     const bibsByRiderId = keyby(
-      this.props.bib.bibsBySeriesId[race.seriesId] || [],
+      this.props.bib.bibsBySeriesId(race.seriesId),
       'riderId'
     )
     return (

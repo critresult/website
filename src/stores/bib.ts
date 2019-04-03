@@ -14,15 +14,20 @@ export interface Bib {
 }
 
 export default class BibStore implements Hydrated {
-  @observable bibsBySeriesId: {
+  @observable _bibsBySeriesId: {
     [key: string]: Bib[]
   } = {}
-  @observable bibsByRiderId: {
-    [key: string]: Bib[]
-  } = {}
-  @observable bibsById: {
+  @observable _bibsById: {
     [key: string]: Bib
   } = {}
+
+  bibsBySeriesId(id: string): Bib[] {
+    return this._bibsBySeriesId[id] || []
+  }
+
+  bibsById(id: string): Bib {
+    return this._bibsById[id] || ({} as Bib)
+  }
 
   async hydrate() {
     const { data } = await axios.get('/bibs', {
@@ -30,13 +35,12 @@ export default class BibStore implements Hydrated {
         token: PromoterStore.activeToken(),
       },
     })
-    this.bibsById = keyby(data, '_id')
-    this.bibsBySeriesId = groupby(data, 'seriesId')
-    this.bibsByRiderId = groupby(data, 'riderId')
+    this._bibsById = keyby(data, '_id')
+    this._bibsBySeriesId = groupby(data, 'seriesId')
   }
 
   availableBibsForSeriesId(seriesId: string) {
-    const bibs = this.bibsBySeriesId[seriesId] || []
+    const bibs = this.bibsBySeriesId(seriesId)
     const bibNumbers = bibs.map((bib) => +bib.bibNumber)
     bibNumbers.sort((b1, b2) => b1 - b2)
     const available = []
@@ -62,7 +66,7 @@ export default class BibStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.bibsBySeriesId[seriesId] = data
+      this._bibsBySeriesId[seriesId] = data
     } catch (err) {
       console.log('Error loading bibs for series', err)
       throw err
@@ -77,7 +81,7 @@ export default class BibStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.bibsById[data._id] = data
+      this._bibsById[data._id] = data
     } catch (err) {
       console.log('Error loading bib by id', err)
       throw err

@@ -66,7 +66,7 @@ export default class Series extends React.Component<{
   render() {
     const seriesId = this.props.match.params.id
     const series = this.props.series.seriesById[seriesId] || {}
-    const bibs = this.props.bib.bibsBySeriesId[seriesId] || []
+    const bibs = this.props.bib.bibsBySeriesId(seriesId)
     const bibsByRiderId = keyby(bibs, 'riderId')
     const promoters = this.props.series.promotersBySeriesId[seriesId] || []
     const events = this.props.event.eventsBySeriesId[seriesId] || []
