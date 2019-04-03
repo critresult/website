@@ -7,7 +7,7 @@ import EventStore from '../stores/event'
 
 @inject('event', 'race')
 @observer
-class RaceCreate extends React.Component<{
+export default class RaceCreate extends React.Component<{
   onCreated?: () => void
   onCancelled?: () => void
   race?: RaceStore
@@ -78,5 +78,3 @@ class RaceCreate extends React.Component<{
     )
   }
 }
-
-export default RaceCreate

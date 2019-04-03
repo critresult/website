@@ -4,15 +4,18 @@ import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import EventStore, { Event } from '../stores/event'
 import SeriesStore from '../stores/series'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
+@(withRouter as any)
 @inject('event', 'series')
 @observer
-class EventCreate extends React.Component<{
-  onCancelled?: () => void
-  event?: EventStore
-  series?: SeriesStore
-}> {
+export default class EventCreate extends React.Component<
+  RouteComponentProps & {
+    onCancelled?: () => void
+    event?: EventStore
+    series?: SeriesStore
+  }
+> {
   state = {
     eventData: {},
   }
@@ -96,5 +99,3 @@ class EventCreate extends React.Component<{
     )
   }
 }
-
-export default withRouter(EventCreate)

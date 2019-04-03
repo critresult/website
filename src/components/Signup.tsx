@@ -7,7 +7,7 @@ import emailValidator from 'email-validator'
 
 @inject('promoter')
 @observer
-class Signup extends React.Component<{
+export default class Signup extends React.Component<{
   onAuthenticated?: () => void
   onCancelled?: (event: React.MouseEvent) => void
   promoter?: PromoterStore
@@ -111,5 +111,3 @@ class Signup extends React.Component<{
     )
   }
 }
-
-export default Signup

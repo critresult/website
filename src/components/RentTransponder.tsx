@@ -9,7 +9,7 @@ import idx from 'idx'
 
 @inject('bib', 'rider')
 @observer
-class RentTransponder extends React.Component<{
+export default class RentTransponder extends React.Component<{
   bibId: string
   onUpdated?: () => void
   bib?: BibStore
@@ -87,4 +87,3 @@ class RentTransponder extends React.Component<{
     )
   }
 }
-export default RentTransponder

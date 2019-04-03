@@ -1,5 +1,4 @@
 import React from 'react'
-import Colors from '../Colors'
 import { HFlex, VFlex, Input, ModalContainer } from './Shared'
 import Button from './Button'
 import { inject, observer } from 'mobx-react'
@@ -8,7 +7,7 @@ import emailValidator from 'email-validator'
 
 @inject('promoter')
 @observer
-class Signup extends React.Component<{
+export default class Signup extends React.Component<{
   onAuthenticated?: () => void
   onCancelled?: (event: React.MouseEvent) => void
   promoter?: PromoterStore
@@ -86,5 +85,3 @@ class Signup extends React.Component<{
     )
   }
 }
-
-export default Signup

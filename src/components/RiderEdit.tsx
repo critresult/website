@@ -6,7 +6,7 @@ import Button from './Button'
 
 @inject('rider')
 @observer
-class RiderEdit extends React.Component<{
+export default class RiderEdit extends React.Component<{
   riderId: string
   onCancelled?: () => any
   onUpdated?: () => any
@@ -132,4 +132,3 @@ class RiderEdit extends React.Component<{
     )
   }
 }
-export default RiderEdit

@@ -28,7 +28,7 @@ import AvailableBibs from './components/AvailableBibs'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
-class Series extends React.Component<{
+export default class Series extends React.Component<{
   series?: SeriesStore
   bib?: BibStore
   rider?: RiderStore
@@ -204,5 +204,3 @@ class Series extends React.Component<{
     )
   }
 }
-
-export default Series

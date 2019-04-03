@@ -7,7 +7,7 @@ import RiderStore, { Rider } from '../stores/rider'
 
 @inject('bib', 'rider')
 @observer
-class SeriesBibCell extends React.Component<{
+export default class SeriesBibCell extends React.Component<{
   seriesId: string
   _rider: Rider
   bibNumber?: string
@@ -76,5 +76,3 @@ class SeriesBibCell extends React.Component<{
     )
   }
 }
-
-export default SeriesBibCell

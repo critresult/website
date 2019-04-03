@@ -9,7 +9,7 @@ import BibStore from '../stores/bib'
 
 @inject('event', 'race', 'rider', 'bib')
 @observer
-class RiderCreate extends React.Component<{
+export default class RiderCreate extends React.Component<{
   onCreated?: () => void
   onCancelled?: () => void
   seriesId?: string
@@ -137,5 +137,3 @@ class RiderCreate extends React.Component<{
     )
   }
 }
-
-export default RiderCreate

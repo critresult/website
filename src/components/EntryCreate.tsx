@@ -9,7 +9,7 @@ import keyby from 'lodash.keyby'
 
 @inject('rider', 'race', 'bib')
 @observer
-class EntryCreate extends React.Component<{
+export default class EntryCreate extends React.Component<{
   raceId: string
   onFinished?: () => void
   rider?: RiderStore
@@ -172,4 +172,3 @@ class EntryCreate extends React.Component<{
     )
   }
 }
-export default EntryCreate

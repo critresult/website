@@ -3,7 +3,7 @@ import Colors from '../Colors'
 import { TiSocialGithub } from 'react-icons/ti'
 import { VFlex } from './Shared'
 
-class Footer extends React.Component<{}> {
+export default class Footer extends React.Component<{}> {
   render() {
     return (
       <VFlex
@@ -21,5 +21,3 @@ class Footer extends React.Component<{}> {
     )
   }
 }
-
-export default Footer

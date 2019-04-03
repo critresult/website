@@ -39,7 +39,7 @@ const TitleSpan = styled(Link)`
 @(withRouter as any)
 @inject('promoter', 'series')
 @observer
-class Header extends React.Component<
+export default class Header extends React.Component<
   RouteComponentProps & {
     promoter?: PromoterStore
     series?: SeriesStore
@@ -148,6 +148,3 @@ class Header extends React.Component<
     )
   }
 }
-
-// Goddamn decorator export linting issues
-export default Header

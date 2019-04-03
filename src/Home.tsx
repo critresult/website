@@ -13,9 +13,8 @@ import Colors from './Colors'
 import Button from './components/Button'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import Entrylist from './components/Entrylist'
 import RiderStore from './stores/rider'
-import SeriesStore, { Series } from './stores/series'
+import SeriesStore from './stores/series'
 import styled from 'styled-components'
 import Footer from './components/Footer'
 import Hydrated from 'hydrated'
@@ -33,7 +32,7 @@ const Cell = styled(VFlex)`
 
 @inject('promoter', 'event', 'rider', 'series')
 @observer
-class Home extends React.Component<{
+export default class Home extends React.Component<{
   event?: EventStore
   rider?: RiderStore
   series?: SeriesStore
@@ -100,5 +99,3 @@ class Home extends React.Component<{
     )
   }
 }
-
-export default Home

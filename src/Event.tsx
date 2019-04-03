@@ -16,21 +16,24 @@ import Popup from './components/Popup'
 import Button from './components/Button'
 import RaceCreate from './components/RaceCreate'
 import Colors from './Colors'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import Footer from './components/Footer'
 import Hydrated from 'hydrated'
 import idx from 'idx'
 import AvailableBibs from './components/AvailableBibs'
 
+@(withRouter as any)
 @inject('promoter', 'event', 'race', 'series')
 @observer
-class _Event extends React.Component<{
-  event: EventStore
-  race: RaceStore
-  series: SeriesStore
-  match: any
-}> {
+export default class _Event extends React.Component<
+  RouteComponentProps & {
+    event: EventStore
+    race: RaceStore
+    series: SeriesStore
+    match: any
+  }
+> {
   state = {
     raceCreateVisible: false,
   }
@@ -46,7 +49,7 @@ class _Event extends React.Component<{
     const races = event.races || []
     const _riders = {}
     const allRiders = []
-    const totalRacers = races.forEach(race => {
+    const totalRacers = races.forEach((race) => {
       const entries = this.props.race.entriesByRaceId[race._id] || []
       allRiders.push(...entries)
     })
@@ -130,5 +133,3 @@ class _Event extends React.Component<{
     )
   }
 }
-
-export default withRouter(_Event)

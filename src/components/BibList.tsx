@@ -12,7 +12,7 @@ import BibStore, { Bib } from '../stores/bib'
 
 @inject('bib', 'rider')
 @observer
-class BibList extends React.Component<{
+export default class BibList extends React.Component<{
   seriesId: string
   title?: string
   bib?: BibStore
@@ -170,4 +170,3 @@ class BibList extends React.Component<{
     )
   }
 }
-export default BibList

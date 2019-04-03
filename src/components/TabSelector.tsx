@@ -5,7 +5,7 @@ import { VFlex, HFlex } from './Shared'
 
 @inject()
 @observer
-class TabSelector extends React.Component<{
+export default class TabSelector extends React.Component<{
   tabs: { title: string; render: () => any }[]
   onIndexChange?: (activeIndex: number) => void
   style?: any
@@ -53,5 +53,3 @@ class TabSelector extends React.Component<{
     )
   }
 }
-
-export default TabSelector

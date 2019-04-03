@@ -27,7 +27,7 @@ const EntryCell = styled(HFlex)`
 
 @inject('event', 'race', 'bib')
 @observer
-class Entrylist extends React.Component<{
+export default class Entrylist extends React.Component<{
   seriesId: string
   raceId: string
   editable?: boolean
@@ -213,5 +213,3 @@ class Entrylist extends React.Component<{
     )
   }
 }
-
-export default Entrylist

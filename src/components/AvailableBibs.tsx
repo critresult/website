@@ -1,6 +1,5 @@
 import React from 'react'
 import { VFlex, HFlex, LargeText, TitleText } from './Shared'
-import groupby from 'lodash.groupby'
 import { inject, observer } from 'mobx-react'
 import BibStore from '../stores/bib'
 import SeriesStore from '../stores/series'
@@ -12,7 +11,7 @@ const NumberLine = styled.div`
 `
 @inject('bib', 'series', 'event')
 @observer
-class AvailableBibs extends React.Component<{
+export default class AvailableBibs extends React.Component<{
   seriesId: string
   bib?: BibStore
   series?: SeriesStore
@@ -141,5 +140,3 @@ class AvailableBibs extends React.Component<{
     )
   }
 }
-
-export default AvailableBibs
