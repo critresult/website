@@ -45,11 +45,11 @@ export default class Entrylist extends React.Component<{
 
   exportCSV = () => {
     this.setState({ exportingCSV: true })
-    const race = this.props.race.racesById[this.props.raceId] || ({} as Race)
+    const race = this.props.race.racesById(this.props.raceId)
     this.props.race
       .loadEntries(this.props.raceId)
       .then(() => {
-        const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
+        const entries = this.props.race.entriesByRaceId(this.props.raceId)
         const rows = entries.map((entry: Entry) =>
           [
             entry.rider.license,
@@ -88,8 +88,8 @@ export default class Entrylist extends React.Component<{
   }
 
   render() {
-    const race = this.props.race.racesById[this.props.raceId] || ({} as Race)
-    const entries = this.props.race.entriesByRaceId[this.props.raceId] || []
+    const race = this.props.race.racesById(this.props.raceId)
+    const entries = this.props.race.entriesByRaceId(this.props.raceId)
     const tabs = [
       {
         title: 'Find Rider',

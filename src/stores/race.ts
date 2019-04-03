@@ -13,12 +13,20 @@ export interface Race {
 }
 
 export default class RaceStore implements Hydrated {
-  @observable racesById: {
+  @observable _racesById: {
     [key: string]: Race
   } = {}
-  @observable entriesByRaceId: {
+  @observable _entriesByRaceId: {
     [key: string]: Entry[]
   } = {}
+
+  racesById(id: string): Race {
+    return this._racesById[id] || ({} as Race)
+  }
+
+  entriesByRaceId(id: string): Entry[] {
+    return this._entriesByRaceId[id] || []
+  }
 
   async hydrate() {
     const { data } = await axios.get('/races', {
@@ -27,7 +35,7 @@ export default class RaceStore implements Hydrated {
       },
     })
     for (const model of data) {
-      this.racesById[model._id] = model
+      this._racesById[model._id] = model
       await this.loadEntries(model._id)
     }
   }
@@ -40,8 +48,8 @@ export default class RaceStore implements Hydrated {
         bibId,
         token: PromoterStore.activeToken(),
       })
-      this.entriesByRaceId[raceId] = this.entriesByRaceId[raceId] || []
-      this.entriesByRaceId[raceId].push(data)
+      this._entriesByRaceId[raceId] = this._entriesByRaceId[raceId] || []
+      this._entriesByRaceId[raceId].push(data)
     } catch (err) {
       console.log('Error adding rider', err)
       throw err
@@ -71,7 +79,7 @@ export default class RaceStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.entriesByRaceId[_id] = data
+      this._entriesByRaceId[_id] = data
     } catch (err) {
       console.log('Error loading entries', err)
       throw err
@@ -86,7 +94,7 @@ export default class RaceStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
-      this.racesById[_id] = data
+      this._racesById[_id] = data
     } catch (err) {
       console.log('Error loading races by id', err)
       throw err
@@ -102,7 +110,7 @@ export default class RaceStore implements Hydrated {
         },
       })
       data.forEach((race: Race) => {
-        this.racesById[race._id] = race
+        this._racesById[race._id] = race
       })
     } catch (err) {
       console.log('Error loading races by event id', err)
@@ -116,7 +124,7 @@ export default class RaceStore implements Hydrated {
         ...raceData,
         token: PromoterStore.activeToken(),
       })
-      this.racesById[data._id] = data
+      this._racesById[data._id] = data
     } catch (err) {
       console.log('Error creating race', err)
       throw err

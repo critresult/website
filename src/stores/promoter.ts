@@ -10,16 +10,20 @@ export interface Promoter {
 
 export default class PromoterStore implements Hydrated {
   @observable userId: string
-  @observable promotersById: {
+  @observable _promotersById: {
     [key: string]: Promoter
+  } = {}
+
+  promotersById(id: string): Promoter {
+    return this._promotersById[id] || ({} as Promoter)
   }
 
   constructor() {
-    this.promotersById = {}
+    this._promotersById = {}
     const active = JSON.parse(localStorage.getItem('promoter'))
     if (active) {
       this.userId = active._id
-      this.promotersById[active._id] = active
+      this._promotersById[active._id] = active
     }
     if (this.authenticated) {
       this.loadPromoter().catch(() => {})
@@ -30,7 +34,7 @@ export default class PromoterStore implements Hydrated {
 
   @computed
   get active() {
-    return this.promotersById[this.userId] || ({} as Promoter)
+    return this._promotersById[this.userId] || ({} as Promoter)
   }
 
   @computed
@@ -58,7 +62,7 @@ export default class PromoterStore implements Hydrated {
         },
       })
       runInAction(() => {
-        this.promotersById[data._id] = data
+        this._promotersById[data._id] = data
       })
     } catch (err) {
       console.log(err.response.data.message)
@@ -75,7 +79,7 @@ export default class PromoterStore implements Hydrated {
       runInAction(() => {
         localStorage.setItem('token', data.token)
         localStorage.setItem('promoter', JSON.stringify(data))
-        this.promotersById[data._id] = data
+        this._promotersById[data._id] = data
         this.userId = data._id
       })
     } catch (err) {
@@ -93,7 +97,7 @@ export default class PromoterStore implements Hydrated {
       runInAction(() => {
         localStorage.setItem('token', data.token)
         localStorage.setItem('promoter', JSON.stringify(data))
-        this.promotersById[data._id] = data
+        this._promotersById[data._id] = data
         this.userId = data._id
       })
     } catch (err) {

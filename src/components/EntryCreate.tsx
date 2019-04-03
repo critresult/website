@@ -25,13 +25,13 @@ export default class EntryCreate extends React.Component<{
   searchRef = React.createRef<any>()
 
   componentDidMount() {
-    const race = this.props.race.racesById[this.props.raceId] || {}
+    const race = this.props.race.racesById(this.props.raceId)
     this.props.bib.loadBibsForSeries(race.seriesId)
     this.searchRef.current.focus()
   }
 
   render() {
-    const race = this.props.race.racesById[this.props.raceId] || {}
+    const race = this.props.race.racesById(this.props.raceId)
     const bibsByRiderId = keyby(
       this.props.bib.bibsBySeriesId(race.seriesId),
       'riderId'

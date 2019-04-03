@@ -51,7 +51,7 @@ export default class _Event extends React.Component<
     const races = event.races || []
     const allEntries = [] as Entry[]
     races.forEach((race) => {
-      const entries = this.props.race.entriesByRaceId[race._id] || []
+      const entries = this.props.race.entriesByRaceId(race._id)
       allEntries.push(...entries)
     })
     const uniqRidersLength = uniqby(allEntries, 'riderId').length
