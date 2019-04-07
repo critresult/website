@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import Colors from '../Colors'
 
@@ -12,7 +13,6 @@ export const HFlex = styled.div`
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
-  flex: 1;
 `
 
 export const Input = styled.input<{ valid?: boolean }>`
@@ -56,7 +56,7 @@ export const TitleText = styled.div`
   margin: 8px;
 `
 
-export const RootCell = styled.div`
+export const RootCellInternal = styled.div`
   background-color: ${Colors.white};
   margin: auto;
   margin-top: 8px;
@@ -64,4 +64,11 @@ export const RootCell = styled.div`
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0px 1px 2px ${Colors.shadow};
+  flex: 1;
 `
+
+export const RootCell = (props: any) => (
+  <div>
+    <RootCellInternal {...props} />
+  </div>
+)

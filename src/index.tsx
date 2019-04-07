@@ -21,10 +21,12 @@ axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers['content-type'] = 'application/json'
 
+console.log(window.innerHeight)
 Object.assign(document.body.style, {
   margin: 'auto',
   'font-family': 'Helvetica',
   'background-color': Colors.whiteDark,
+  minHeight: window.innerHeight,
 })
 
 const stores = {
@@ -39,6 +41,15 @@ const stores = {
 
 Hydrated.stores = stores
 
+const appDiv = document.getElementById('app')
+appDiv.setAttribute(
+  'style',
+  `
+min-height: ${window.innerHeight}px;
+display: flex;
+flex-direction: column;
+`
+)
 ReactDOM.render(
   <Provider {...stores}>
     <Router>
@@ -48,5 +59,5 @@ ReactDOM.render(
       <Route path="/race/:id" component={Race} />
     </Router>
   </Provider>,
-  document.getElementById('app')
+  appDiv
 )
