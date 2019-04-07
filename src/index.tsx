@@ -13,7 +13,9 @@ import RaceStore from './stores/race'
 import RiderStore from './stores/rider'
 import SeriesStore from './stores/series'
 import BibStore from './stores/bib'
+import PassingStore from './stores/passing'
 import Hydrated from 'hydrated'
+import Race from './Race'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
@@ -32,6 +34,7 @@ const stores = {
   rider: new RiderStore(),
   series: new SeriesStore(),
   bib: new BibStore(),
+  passing: new PassingStore(),
 }
 
 Hydrated.stores = stores
@@ -42,6 +45,7 @@ ReactDOM.render(
       <Route path="/" component={Home} exact />
       <Route path="/event/:id" component={Event} />
       <Route path="/series/:id" component={Series} />
+      <Route path="/race/:id" component={Race} />
     </Router>
   </Provider>,
   document.getElementById('app')

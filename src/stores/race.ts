@@ -3,6 +3,7 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import Hydrated from 'hydrated'
 import { Entry } from './entry'
+import { Passing } from './passing'
 
 export interface Race {
   _id: string
@@ -19,6 +20,13 @@ export default class RaceStore implements Hydrated {
   @observable _entriesByRaceId: {
     [key: string]: Entry[]
   } = {}
+  @observable _leaderboardByRaceId: {
+    [key: string]: Passing[]
+  } = {}
+
+  leaderboardByRaceId(id: string) {
+    return this._leaderboardByRaceId[id] || []
+  }
 
   racesById(id: string): Race {
     return this._racesById[id] || ({} as Race)
@@ -37,6 +45,21 @@ export default class RaceStore implements Hydrated {
     for (const model of data) {
       this._racesById[model._id] = model
       await this.loadEntries(model._id)
+    }
+  }
+
+  async loadLeaderboard(raceId: string) {
+    try {
+      const { data } = await axios.get('/races/leaderboard', {
+        params: {
+          raceId,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      this._leaderboardByRaceId[raceId] = data
+    } catch (err) {
+      console.log('Error loading leaderboard for raceId', raceId, err)
+      throw err
     }
   }
 

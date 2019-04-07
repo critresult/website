@@ -18,7 +18,11 @@ export default class RiderStore implements Hydrated {
   } = {}
 
   ridersById(id: string): Rider {
-    return this._ridersById[id] || ({} as Rider)
+    return {
+      firstname: 'unknown',
+      lastname: 'RIDER',
+      ...(this._ridersById[id] || {}),
+    } as Rider
   }
 
   async hydrate() {}
