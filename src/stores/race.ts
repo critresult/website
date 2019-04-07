@@ -24,6 +24,13 @@ export default class RaceStore implements Hydrated {
   @observable _leaderboardByRaceId: {
     [key: string]: Passing[]
   } = {}
+  @observable _racesByEventId: {
+    [key: string]: Race[]
+  } = {}
+
+  racesByEventId(id: string) {
+    return this._racesByEventId[id] || []
+  }
 
   leaderboardByRaceId(id: string) {
     return this._leaderboardByRaceId[id] || []
@@ -133,6 +140,7 @@ export default class RaceStore implements Hydrated {
           token: PromoterStore.activeToken(),
         },
       })
+      this._racesByEventId[eventId] = data
       data.forEach((race: Race) => {
         this._racesById[race._id] = race
       })
