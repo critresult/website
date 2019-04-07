@@ -39,7 +39,7 @@ export default class RaceScreen extends React.Component<{
     ])
     this.reloadTimer = setInterval(
       () => this.props.race.loadLeaderboard(raceId),
-      1000
+      5000
     )
   }
   componentWillUnmount() {
@@ -56,9 +56,15 @@ export default class RaceScreen extends React.Component<{
       <>
         <Header />
         <RootCell>
-          <LargeText>
-            {series.name} - {event.name} - {race.name}
-          </LargeText>
+          <HFlex style={{ justifyContent: 'space-between' }}>
+            <LargeText>
+              {series.name} - {event.name} - {race.name}
+            </LargeText>
+            <LargeText>
+              {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
+              {race.lapCount} laps
+            </LargeText>
+          </HFlex>
           {leaderboard.map((passing, index) => {
             const rider = this.props.rider.ridersById(passing.riderId)
             return (
