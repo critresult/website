@@ -119,9 +119,6 @@ export default class _Event extends React.Component<
             />
           </HFlex>
         </RootCell>
-        <RootCell>
-          <AvailableBibs seriesId={event.seriesId} />
-        </RootCell>
         {races.map((race: Race) => (
           <RootCell key={race._id}>
             <Entrylist seriesId={race.seriesId} raceId={race._id} />
