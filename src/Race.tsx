@@ -17,7 +17,6 @@ import EventStore from './stores/event'
 import RiderStore from './stores/rider'
 import moment from 'moment'
 import Colors from './Colors'
-import Hydrated from 'hydrated'
 import Button from './components/Button'
 import { Link } from 'react-router-dom'
 
@@ -33,7 +32,6 @@ export default class RaceScreen extends React.Component<{
 }> {
   reloadTimer: any
   async componentDidMount() {
-    Hydrated.hydrate()
     const raceId = this.props.match.params.id
     await Promise.all([
       this.props.passing.loadByRaceId(raceId),
