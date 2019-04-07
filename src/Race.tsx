@@ -102,45 +102,54 @@ export default class RaceScreen extends React.Component<{
             </HFlex>
           </VFlex>
         </RootCell>
-        <RootCell>
-          <HFlex style={{ justifyContent: 'space-between' }}>
-            <LargeText>
-              {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
-              {race.lapCount} laps
-            </LargeText>
-          </HFlex>
-          {leaderboard.map((passing, index) => {
-            const rider = this.props.rider.ridersById(passing.riderId)
-            return (
-              <HFlex
-                key={passing._id}
-                style={{
-                  justifyContent: 'space-between',
-                  backgroundColor:
-                    index % 2 === 0 ? Colors.white : Colors.whiteDark,
-                }}
-              >
-                <div style={{ margin: 8 }}>{index + 1}</div>
-                <div style={{ flex: 1 }} />
-                <div style={{ margin: 8, minWidth: 100 }}>
-                  {rider.firstname}
-                </div>
-                <div style={{ margin: 8, minWidth: 100 }}>
-                  {' '}
-                  {rider.lastname}
-                </div>
-                <div style={{ flex: 1 }} />
-                <div style={{ margin: 8, minWidth: 50 }}>
-                  {passing.transponder}
-                </div>
-                <div style={{ margin: 8 }}>
-                  {moment(passing.date).format('HH:mm:ss:SSS')}
-                </div>
-                <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
-              </HFlex>
-            )
-          })}
-        </RootCell>
+        {race.actualStart ? (
+          <RootCell>
+            <HFlex style={{ justifyContent: 'space-between' }}>
+              <LargeText>
+                {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
+                {race.lapCount} laps
+              </LargeText>
+            </HFlex>
+            {leaderboard.map((passing, index) => {
+              const rider = this.props.rider.ridersById(passing.riderId)
+              return (
+                <HFlex
+                  key={passing._id}
+                  style={{
+                    justifyContent: 'space-between',
+                    backgroundColor:
+                      index % 2 === 0 ? Colors.white : Colors.whiteDark,
+                  }}
+                >
+                  <div style={{ margin: 8 }}>{index + 1}</div>
+                  <div style={{ flex: 1 }} />
+                  <div style={{ margin: 8, minWidth: 100 }}>
+                    {rider.firstname}
+                  </div>
+                  <div style={{ margin: 8, minWidth: 100 }}>
+                    {' '}
+                    {rider.lastname}
+                  </div>
+                  <div style={{ flex: 1 }} />
+                  <div style={{ margin: 8, minWidth: 50 }}>
+                    {passing.transponder}
+                  </div>
+                  <div style={{ margin: 8 }}>
+                    {moment(passing.date).format('HH:mm:ss:SSS')}
+                  </div>
+                  <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
+                </HFlex>
+              )
+            })}
+          </RootCell>
+        ) : (
+          <RootCell>
+            <LargeText>{`This race hasn't started yet!`}</LargeText>
+            <div style={{ margin: 8 }}>
+              This race is scheduled to start at {race.scheduledStartTime}
+            </div>
+          </RootCell>
+        )}
         <Footer />
       </>
     )
