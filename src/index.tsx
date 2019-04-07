@@ -16,12 +16,12 @@ import BibStore from './stores/bib'
 import PassingStore from './stores/passing'
 import Hydrated from 'hydrated'
 import Race from './Race'
+import throttle from 'lodash.throttle'
 
 axios.defaults.baseURL = 'https://api.critresult.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers['content-type'] = 'application/json'
 
-console.log(window.innerHeight)
 Object.assign(document.body.style, {
   margin: 'auto',
   'font-family': 'Helvetica',
@@ -42,14 +42,19 @@ const stores = {
 Hydrated.stores = stores
 
 const appDiv = document.getElementById('app')
-appDiv.setAttribute(
-  'style',
-  `
+const setAppStyle = () => {
+  appDiv.setAttribute(
+    'style',
+    `
 min-height: ${window.innerHeight}px;
 display: flex;
 flex-direction: column;
 `
-)
+  )
+}
+window.addEventListener('resize', throttle(setAppStyle, 250))
+setAppStyle()
+
 ReactDOM.render(
   <Provider {...stores}>
     <Router>
