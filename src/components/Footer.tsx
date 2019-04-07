@@ -14,7 +14,13 @@ export default class Footer extends React.Component<{}> {
         />
         <div>
           <RootCell
-            style={{ flex: 1, display: 'flex', justifyContent: 'center' }}
+            style={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+            }}
           >
             <a href="https://github.com/critresult" target="_blank">
               <TiSocialGithub color={Colors.black} size={50} />
