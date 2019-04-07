@@ -11,6 +11,7 @@ export interface Race {
   scheduledStartTime: string
   seriesId: string
   eventId: string
+  actualStart?: string
 }
 
 export default class RaceStore implements Hydrated {
