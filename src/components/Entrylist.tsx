@@ -126,9 +126,7 @@ class Entrylist extends React.Component<{
         >
           <Button
             title="View Results"
-            style={{ opacity: race.actualStart ? 1 : 0}}
             onClick={() => {
-              if (!race.actualStart) return
               this.props.history.push(`/race/${this.props.raceId}`)
             }}
           />
