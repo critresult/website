@@ -15,6 +15,7 @@ import { TiTimes } from 'react-icons/ti'
 import RentTransponder from './RentTransponder'
 import Hydrated from 'hydrated'
 import BibStore from '../stores/bib'
+import { withRouter } from 'react-router-dom'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -27,7 +28,7 @@ const EntryCell = styled(HFlex)`
 
 @inject('event', 'race', 'bib')
 @observer
-export default class Entrylist extends React.Component<{
+class Entrylist extends React.Component<{
   seriesId: string
   raceId: string
   editable?: boolean
@@ -123,7 +124,12 @@ export default class Entrylist extends React.Component<{
             alignItems: 'space-between',
           }}
         >
-          <Button title="Add Entry" style={{ opacity: 0 }} onClick={() => {}} />
+          <Button
+            title="View Results"
+            onClick={() => {
+              this.props.history.push(`/race/${this.props.raceId}`)
+            }}
+          />
           <LargeText>
             {race.name} - {`${entries.length} entries`}
           </LargeText>
@@ -213,3 +219,5 @@ export default class Entrylist extends React.Component<{
     )
   }
 }
+
+export default withRouter(Entrylist)
