@@ -158,7 +158,7 @@ export default class Series extends React.Component<{
             {events.map((event: any) => {
               const races = event.races || []
               return (
-                <RootCell key={event._id}>
+                <RootCell key={event._id} style={{ margin: 8 }}>
                   <HFlex>
                     {series.name || ''} - {event.name}
                   </HFlex>
