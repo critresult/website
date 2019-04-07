@@ -11,6 +11,7 @@ import EventStore from './stores/event'
 import RiderStore from './stores/rider'
 import moment from 'moment'
 import Colors from './Colors'
+import Hydrated from 'hydrated'
 
 @inject('rider', 'promoter', 'passing', 'race', 'series', 'event')
 @observer
@@ -24,6 +25,7 @@ export default class RaceScreen extends React.Component<{
 }> {
   reloadTimer: any
   async componentDidMount() {
+    Hydrated.hydrate()
     const raceId = this.props.match.params.id
     await Promise.all([
       this.props.passing.loadByRaceId(raceId),
@@ -76,12 +78,12 @@ export default class RaceScreen extends React.Component<{
                     index % 2 === 0 ? Colors.white : Colors.whiteDark,
                 }}
               >
-                <div style={{ margin: 8 }}>{index + 1}</div>
+                <div style={{ margin: 8, }}>{index + 1}</div>
                 <div style={{ flex: 1 }} />
-                <div style={{ margin: 8 }}>{rider.firstname}</div>
-                <div style={{ margin: 8 }}> {rider.lastname}</div>
+                <div style={{ margin: 8, minWidth: 100 }}>{rider.firstname}</div>
+                <div style={{ margin: 8, minWidth: 100 }}> {rider.lastname}</div>
                 <div style={{ flex: 1 }} />
-                <div style={{ margin: 8 }}>{passing.transponder}</div>
+                <div style={{ margin: 8, minWidth: 50 }}>{passing.transponder}</div>
                 <div style={{ margin: 8 }}>
                   {moment(passing.date).format('HH:mm:ss:SSS')}
                 </div>
