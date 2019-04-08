@@ -1,3 +1,3 @@
 # website
 
-The [critresult](https://critresult.com) web app.
+The [critrace](https://critrace.com) web app.
