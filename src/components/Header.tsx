@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Colors from '../Colors'
-import { HFlex, VFlex } from './Shared'
+import { HFlex, VFlex, Input, ModalContainer, LargeText } from './Shared'
 import Popup from './Popup'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
@@ -48,6 +48,10 @@ export default class Header extends React.Component<
   state = {
     authVisible: false,
     showingCreateSeriesPopup: false,
+    editUserVisible: false,
+    email: '',
+    password: '',
+    oldPassword: '',
   }
   onAuthenticated = () => this.setState({ authVisible: false })
   onCancelled = () => this.setState({ authVisible: false })
@@ -90,6 +94,54 @@ export default class Header extends React.Component<
             }
           />
         </Popup>
+        <Popup visible={this.state.editUserVisible}>
+          <ModalContainer>
+            <VFlex>
+              <LargeText>Update Info</LargeText>
+              <Input
+                type="text"
+                placeholder="email"
+                onChange={(e: any) => this.setState({ email: e.target.value })}
+              />
+              <Input
+                type="password"
+                placeholder="old password"
+                onChange={(e: any) =>
+                  this.setState({ oldPassword: e.target.value })
+                }
+              />
+              <Input
+                type="password"
+                placeholder="new password"
+                onChange={(e: any) =>
+                  this.setState({ password: e.target.value })
+                }
+              />
+              <HFlex>
+                <Button
+                  title="Update"
+                  onClick={() =>
+                    this.props.promoter
+                      .update({
+                        email: this.state.email,
+                        oldPassword: this.state.oldPassword,
+                        password: this.state.password,
+                      })
+                      .then(() => this.props.promoter.loadPromoter())
+                      .then(() => this.setState({ editUserVisible: false }))
+                      .catch(() =>
+                        alert('There was a problem updating your info.')
+                      )
+                  }
+                />
+                <Button
+                  title="Cancel"
+                  onClick={() => this.setState({ editUserVisible: false })}
+                />
+              </HFlex>
+            </VFlex>
+          </ModalContainer>
+        </Popup>
         <UpperHeader>
           <VFlex style={{ alignItems: 'flex-start' }}>
             <TitleSpan to="/">critrace</TitleSpan>
@@ -98,7 +150,9 @@ export default class Header extends React.Component<
           <VFlex style={{ alignItems: 'flex-end' }}>
             <HFlex>
               {this.props.promoter.userId ? (
-                <Button onClick={() => {}}>
+                <Button
+                  onClick={() => this.setState({ editUserVisible: true })}
+                >
                   {this.props.promoter.active.email || ''}
                 </Button>
               ) : (

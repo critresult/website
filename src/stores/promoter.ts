@@ -1,6 +1,7 @@
 import { computed, observable, action, runInAction } from 'mobx'
 import axios from 'axios'
 import Hydrated from 'hydrated'
+import omitby from 'lodash.omitby'
 
 export interface Promoter {
   _id: string
@@ -57,7 +58,7 @@ export default class PromoterStore implements Hydrated {
     try {
       const { data } = await axios.get('/promoters', {
         params: {
-          _id,
+          _id: _id || this.userId,
           token: this.token,
         },
       })
@@ -66,6 +67,22 @@ export default class PromoterStore implements Hydrated {
       })
     } catch (err) {
       console.log(err.response.data.message)
+      throw err
+    }
+  }
+
+  async update(promoter: any = {}) {
+    try {
+      const cleanModel = omitby(
+        promoter,
+        (p: any) => typeof p === 'string' && p.trim().length === 0
+      )
+      await axios.put('/promoters', {
+        ...cleanModel,
+        token: this.token,
+      })
+    } catch (err) {
+      console.log('Error updating promoter model', err)
       throw err
     }
   }
