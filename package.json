@@ -1,7 +1,7 @@
 {
-  "name": "@critresult/website",
+  "name": "@critrace/website",
   "version": "0.0.1",
-  "description": "The critresult.com user interface",
+  "description": "The critrace.com user interface",
   "main": "index.js",
   "scripts": {
     "clean": "rm -r ./build || true",
@@ -9,7 +9,6 @@
     "dev": "webpack-dev-server --config webpack.config.js",
     "lint": "eslint ./src/**.tsx",
     "now-build": "npm run build",
-    "next": "now alias set $(now) next.critresult.com",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
@@ -19,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/critresult/website.git"
+    "url": "git+ssh://git@github.com/critrace/website.git"
   },
   "author": "Chance Hudson",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/critresult/website/issues"
+    "url": "https://github.com/critrace/website/issues"
   },
-  "homepage": "https://github.com/critresult/website#readme",
+  "homepage": "https://github.com/critrace/website#readme",
   "dependencies": {
     "@types/lodash.uniqby": "^4.7.6",
     "axios": "^0.18.0",

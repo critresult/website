@@ -22,7 +22,7 @@ export default class Footer extends React.Component<{}> {
               borderBottomRightRadius: 0,
             }}
           >
-            <a href="https://github.com/critresult" target="_blank">
+            <a href="https://github.com/critrace" target="_blank">
               <TiSocialGithub color={Colors.black} size={50} />
             </a>
           </RootCell>

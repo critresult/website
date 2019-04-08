@@ -18,7 +18,7 @@ import Hydrated from 'hydrated'
 import Race from './Race'
 import throttle from 'lodash.throttle'
 
-axios.defaults.baseURL = 'https://api.critresult.com'
+axios.defaults.baseURL = 'https://api.critrace.com'
 // axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers['content-type'] = 'application/json'
 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "alias": ["critresult.com"],
+  "alias": ["critresult.com", "critrace.com"],
   "builds": [
     {
       "src": "package.json",

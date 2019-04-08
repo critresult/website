@@ -92,7 +92,8 @@ export default class Header extends React.Component<
         </Popup>
         <UpperHeader>
           <VFlex style={{ alignItems: 'flex-start' }}>
-            <TitleSpan to="/">CritResult</TitleSpan>
+            <TitleSpan to="/">critrace</TitleSpan>
+            <span style={{ fontSize: 15 }}>Easy Criterium racing</span>
           </VFlex>
           <VFlex style={{ alignItems: 'flex-end' }}>
             <HFlex>
