@@ -41,7 +41,7 @@ export default class RiderStore {
 
   async loadMany(_ids: string[]) {
     try {
-      const { data } = await axios.post('riders/byId', {
+      const { data } = await axios.post('/riders/byId', {
         _ids,
         token: PromoterStore.activeToken(),
       })
