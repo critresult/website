@@ -21,8 +21,9 @@ import Button from './components/Button'
 import { Link } from 'react-router-dom'
 import idx from 'idx'
 import LoadingIndicator from './components/LoadingIndicator'
+import BibStore from './stores/bib'
 
-@inject('rider', 'promoter', 'passing', 'race', 'series', 'event')
+@inject('rider', 'promoter', 'passing', 'race', 'series', 'event', 'bib')
 @observer
 export default class RaceScreen extends React.Component<{
   promoter: PromoterStore
@@ -31,6 +32,7 @@ export default class RaceScreen extends React.Component<{
   series: SeriesStore
   event: EventStore
   rider: RiderStore
+  bib: BibStore
   match: any
 }> {
   reloadTimer: any
@@ -73,6 +75,7 @@ export default class RaceScreen extends React.Component<{
     const race = this.props.race.racesById(raceId)
     const leaderboard = this.props.race.leaderboardByRaceId(raceId)
     await Promise.all([
+      this.props.bib.loadBibsForSeries(race.seriesId),
       this.props.series.load(race.seriesId),
       this.props.event.load(race.eventId),
       this.props.event.loadRacesByEventId(race.eventId),
@@ -156,6 +159,11 @@ export default class RaceScreen extends React.Component<{
                   </LargeText>
                 </HFlex>
                 {leaderboard.map((passing, index) => {
+                  const bib =
+                    this.props.bib
+                      .bibsBySeriesId(passing.seriesId)
+                      .find((_bib: any) => _bib.riderId === passing.riderId) ||
+                    {}
                   const rider = this.props.rider.ridersById(passing.riderId)
                   return (
                     <HFlex
@@ -171,6 +179,9 @@ export default class RaceScreen extends React.Component<{
                       <div style={{ margin: 8, minWidth: 100 }}>
                         {' '}
                         {rider.lastname}
+                      </div>
+                      <div style={{ margin: 8, minWidth: 100 }}>
+                        #{bib.bibNumber || '-'}
                       </div>
                       <div style={{ flex: 1 }} />
                       <div style={{ margin: 8, minWidth: 50 }}>
