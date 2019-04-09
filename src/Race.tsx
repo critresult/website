@@ -20,6 +20,7 @@ import Colors from './Colors'
 import Button from './components/Button'
 import { Link } from 'react-router-dom'
 import idx from 'idx'
+import LoadingIndicator from './components/LoadingIndicator'
 
 @inject('rider', 'promoter', 'passing', 'race', 'series', 'event')
 @observer
@@ -34,6 +35,10 @@ export default class RaceScreen extends React.Component<{
 }> {
   reloadTimer: any
 
+  state = {
+    loading: true,
+  }
+
   async componentDidMount() {
     this.componentDidUpdate({})
   }
@@ -42,9 +47,15 @@ export default class RaceScreen extends React.Component<{
     const raceId = this.props.match.params.id
     const lastRaceId = idx(prevProps, (_: any) => _.match.params.id)
     if (raceId === lastRaceId) return
+    this.setState({ loading: true })
     clearInterval(this.reloadTimer)
     this.reloadTimer = undefined
     this.loadResultData()
+      .then(() => this.setState({ loading: false }))
+      .catch((err) => {
+        this.setState({ loading: false })
+        throw err
+      })
   }
 
   componentWillUnmount() {
@@ -83,88 +94,94 @@ export default class RaceScreen extends React.Component<{
     return (
       <>
         <Header />
-        <RootCell
-          style={{
-            marginTop: 0,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-        >
-          <VFlex>
-            <TitleText>
-              {series.name} - {event.name} - {race.name}
-            </TitleText>
-            {event.startDate === event.endDate ? null : (
-              <LargeText>Event End: {event.endDate}</LargeText>
-            )}
-          </VFlex>
-          <VFlex>
-            <HFlex>
-              {otherRaces.map((race) => (
-                <Link
-                  key={race._id}
-                  to={`/race/${race._id}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Button
-                    title={race.name}
-                    style={{
-                      backgroundColor:
-                        race._id === raceId ? Colors.blue : Colors.black,
-                    }}
-                  />
-                </Link>
-              ))}
-            </HFlex>
-          </VFlex>
-        </RootCell>
-        {race.actualStart ? (
-          <RootCell>
-            <HFlex style={{ justifyContent: 'space-between' }}>
-              <LargeText>
-                {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
-                {race.lapCount} laps
-              </LargeText>
-            </HFlex>
-            {leaderboard.map((passing, index) => {
-              const rider = this.props.rider.ridersById(passing.riderId)
-              return (
-                <HFlex
-                  key={passing._id}
-                  style={{
-                    justifyContent: 'space-between',
-                    backgroundColor:
-                      index % 2 === 0 ? Colors.white : Colors.whiteDark,
-                  }}
-                >
-                  <div style={{ margin: 8 }}>{index + 1}</div>
-                  <div style={{ flex: 1 }} />
-                  <div style={{ margin: 8, minWidth: 100 }}>
-                    {rider.firstname}
-                  </div>
-                  <div style={{ margin: 8, minWidth: 100 }}>
-                    {' '}
-                    {rider.lastname}
-                  </div>
-                  <div style={{ flex: 1 }} />
-                  <div style={{ margin: 8, minWidth: 50 }}>
-                    {passing.transponder}
-                  </div>
-                  <div style={{ margin: 8 }}>
-                    {moment(passing.date).format('HH:mm:ss:SSS')}
-                  </div>
-                  <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
-                </HFlex>
-              )
-            })}
-          </RootCell>
+        {this.state.loading ? (
+          <LoadingIndicator />
         ) : (
-          <RootCell>
-            <LargeText>{`This race hasn't started yet!`}</LargeText>
-            <div style={{ margin: 8 }}>
-              This race is scheduled to start at {race.scheduledStartTime}
-            </div>
-          </RootCell>
+          <>
+            <RootCell
+              style={{
+                marginTop: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              }}
+            >
+              <VFlex>
+                <TitleText>
+                  {series.name} - {event.name} - {race.name}
+                </TitleText>
+                {event.startDate === event.endDate ? null : (
+                  <LargeText>Event End: {event.endDate}</LargeText>
+                )}
+              </VFlex>
+              <VFlex>
+                <HFlex>
+                  {otherRaces.map((race) => (
+                    <Link
+                      key={race._id}
+                      to={`/race/${race._id}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Button
+                        title={race.name}
+                        style={{
+                          backgroundColor:
+                            race._id === raceId ? Colors.blue : Colors.black,
+                        }}
+                      />
+                    </Link>
+                  ))}
+                </HFlex>
+              </VFlex>
+            </RootCell>
+            {race.actualStart ? (
+              <RootCell>
+                <HFlex style={{ justifyContent: 'space-between' }}>
+                  <LargeText>
+                    {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
+                    {race.lapCount} laps
+                  </LargeText>
+                </HFlex>
+                {leaderboard.map((passing, index) => {
+                  const rider = this.props.rider.ridersById(passing.riderId)
+                  return (
+                    <HFlex
+                      key={passing._id}
+                      style={{
+                        justifyContent: 'space-between',
+                        backgroundColor:
+                          index % 2 === 0 ? Colors.white : Colors.whiteDark,
+                      }}
+                    >
+                      <div style={{ margin: 8 }}>{index + 1}</div>
+                      <div style={{ flex: 1 }} />
+                      <div style={{ margin: 8, minWidth: 100 }}>
+                        {rider.firstname}
+                      </div>
+                      <div style={{ margin: 8, minWidth: 100 }}>
+                        {' '}
+                        {rider.lastname}
+                      </div>
+                      <div style={{ flex: 1 }} />
+                      <div style={{ margin: 8, minWidth: 50 }}>
+                        {passing.transponder}
+                      </div>
+                      <div style={{ margin: 8 }}>
+                        {moment(passing.date).format('HH:mm:ss:SSS')}
+                      </div>
+                      <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
+                    </HFlex>
+                  )
+                })}
+              </RootCell>
+            ) : (
+              <RootCell>
+                <LargeText>{`This race hasn't started yet!`}</LargeText>
+                <div style={{ margin: 8 }}>
+                  This race is scheduled to start at {race.scheduledStartTime}
+                </div>
+              </RootCell>
+            )}
+          </>
         )}
         <Footer />
       </>

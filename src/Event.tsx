@@ -23,6 +23,7 @@ import Footer from './components/Footer'
 import idx from 'idx'
 import AvailableBibs from './components/AvailableBibs'
 import uniqby from 'lodash.uniqby'
+import LoadingIndicator from './components/LoadingIndicator'
 
 @(withRouter as any)
 @inject('promoter', 'event', 'race', 'series')
@@ -37,6 +38,7 @@ export default class _Event extends React.Component<
 > {
   state = {
     raceCreateVisible: false,
+    loading: true,
   }
 
   async componentDidMount() {
@@ -47,10 +49,18 @@ export default class _Event extends React.Component<
     const eventId = this.props.match.params.id
     const lastEventId = idx(prevProps, (_: any) => _.match.params.id)
     if (eventId === lastEventId) return
-    this.props.event.load(eventId).then(() => {
-      const { seriesId } = this.props.event.eventsById(eventId)
-      return this.props.series.load(seriesId)
-    })
+    this.setState({ loading: true })
+    this.props.event
+      .load(eventId)
+      .then(() => {
+        const { seriesId } = this.props.event.eventsById(eventId)
+        return this.props.series.load(seriesId)
+      })
+      .then(() => this.setState({ loading: false }))
+      .catch((err) => {
+        this.setState({ loading: false })
+        throw err
+      })
   }
 
   render() {
@@ -82,57 +92,63 @@ export default class _Event extends React.Component<
             onCancelled={() => this.setState({ raceCreateVisible: false })}
           />
         </Popup>
-        <RootCell
-          style={{
-            marginTop: 0,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-        >
-          <VFlex>
-            <TitleText>
-              {series.name} - {event.name} - {uniqRidersLength} Riders
-            </TitleText>
-            <LargeText>
-              {moment(event.startDate)
-                .utc()
-                .format('MMMM Do YYYY')}{' '}
-              ({dayDifference})
-            </LargeText>
-            {event.startDate === event.endDate ? null : (
-              <LargeText>Event End: {event.endDate}</LargeText>
-            )}
-          </VFlex>
-        </RootCell>
-        <RootCell>
-          <HFlex style={{ justifyContent: 'space-around' }}>
-            <Button
-              title="Delete Event"
-              onClick={() => {
-                if (
-                  !confirm(
-                    'Are you sure? This will delete all associated races and entries.'
-                  )
-                ) return
-                return this.props.event
-                  .delete(eventId)
-                  .then(() => this.props.event.loadUpcoming())
-                  .then(() => this.props.history.push('/'))
+        {this.state.loading ? (
+          <LoadingIndicator />
+        ) : (
+          <>
+            <RootCell
+              style={{
+                marginTop: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
               }}
-              style={{ backgroundColor: Colors.pink }}
-            />
-            <Button
-              title="Add Race"
-              style={{ backgroundColor: Colors.green }}
-              onClick={() => this.setState({ raceCreateVisible: true })}
-            />
-          </HFlex>
-        </RootCell>
-        {races.map((race: Race) => (
-          <RootCell key={race._id}>
-            <Entrylist seriesId={race.seriesId} raceId={race._id} />
-          </RootCell>
-        ))}
+            >
+              <VFlex>
+                <TitleText>
+                  {series.name} - {event.name} - {uniqRidersLength} Riders
+                </TitleText>
+                <LargeText>
+                  {moment(event.startDate)
+                    .utc()
+                    .format('MMMM Do YYYY')}{' '}
+                  ({dayDifference})
+                </LargeText>
+                {event.startDate === event.endDate ? null : (
+                  <LargeText>Event End: {event.endDate}</LargeText>
+                )}
+              </VFlex>
+            </RootCell>
+            <RootCell>
+              <HFlex style={{ justifyContent: 'space-around' }}>
+                <Button
+                  title="Delete Event"
+                  onClick={() => {
+                    if (
+                      !confirm(
+                        'Are you sure? This will delete all associated races and entries.'
+                      )
+                    ) return
+                    return this.props.event
+                      .delete(eventId)
+                      .then(() => this.props.event.loadUpcoming())
+                      .then(() => this.props.history.push('/'))
+                  }}
+                  style={{ backgroundColor: Colors.pink }}
+                />
+                <Button
+                  title="Add Race"
+                  style={{ backgroundColor: Colors.green }}
+                  onClick={() => this.setState({ raceCreateVisible: true })}
+                />
+              </HFlex>
+            </RootCell>
+            {races.map((race: Race) => (
+              <RootCell key={race._id}>
+                <Entrylist seriesId={race.seriesId} raceId={race._id} />
+              </RootCell>
+            ))}
+          </>
+        )}
         <Footer />
       </>
     )
