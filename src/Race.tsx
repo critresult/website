@@ -94,7 +94,7 @@ export default class RaceScreen extends React.Component<{
     const series = this.props.series.seriesById(race.seriesId)
     const event = this.props.event.eventsById(race.eventId)
     const leaderboard = this.props.race.leaderboardByRaceId(raceId)
-    const otherRaces = this.props.event.racesByEventId(race.eventId)
+    const allRaces = this.props.event.racesByEventId(race.eventId)
     return (
       <>
         <Header />
@@ -111,7 +111,7 @@ export default class RaceScreen extends React.Component<{
             >
               <VFlex>
                 <TitleText>
-                  {series.name} - {event.name} - {race.name}
+                  {series.name} - {event.name}
                 </TitleText>
                 {event.startDate === event.endDate ? null : (
                   <LargeText>Event End: {event.endDate}</LargeText>
@@ -119,7 +119,7 @@ export default class RaceScreen extends React.Component<{
               </VFlex>
               <VFlex>
                 <HFlex>
-                  {otherRaces.map((race) => (
+                  {allRaces.map((race) => (
                     <Link
                       key={race._id}
                       to={`/race/${race._id}`}
