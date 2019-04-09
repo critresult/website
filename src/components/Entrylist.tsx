@@ -13,9 +13,9 @@ import TabSelector from './TabSelector'
 import EntryCreate from './EntryCreate'
 import { TiTimes } from 'react-icons/ti'
 import RentTransponder from './RentTransponder'
-import Hydrated from 'hydrated'
 import BibStore from '../stores/bib'
 import { withRouter } from 'react-router-dom'
+import LoadingIndicator from './LoadingIndicator'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -39,9 +39,22 @@ class Entrylist extends React.Component<{
   state = {
     createEntryVisible: false,
     exportingCSV: false,
+    loading: true,
   }
   componentDidMount() {
-    this.props.race.loadEntries(this.props.raceId)
+    this.componentDidUpdate({})
+  }
+
+  componentDidUpdate(prevProps: any) {
+    if (prevProps.raceId === this.props.raceId) return
+    this.setState({ loading: true })
+    this.props.race
+      .loadEntries(this.props.raceId)
+      .then(() => this.setState({ loading: false }))
+      .catch((err) => {
+        this.setState({ loading: false })
+        throw err
+      })
   }
 
   exportCSV = () => {
@@ -150,46 +163,54 @@ class Entrylist extends React.Component<{
           <VFlex style={{ minWidth: '15%' }}>Rental Transponder</VFlex>
           {this.props.editable === false ? null : <VFlex style={{ flex: 1 }} />}
         </EntryCell>
-        {entries.map((entry: Entry) =>
-          !entry.rider ? null : (
-            <EntryCell key={entry._id}>
-              <VFlex style={{ minWidth: '5%' }}>
-                {(entry.bib || {}).bibNumber}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{entry.rider.firstname}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>{entry.rider.lastname}</VFlex>
-              <VFlex style={{ minWidth: '10%' }}>
-                {entry.rider.license || 'One Day'}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                {entry.rider.transponder || 'none'}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                <RentTransponder
-                  bibId={entry.bibId}
-                  onUpdated={() =>
-                    this.props.bib.loadBibsForSeries(race.seriesId)
-                  }
-                />
-              </VFlex>
-              {this.props.editable === false ? null : (
-                <VFlex style={{ flex: 1 }}>
-                  <Button
-                    style={{ minWidth: 0, backgroundColor: Colors.pink }}
-                    onClick={() => {
-                      if (!confirm('Remove this entry?')) return
-                      return this.props.race
-                        .removeEntry(this.props.raceId, entry.riderId)
-                        .then(() =>
-                          this.props.race.loadEntries(this.props.raceId)
-                        )
-                    }}
-                  >
-                    <TiTimes size={25} color={Colors.white} />
-                  </Button>
+        {this.state.loading ? (
+          <LoadingIndicator />
+        ) : (
+          entries.map((entry: Entry) =>
+            !entry.rider ? null : (
+              <EntryCell key={entry._id}>
+                <VFlex style={{ minWidth: '5%' }}>
+                  {(entry.bib || {}).bibNumber}
                 </VFlex>
-              )}
-            </EntryCell>
+                <VFlex style={{ minWidth: '15%' }}>
+                  {entry.rider.firstname}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  {entry.rider.lastname}
+                </VFlex>
+                <VFlex style={{ minWidth: '10%' }}>
+                  {entry.rider.license || 'One Day'}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  {entry.rider.transponder || 'none'}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  <RentTransponder
+                    bibId={entry.bibId}
+                    onUpdated={() =>
+                      this.props.bib.loadBibsForSeries(race.seriesId)
+                    }
+                  />
+                </VFlex>
+                {this.props.editable === false ? null : (
+                  <VFlex style={{ flex: 1 }}>
+                    <Button
+                      style={{ minWidth: 0, backgroundColor: Colors.pink }}
+                      onClick={() => {
+                        if (!confirm('Remove this entry?')) return
+                        return this.props.race
+                          .removeEntry(this.props.raceId, entry.riderId)
+                          .then(() =>
+                            this.props.race.loadEntries(this.props.raceId)
+                          )
+                      }}
+                    >
+                      <TiTimes size={25} color={Colors.white} />
+                    </Button>
+                  </VFlex>
+                )}
+              </EntryCell>
+            )
           )
         )}
         <HFlex>
