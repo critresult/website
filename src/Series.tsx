@@ -25,6 +25,7 @@ import EventCreate from './components/EventCreate'
 import BibList from './components/BibList'
 import EventStore from './stores/event'
 import idx from 'idx'
+import LoadingIndicator from './components/LoadingIndicator'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -40,6 +41,7 @@ export default class Series extends React.Component<{
     foundRiders: [] as Rider[],
     promoterEmail: '',
     showingCreatePopup: false,
+    loading: true,
   }
 
   searchRef = React.createRef<any>()
@@ -52,10 +54,12 @@ export default class Series extends React.Component<{
     const seriesId = this.props.match.params.id
     const lastSeriesId = idx(prevProps, (_: any) => _.match.params.id)
     if (seriesId === lastSeriesId) return
-    this.props.series.load(seriesId)
-    this.props.bib.loadBibsForSeries(seriesId)
-    this.props.series
-      .loadEventsBySeriesId(seriesId)
+    this.setState({ loading: true })
+    Promise.all([
+      this.props.series.load(seriesId),
+      this.props.bib.loadBibsForSeries(seriesId),
+      this.props.series.loadEventsBySeriesId(seriesId),
+    ])
       .then(() =>
         Promise.all(
           this.props.series
@@ -63,6 +67,11 @@ export default class Series extends React.Component<{
             .map((event: any) => this.props.event.loadRacesByEventId(event._id))
         )
       )
+      .then(() => this.setState({ loading: false }))
+      .catch((err) => {
+        this.setState({ loading: false })
+        throw err
+      })
   }
 
   searchChanged = (e: any) => {
@@ -97,126 +106,134 @@ export default class Series extends React.Component<{
           />
         </Popup>
         <Header />
-        <RootCell
-          style={{
-            marginTop: 0,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-        >
-          <VFlex>
-            <TitleText>{series.name} Race Series</TitleText>
-          </VFlex>
-        </RootCell>
-        <RootCell>
-          <VFlex>
-            <LargeText>Add Rider to Series</LargeText>
-            <HFlex>
-              Search:
-              <Input
-                ref={this.searchRef}
-                type="text"
-                placeholder="firstname, lastname, or license #"
-                style={{ minWidth: 200 }}
-                onChange={this.searchChanged}
-              />
-              {this.state.isSearching ? (
-                <img
-                  src={require('../static/puff.svg')}
-                  height="15"
-                  style={{ filter: 'brightness(0)' }}
-                />
-              ) : null}
-            </HFlex>
-          </VFlex>
-          {this.state.foundRiders.map((_rider: Rider) => (
-            <AddBibCell
-              key={_rider._id}
-              seriesId={seriesId}
-              _rider={_rider}
-              bibNumber={(bibsByRiderId[_rider._id] || ({} as Bib)).bibNumber}
-            />
-          ))}
-        </RootCell>
-        <RootCell>
-          <VFlex>
-            <LargeText>Promoters</LargeText>
-            <VFlex style={{ margin: 8 }}>
-              {promoters.map((promoter) => (
-                <div key={promoter._id}>{promoter.email}</div>
-              ))}
-            </VFlex>
-            <HFlex>
-              <Input
-                valid={emailValidator.validate(this.state.promoterEmail)}
-                type="text"
-                placeholder="email@domain.com"
-                style={{ minWidth: 200 }}
-                onChange={(e) =>
-                  this.setState({ promoterEmail: e.target.value })
-                }
-              />
-              <Button
-                title="Invite"
-                onClick={() =>
-                  this.props.series.invitePromoter(
-                    seriesId,
-                    this.state.promoterEmail
-                  )
-                }
-              />
-            </HFlex>
-          </VFlex>
-        </RootCell>
-        <RootCell>
-          <VFlex>
-            <LargeText>Events</LargeText>
-          </VFlex>
-          <HFlex>
-            {events.map((event: any) => {
-              const races = this.props.event.racesByEventId(event._id)
-              return (
-                <RootCell key={event._id} style={{ margin: 8 }}>
-                  <HFlex>
-                    {series.name || ''} - {event.name}
-                  </HFlex>
-                  <HFlex style={{ margin: 8 }}>
-                    {moment(event.startDate)
-                      .utc()
-                      .format('MMMM D, YYYY')}{' '}
-                    - {races.length} race{races.length === 1 ? '' : 's'}
-                  </HFlex>
-                  <Link
-                    style={{ textDecoration: 'none' }}
-                    to={`/event/${event._id}`}
-                  >
-                    <Button
-                      style={{
-                        backgroundColor: Colors.yellow,
-                        color: Colors.black,
-                      }}
-                      title="View Details"
+        {this.state.loading ? (
+          <LoadingIndicator />
+        ) : (
+          <>
+            <RootCell
+              style={{
+                marginTop: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              }}
+            >
+              <VFlex>
+                <TitleText>{series.name} Race Series</TitleText>
+              </VFlex>
+            </RootCell>
+            <RootCell>
+              <VFlex>
+                <LargeText>Add Rider to Series</LargeText>
+                <HFlex>
+                  Search:
+                  <Input
+                    ref={this.searchRef}
+                    type="text"
+                    placeholder="firstname, lastname, or license #"
+                    style={{ minWidth: 200 }}
+                    onChange={this.searchChanged}
+                  />
+                  {this.state.isSearching ? (
+                    <img
+                      src={require('../static/puff.svg')}
+                      height="15"
+                      style={{ filter: 'brightness(0)' }}
                     />
-                  </Link>
-                </RootCell>
-              )
-            })}
-          </HFlex>
-          <HFlex style={{ justifyContent: 'flex-end' }}>
-            <VFlex>
-              <Button
-                style={{
-                  backgroundColor: Colors.green,
-                }}
-                title="Create Event"
-                onClick={() => this.setState({ showingCreatePopup: true })}
-              />
-            </VFlex>
-          </HFlex>
-        </RootCell>
-        <RootCell>
-          <BibList seriesId={seriesId} />
-        </RootCell>
+                  ) : null}
+                </HFlex>
+              </VFlex>
+              {this.state.foundRiders.map((_rider: Rider) => (
+                <AddBibCell
+                  key={_rider._id}
+                  seriesId={seriesId}
+                  _rider={_rider}
+                  bibNumber={
+                    (bibsByRiderId[_rider._id] || ({} as Bib)).bibNumber
+                  }
+                />
+              ))}
+            </RootCell>
+            <RootCell>
+              <VFlex>
+                <LargeText>Promoters</LargeText>
+                <VFlex style={{ margin: 8 }}>
+                  {promoters.map((promoter) => (
+                    <div key={promoter._id}>{promoter.email}</div>
+                  ))}
+                </VFlex>
+                <HFlex>
+                  <Input
+                    valid={emailValidator.validate(this.state.promoterEmail)}
+                    type="text"
+                    placeholder="email@domain.com"
+                    style={{ minWidth: 200 }}
+                    onChange={(e) =>
+                      this.setState({ promoterEmail: e.target.value })
+                    }
+                  />
+                  <Button
+                    title="Invite"
+                    onClick={() =>
+                      this.props.series.invitePromoter(
+                        seriesId,
+                        this.state.promoterEmail
+                      )
+                    }
+                  />
+                </HFlex>
+              </VFlex>
+            </RootCell>
+            <RootCell>
+              <VFlex>
+                <LargeText>Events</LargeText>
+              </VFlex>
+              <HFlex>
+                {events.map((event: any) => {
+                  const races = this.props.event.racesByEventId(event._id)
+                  return (
+                    <RootCell key={event._id} style={{ margin: 8 }}>
+                      <HFlex>
+                        {series.name || ''} - {event.name}
+                      </HFlex>
+                      <HFlex style={{ margin: 8 }}>
+                        {moment(event.startDate)
+                          .utc()
+                          .format('MMMM D, YYYY')}{' '}
+                        - {races.length} race{races.length === 1 ? '' : 's'}
+                      </HFlex>
+                      <Link
+                        style={{ textDecoration: 'none' }}
+                        to={`/event/${event._id}`}
+                      >
+                        <Button
+                          style={{
+                            backgroundColor: Colors.yellow,
+                            color: Colors.black,
+                          }}
+                          title="View Details"
+                        />
+                      </Link>
+                    </RootCell>
+                  )
+                })}
+              </HFlex>
+              <HFlex style={{ justifyContent: 'flex-end' }}>
+                <VFlex>
+                  <Button
+                    style={{
+                      backgroundColor: Colors.green,
+                    }}
+                    title="Create Event"
+                    onClick={() => this.setState({ showingCreatePopup: true })}
+                  />
+                </VFlex>
+              </HFlex>
+            </RootCell>
+            <RootCell>
+              <BibList seriesId={seriesId} />
+            </RootCell>
+          </>
+        )}
         <Footer />
       </>
     )
