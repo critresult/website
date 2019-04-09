@@ -30,7 +30,6 @@
     "@types/lodash.uniqby": "^4.7.6",
     "axios": "^0.18.0",
     "email-validator": "^2.0.4",
-    "hydrated": "0.0.4",
     "idx": "^2.5.5",
     "jsonwebtoken": "^8.5.1",
     "lodash.chunk": "^4.2.0",
