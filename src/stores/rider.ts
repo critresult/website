@@ -9,6 +9,7 @@ export interface Rider {
   firstname: string
   lastname: string
   license: string
+  transponder?: string
 }
 
 export default class RiderStore {
@@ -22,6 +23,11 @@ export default class RiderStore {
       lastname: 'RIDER',
       ...(this._ridersById[id] || {}),
     } as Rider
+  }
+
+  async loadIfNeeded(_id: string) {
+    if (this._ridersById[_id] && this._ridersById[_id]._id) return
+    await this.load(_id)
   }
 
   async load(_id: string) {
@@ -118,3 +124,5 @@ export default class RiderStore {
     }
   }
 }
+
+export const riderStore = new RiderStore()

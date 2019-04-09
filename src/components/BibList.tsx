@@ -96,75 +96,76 @@ export default class BibList extends React.Component<{
         {(this.state.filteredBibs || bibs)
           .slice()
           .sort((a: Bib, b: Bib) => (a.bibNumber > b.bibNumber ? 1 : -1))
-          .map((bib: Bib, index: number) => (
-            <HFlex
-              key={bib._id}
-              style={{
-                justifyContent: 'space-between',
-                margin: 4,
-                marginBottom: 0,
-                backgroundColor:
-                  index % 2 === 0 ? Colors.whiteDark : Colors.white,
-              }}
-            >
-              <VFlex style={{ minWidth: '5%' }}>{bib.bibNumber}</VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                {idx(bib, (_: any) => _.rider.firstname)}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                {idx(bib, (_: any) => _.rider.lastname)}
-              </VFlex>
-              <VFlex style={{ minWidth: '10%' }}>
-                {idx(bib, (_: any) => _.rider.license) || 'One Day'}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                {idx(bib, (_: any) => _.rider.transponder) || 'none'}
-              </VFlex>
-              <VFlex style={{ minWidth: '15%' }}>
-                <RentTransponder
-                  bibId={bib._id}
-                  onUpdated={() =>
-                    this.props.bib.loadBibsForSeries(this.props.seriesId)
-                  }
-                />
-              </VFlex>
-              <VFlex style={{ flex: 1 }}>
-                <HFlex>
-                  <Button
-                    title="Edit"
-                    style={{
-                      backgroundColor: Colors.yellow,
-                      color: Colors.black,
-                      flex: 1,
-                    }}
-                    onClick={() => {
-                      this.setState({
-                        showingRiderEditPopup: true,
-                        editRiderId: bib.riderId,
-                      })
-                    }}
+          .map((bib: Bib, index: number) => {
+            const rider = this.props.rider.ridersById(bib.riderId)
+            return (
+              <HFlex
+                key={bib._id}
+                style={{
+                  justifyContent: 'space-between',
+                  margin: 4,
+                  marginBottom: 0,
+                  backgroundColor:
+                    index % 2 === 0 ? Colors.whiteDark : Colors.white,
+                }}
+              >
+                <VFlex style={{ minWidth: '5%' }}>{bib.bibNumber}</VFlex>
+                <VFlex style={{ minWidth: '15%' }}>{rider.firstname}</VFlex>
+                <VFlex style={{ minWidth: '15%' }}>{rider.lastname}</VFlex>
+                <VFlex style={{ minWidth: '10%' }}>
+                  {rider.license || 'One Day'}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  {rider.transponder || 'none'}
+                </VFlex>
+                <VFlex style={{ minWidth: '15%' }}>
+                  <RentTransponder
+                    bibId={bib._id}
+                    onUpdated={() =>
+                      this.props.bib.loadBibsForSeries(this.props.seriesId)
+                    }
                   />
-                  <Button
-                    title="Delete"
-                    style={{ backgroundColor: Colors.pink, flex: 1 }}
-                    onClick={() => {
-                      if (
-                        !confirm(
-                          'Are you sure you want to delete this bib? Any race entries will also be deleted.'
-                        )
-                      ) return
-                      return this.props.bib
-                        .delete(bib._id)
-                        .then(() =>
-                          this.props.bib.loadBibsForSeries(this.props.seriesId)
-                        )
-                        .then(this.filterBibs)
-                    }}
-                  />
-                </HFlex>
-              </VFlex>
-            </HFlex>
-          ))}
+                </VFlex>
+                <VFlex style={{ flex: 1 }}>
+                  <HFlex>
+                    <Button
+                      title="Edit"
+                      style={{
+                        backgroundColor: Colors.yellow,
+                        color: Colors.black,
+                        flex: 1,
+                      }}
+                      onClick={() => {
+                        this.setState({
+                          showingRiderEditPopup: true,
+                          editRiderId: bib.riderId,
+                        })
+                      }}
+                    />
+                    <Button
+                      title="Delete"
+                      style={{ backgroundColor: Colors.pink, flex: 1 }}
+                      onClick={() => {
+                        if (
+                          !confirm(
+                            'Are you sure you want to delete this bib? Any race entries will also be deleted.'
+                          )
+                        ) return
+                        return this.props.bib
+                          .delete(bib._id)
+                          .then(() =>
+                            this.props.bib.loadBibsForSeries(
+                              this.props.seriesId
+                            )
+                          )
+                          .then(this.filterBibs)
+                      }}
+                    />
+                  </HFlex>
+                </VFlex>
+              </HFlex>
+            )
+          })}
       </>
     )
   }

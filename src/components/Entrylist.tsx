@@ -16,6 +16,7 @@ import RentTransponder from './RentTransponder'
 import BibStore from '../stores/bib'
 import { withRouter } from 'react-router-dom'
 import LoadingIndicator from './LoadingIndicator'
+import RiderStore from '../stores/rider'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -26,7 +27,7 @@ const EntryCell = styled(HFlex)`
   min-width: 600px;
 `
 
-@inject('event', 'race', 'bib')
+@inject('event', 'race', 'bib', 'rider')
 @observer
 class Entrylist extends React.Component<{
   seriesId: string
@@ -35,6 +36,7 @@ class Entrylist extends React.Component<{
   event?: EventStore
   race?: RaceStore
   bib?: BibStore
+  rider?: RiderStore
 }> {
   state = {
     createEntryVisible: false,
@@ -166,23 +168,19 @@ class Entrylist extends React.Component<{
         {this.state.loading ? (
           <LoadingIndicator />
         ) : (
-          entries.map((entry: Entry) =>
-            !entry.rider ? null : (
+          entries.map((entry: Entry) => {
+            const bib = this.props.bib.bibsById(entry.bibId)
+            const rider = this.props.rider.ridersById(entry.riderId)
+            return (
               <EntryCell key={entry._id}>
-                <VFlex style={{ minWidth: '5%' }}>
-                  {(entry.bib || {}).bibNumber}
-                </VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {entry.rider.firstname}
-                </VFlex>
-                <VFlex style={{ minWidth: '15%' }}>
-                  {entry.rider.lastname}
-                </VFlex>
+                <VFlex style={{ minWidth: '5%' }}>{bib.bibNumber}</VFlex>
+                <VFlex style={{ minWidth: '15%' }}>{rider.firstname}</VFlex>
+                <VFlex style={{ minWidth: '15%' }}>{rider.lastname}</VFlex>
                 <VFlex style={{ minWidth: '10%' }}>
-                  {entry.rider.license || 'One Day'}
+                  {rider.license || 'One Day'}
                 </VFlex>
                 <VFlex style={{ minWidth: '15%' }}>
-                  {entry.rider.transponder || 'none'}
+                  {rider.transponder || 'none'}
                 </VFlex>
                 <VFlex style={{ minWidth: '15%' }}>
                   <RentTransponder
@@ -211,7 +209,7 @@ class Entrylist extends React.Component<{
                 )}
               </EntryCell>
             )
-          )
+          })
         )}
         <HFlex>
           <HFlex>

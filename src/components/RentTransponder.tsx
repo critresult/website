@@ -5,7 +5,6 @@ import Button from './Button'
 import BibStore from '../stores/bib'
 import RiderStore from '../stores/rider'
 import Colors from '../Colors'
-import idx from 'idx'
 
 @inject('bib', 'rider')
 @observer
@@ -18,8 +17,19 @@ export default class RentTransponder extends React.Component<{
   state = {
     rentalTransponder: '',
   }
+  componentDidMount() {
+    this.componentDidUpdate({})
+  }
+  componentDidUpdate(prevProps: any) {
+    if (prevProps.bibId === this.props.bibId) return
+    this.props.bib.loadIfNeeded(this.props.bibId).then(() => {
+      const bib = this.props.bib.bibsById(this.props.bibId)
+      return this.props.rider.loadIfNeeded(bib.riderId)
+    })
+  }
   render() {
     const bib = this.props.bib.bibsById(this.props.bibId)
+    const rider = this.props.rider.ridersById(bib.riderId)
     return (
       <>
         <HFlex>
@@ -37,7 +47,12 @@ export default class RentTransponder extends React.Component<{
                       hasRentalTransponder: false,
                     })
                   )
-                  .then(() => this.props.bib.loadById(bib._id))
+                  .then(() =>
+                    Promise.all([
+                      this.props.bib.loadById(bib._id),
+                      this.props.rider.load(bib.riderId),
+                    ])
+                  )
                   .then(() => this.setState({ rentalTransponder: '' }))
                   .then(this.props.onUpdated || (() => {}))
               }
@@ -60,7 +75,7 @@ export default class RentTransponder extends React.Component<{
                 onClick={() => {
                   const transponder = this.state.rentalTransponder
                   if (!transponder) return
-                  if (idx(bib, (_: any) => _.rider.transponder)) {
+                  if (rider.transponder) {
                     const confirmed = confirm(
                       'This rider already has a transponder. Overwrite?'
                     )
@@ -75,7 +90,12 @@ export default class RentTransponder extends React.Component<{
                         hasRentalTransponder: true,
                       })
                     )
-                    .then(() => this.props.bib.loadById(bib._id))
+                    .then(() =>
+                      Promise.all([
+                        this.props.bib.loadById(bib._id),
+                        this.props.rider.load(bib.riderId),
+                      ])
+                    )
                     .then(() => this.setState({ rentalTransponder: '' }))
                     .then(this.props.onUpdated || (() => {}))
                 }}

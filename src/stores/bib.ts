@@ -1,6 +1,7 @@
-import { observable } from 'mobx'
+import { toJS, observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
+import { riderStore } from './rider'
 
 export interface Bib {
   _id: string
@@ -8,6 +9,7 @@ export interface Bib {
   riderId: string
   bibNumber: number
   hasRentalTransponder?: boolean
+  rider?: any
 }
 
 export default class BibStore {
@@ -53,11 +55,26 @@ export default class BibStore {
           token: PromoterStore.activeToken(),
         },
       })
+      const keyedRiders = toJS(riderStore._ridersById)
+      const keyedBibs = toJS(this._bibsById)
+      data.forEach((bib: Bib) => {
+        keyedBibs[bib._id] = bib
+        if (bib.rider) {
+          keyedRiders[bib.rider._id] = bib.rider
+        }
+      })
+      riderStore._ridersById = keyedRiders
+      this._bibsById = keyedBibs
       this._bibsBySeriesId[seriesId] = data
     } catch (err) {
       console.log('Error loading bibs for series', err)
       throw err
     }
+  }
+
+  async loadIfNeeded(_id: string) {
+    if (this._bibsById[_id] && this._bibsById[_id]._id) return
+    await this.loadById(_id)
   }
 
   async loadById(_id: string) {
@@ -68,7 +85,7 @@ export default class BibStore {
           token: PromoterStore.activeToken(),
         },
       })
-      this._bibsById[data._id] = data
+      this._bibsById[_id] = data
     } catch (err) {
       console.log('Error loading bib by id', err)
       throw err

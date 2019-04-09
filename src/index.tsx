@@ -10,7 +10,7 @@ import { Provider } from 'mobx-react'
 import PromoterStore from './stores/promoter'
 import EventStore, { eventStore } from './stores/event'
 import RaceStore, { raceStore } from './stores/race'
-import RiderStore from './stores/rider'
+import RiderStore, { riderStore } from './stores/rider'
 import SeriesStore, { seriesStore } from './stores/series'
 import BibStore from './stores/bib'
 import PassingStore from './stores/passing'
@@ -32,7 +32,7 @@ const stores = {
   promoter: new PromoterStore(),
   event: eventStore,
   race: raceStore,
-  rider: new RiderStore(),
+  rider: riderStore,
   series: seriesStore,
   bib: new BibStore(),
   passing: new PassingStore(),
