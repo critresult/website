@@ -4,13 +4,15 @@ import Button from './Button'
 import { inject, observer } from 'mobx-react'
 import PromoterStore from '../stores/promoter'
 import emailValidator from 'email-validator'
+import SeriesStore from '../stores/series'
 
-@inject('promoter')
+@inject('promoter', 'series')
 @observer
 export default class Signup extends React.Component<{
   onAuthenticated?: () => void
   onCancelled?: (event: React.MouseEvent) => void
   promoter?: PromoterStore
+  series?: SeriesStore
 }> {
   state = {
     email: '',
@@ -28,6 +30,7 @@ export default class Signup extends React.Component<{
     this.setState({ isLoading: true })
     this.props.promoter
       .login(this.state.email, this.state.password)
+      .then(() => this.props.series.loadMySeries())
       .then(() => {
         this.resetFields()
         this.props.onAuthenticated()
