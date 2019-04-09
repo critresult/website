@@ -82,10 +82,20 @@ export default class RaceScreen extends React.Component<{
           .map((passing) => passing.riderId)
       ),
     ])
-    this.reloadTimer = setInterval(
-      () => this.props.race.loadLeaderboard(raceId),
-      5000
-    )
+    this.reloadTimer = setInterval(() => {
+      this.props.race.loadLeaderboard(raceId).then(() => {
+        const leaderboard = this.props.race.leaderboardByRaceId(raceId)
+        const unloadedRiderIds = leaderboard
+          .filter((passing) => !!passing.riderId)
+          .filter(
+            (passing) => !this.props.rider.ridersById(passing.riderId)._id
+          )
+          .map((passing) => passing.riderId)
+        if (unloadedRiderIds.length === 0) return
+        this.props.rider.loadMany(unloadedRiderIds)
+      })
+      this.props.race.load(raceId)
+    }, 5000)
   }
 
   render() {
@@ -141,8 +151,8 @@ export default class RaceScreen extends React.Component<{
               <RootCell>
                 <HFlex style={{ justifyContent: 'space-between' }}>
                   <LargeText>
-                    {moment(race.actualStart).format('HH:mm:ss')} start -{' '}
-                    {race.lapCount} laps
+                    {moment(race.actualStart).format('HH:mm:ss')} start
+                    {race.lapCount ? ` - ${race.lapCount} laps` : ''}
                   </LargeText>
                 </HFlex>
                 {leaderboard.map((passing, index) => {
