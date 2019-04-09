@@ -76,7 +76,7 @@ export default class RaceScreen extends React.Component<{
       this.props.series.load(race.seriesId),
       this.props.event.load(race.eventId),
       this.props.event.loadRacesByEventId(race.eventId),
-      ...leaderboard.map((passing) => this.props.rider.load(passing.riderId)),
+      this.props.rider.loadMany(leaderboard.map((passing) => passing.riderId)),
     ])
     this.reloadTimer = setInterval(
       () => this.props.race.loadLeaderboard(raceId),

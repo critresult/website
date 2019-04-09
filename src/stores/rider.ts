@@ -39,6 +39,21 @@ export default class RiderStore {
     }
   }
 
+  async loadMany(_ids: string[]) {
+    try {
+      const { data } = await axios.post('riders/byId', {
+        _ids,
+        token: PromoterStore.activeToken(),
+      })
+      data.forEach((rider: any) => {
+        this._ridersById[rider._id] = rider
+      })
+    } catch (err) {
+      console.log('Error loading many riders', err)
+      throw err
+    }
+  }
+
   async update(where: string | object, changes: any) {
     try {
       await axios.put('/riders', {
