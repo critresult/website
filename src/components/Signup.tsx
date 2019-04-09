@@ -80,7 +80,7 @@ export default class Signup extends React.Component<{
             />
           </HFlex>
           <HFlex>
-            Confirm Password:{' '}
+            Confirm:{' '}
             <Input
               valid={
                 this.state.password.length >= 6 &&
