@@ -151,16 +151,13 @@ export default class RaceScreen extends React.Component<{
                     <HFlex
                       key={passing._id}
                       style={{
-                        justifyContent: 'space-between',
+                        justifyContent: 'space-around',
                         backgroundColor:
                           index % 2 === 0 ? Colors.white : Colors.whiteDark,
                       }}
                     >
                       <div style={{ margin: 8 }}>{index + 1}</div>
                       <div style={{ flex: 1 }} />
-                      <div style={{ margin: 8, minWidth: 100 }}>
-                        {rider.firstname}
-                      </div>
                       <div style={{ margin: 8, minWidth: 100 }}>
                         {' '}
                         {rider.lastname}
