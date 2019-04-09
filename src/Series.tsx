@@ -33,6 +33,7 @@ export default class Series extends React.Component<{
   bib?: BibStore
   rider?: RiderStore
   event?: EventStore
+  match?: any
 }> {
   state = {
     isSearching: false,
@@ -45,6 +46,15 @@ export default class Series extends React.Component<{
 
   async componentDidMount() {
     await Hydrated.hydrate()
+    const seriesId = this.props.match.params.id
+    await this.props.bib.loadBibsForSeries(seriesId)
+  }
+
+  componentDidUpdate(prevProps: any) {
+    const seriesId = this.props.match.params.id
+    const lastSeriesId = prevProps.match.params.id
+    if (seriesId === lastSeriesId) return
+    this.props.bib.loadBibsForSeries(seriesId)
   }
 
   searchChanged = (e: any) => {
