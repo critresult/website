@@ -56,6 +56,10 @@ export default class Header extends React.Component<
   onAuthenticated = () => this.setState({ authVisible: false })
   onCancelled = () => this.setState({ authVisible: false })
 
+  async componentDidMount() {
+    this.props.series.loadMySeries()
+  }
+
   render() {
     const tabs = [
       {
@@ -174,7 +178,7 @@ export default class Header extends React.Component<
         <LowerHeader>
           <VFlex style={{ color: Colors.white }}>
             <HFlex>
-              {this.props.series.all.map((series: Series, index) => (
+              {this.props.series.mySeries.map((series: Series, index) => (
                 <Button
                   key={index}
                   title={series.name}

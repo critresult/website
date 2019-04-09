@@ -20,7 +20,6 @@ import Colors from './Colors'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Entrylist from './components/Entrylist'
 import Footer from './components/Footer'
-import Hydrated from 'hydrated'
 import idx from 'idx'
 import AvailableBibs from './components/AvailableBibs'
 import uniqby from 'lodash.uniqby'
@@ -41,7 +40,17 @@ export default class _Event extends React.Component<
   }
 
   async componentDidMount() {
-    await Hydrated.hydrate()
+    this.componentDidUpdate({})
+  }
+
+  componentDidUpdate(prevProps: any) {
+    const eventId = this.props.match.params.id
+    const lastEventId = idx(prevProps, (_: any) => _.match.params.id)
+    if (eventId === lastEventId) return
+    this.props.event.load(eventId).then(() => {
+      const { seriesId } = this.props.event.eventsById(eventId)
+      return this.props.series.load(seriesId)
+    })
   }
 
   render() {

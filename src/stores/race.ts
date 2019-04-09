@@ -23,13 +23,6 @@ export default class RaceStore {
   @observable _leaderboardByRaceId: {
     [key: string]: Passing[]
   } = {}
-  @observable _racesByEventId: {
-    [key: string]: Race[]
-  } = {}
-
-  racesByEventId(id: string) {
-    return this._racesByEventId[id] || []
-  }
 
   leaderboardByRaceId(id: string) {
     return this._leaderboardByRaceId[id] || []
@@ -41,18 +34,6 @@ export default class RaceStore {
 
   entriesByRaceId(id: string): Entry[] {
     return this._entriesByRaceId[id] || []
-  }
-
-  async hydrate() {
-    const { data } = await axios.get('/races', {
-      params: {
-        token: PromoterStore.activeToken(),
-      },
-    })
-    for (const model of data) {
-      this._racesById[model._id] = model
-      await this.loadEntries(model._id)
-    }
   }
 
   async loadLeaderboard(raceId: string) {
@@ -103,12 +84,15 @@ export default class RaceStore {
 
   async loadEntries(_id: string) {
     try {
-      const { data } = await axios.get('/races/entries', {
-        params: {
-          _id,
-          token: PromoterStore.activeToken(),
-        },
-      })
+      const [{ data }] = await Promise.all([
+        axios.get('/races/entries', {
+          params: {
+            _id,
+            token: PromoterStore.activeToken(),
+          },
+        }),
+        this.load(_id),
+      ])
       this._entriesByRaceId[_id] = data
     } catch (err) {
       console.log('Error loading entries', err)
@@ -127,24 +111,6 @@ export default class RaceStore {
       this._racesById[_id] = data
     } catch (err) {
       console.log('Error loading races by id', err)
-      throw err
-    }
-  }
-
-  async loadByEventId(eventId: string) {
-    try {
-      const { data } = await axios.get('/races', {
-        params: {
-          eventId,
-          token: PromoterStore.activeToken(),
-        },
-      })
-      this._racesByEventId[eventId] = data
-      data.forEach((race: Race) => {
-        this._racesById[race._id] = race
-      })
-    } catch (err) {
-      console.log('Error loading races by event id', err)
       throw err
     }
   }
@@ -176,3 +142,5 @@ export default class RaceStore {
     }
   }
 }
+
+export const raceStore = new RaceStore()

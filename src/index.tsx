@@ -8,10 +8,10 @@ import Series from './Series'
 import Colors from './Colors'
 import { Provider } from 'mobx-react'
 import PromoterStore from './stores/promoter'
-import EventStore from './stores/event'
-import RaceStore from './stores/race'
+import EventStore, { eventStore } from './stores/event'
+import RaceStore, { raceStore } from './stores/race'
 import RiderStore from './stores/rider'
-import SeriesStore from './stores/series'
+import SeriesStore, { seriesStore } from './stores/series'
 import BibStore from './stores/bib'
 import PassingStore from './stores/passing'
 import Race from './Race'
@@ -30,10 +30,10 @@ Object.assign(document.body.style, {
 
 const stores = {
   promoter: new PromoterStore(),
-  event: new EventStore(),
-  race: new RaceStore(),
+  event: eventStore,
+  race: raceStore,
   rider: new RiderStore(),
-  series: new SeriesStore(),
+  series: seriesStore,
   bib: new BibStore(),
   passing: new PassingStore(),
 }

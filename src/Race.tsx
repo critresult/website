@@ -19,6 +19,7 @@ import moment from 'moment'
 import Colors from './Colors'
 import Button from './components/Button'
 import { Link } from 'react-router-dom'
+import idx from 'idx'
 
 @inject('rider', 'promoter', 'passing', 'race', 'series', 'event')
 @observer
@@ -34,12 +35,12 @@ export default class RaceScreen extends React.Component<{
   reloadTimer: any
 
   async componentDidMount() {
-    await this.loadResultData()
+    this.componentDidUpdate({})
   }
 
   componentDidUpdate(prevProps: any) {
     const raceId = this.props.match.params.id
-    const lastRaceId = prevProps.match.params.id
+    const lastRaceId = idx(prevProps, (_: any) => _.match.params.id)
     if (raceId === lastRaceId) return
     clearInterval(this.reloadTimer)
     this.reloadTimer = undefined
@@ -63,7 +64,7 @@ export default class RaceScreen extends React.Component<{
     await Promise.all([
       this.props.series.load(race.seriesId),
       this.props.event.load(race.eventId),
-      this.props.race.loadByEventId(race.eventId),
+      this.props.event.loadRacesByEventId(race.eventId),
       ...leaderboard.map((passing) => this.props.rider.load(passing.riderId)),
     ])
     this.reloadTimer = setInterval(
@@ -78,7 +79,7 @@ export default class RaceScreen extends React.Component<{
     const series = this.props.series.seriesById(race.seriesId)
     const event = this.props.event.eventsById(race.eventId)
     const leaderboard = this.props.race.leaderboardByRaceId(raceId)
-    const otherRaces = this.props.race.racesByEventId(race.eventId)
+    const otherRaces = this.props.event.racesByEventId(race.eventId)
     return (
       <>
         <Header />

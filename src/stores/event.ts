@@ -1,10 +1,10 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
-import uniqBy from 'lodash.uniqby'
-import { Race } from './race'
+import uniqby from 'lodash.uniqby'
+import { Race, raceStore } from './race'
 import { Entry } from './entry'
-import groupby from 'lodash.groupby'
+import { Series, seriesStore } from './series'
 
 export interface Event {
   _id: string
@@ -13,22 +13,26 @@ export interface Event {
   endDate: string
   races?: Race[]
   seriesId: string
+  series?: Series
 }
 
 export default class EventStore {
   @observable upcomingEvents: Event[] = []
-  @observable _eventsBySeriesId: {
-    [key: string]: Event[]
-  } = {}
   @observable _eventsById: {
     [key: string]: Event
   } = {}
   @observable _entriesByEventId: {
     [key: string]: Entry[]
   } = {}
+  @observable _racesByEventId: {
+    [key: string]: Race[]
+  } = {}
 
-  eventsBySeriesId(id: string): Event[] {
-    return this._eventsBySeriesId[id] || []
+  racesByEventId(id: string): Race[] {
+    if (!this._racesByEventId[id]) {
+      this._racesByEventId[id] = []
+    }
+    return this._racesByEventId[id]
   }
 
   eventsById(id: string): Event {
@@ -36,7 +40,10 @@ export default class EventStore {
   }
 
   entriesByEventId(id: string): Entry[] {
-    return this._entriesByEventId[id] || []
+    if (!this._entriesByEventId[id]) {
+      this._entriesByEventId[id] = []
+    }
+    return this._entriesByEventId[id]
   }
 
   async load(_id: string) {
@@ -50,6 +57,24 @@ export default class EventStore {
       this._eventsById[_id] = data
     } catch (err) {
       console.log('Error loading event by id', err)
+      throw err
+    }
+  }
+
+  async loadRacesByEventId(id: string) {
+    try {
+      const { data } = await axios.get('/races', {
+        params: {
+          eventId: id,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      data.forEach((race: Race) => {
+        raceStore._racesById[race._id] = race
+      })
+      this._racesByEventId[id] = data
+    } catch (err) {
+      console.log('Error loading races by event id', err)
       throw err
     }
   }
@@ -102,7 +127,7 @@ export default class EventStore {
         },
       })
       const redundantEvents = [...this.upcomingEvents, ...data]
-      this.upcomingEvents = uniqBy(redundantEvents, '_id').sort(
+      this.upcomingEvents = uniqby(redundantEvents, '_id').sort(
         (e1: Event, e2: Event) => {
           const date1 = new Date(e1.startDate)
           const date2 = new Date(e2.startDate)
@@ -114,12 +139,15 @@ export default class EventStore {
           return -1
         }
       )
-      this.upcomingEvents.forEach(
-        (event) => (this._eventsById[event._id] = event)
-      )
+      this.upcomingEvents.forEach((event) => {
+        seriesStore._seriesById[event.seriesId] = event.series
+        this._eventsById[event._id] = event
+      })
     } catch (err) {
       console.log('Error loading upcoming events', err)
       throw err
     }
   }
 }
+
+export const eventStore = new EventStore()

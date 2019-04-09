@@ -17,7 +17,6 @@ import RiderStore from './stores/rider'
 import SeriesStore from './stores/series'
 import styled from 'styled-components'
 import Footer from './components/Footer'
-import Hydrated from 'hydrated'
 
 const Cell = styled(VFlex)`
   flex: 1;
@@ -40,7 +39,7 @@ export default class Home extends React.Component<{
   inputFileRef = React.createRef()
 
   async componentDidMount() {
-    await Hydrated.hydrate()
+    await Promise.all([this.props.event.loadUpcoming()])
   }
 
   render() {

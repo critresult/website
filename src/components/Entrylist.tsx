@@ -167,7 +167,9 @@ class Entrylist extends React.Component<{
               <VFlex style={{ minWidth: '15%' }}>
                 <RentTransponder
                   bibId={entry.bibId}
-                  onUpdated={() => Hydrated.hydrate('race')}
+                  onUpdated={() =>
+                    this.props.bib.loadBibsForSeries(race.seriesId)
+                  }
                 />
               </VFlex>
               {this.props.editable === false ? null : (
@@ -206,7 +208,7 @@ class Entrylist extends React.Component<{
                   .delete(this.props.raceId)
                   .then(() =>
                     Promise.all([
-                      this.props.race.loadByEventId(race.eventId),
+                      this.props.event.loadRacesByEventId(race.eventId),
                       this.props.event.load(race.eventId),
                     ])
                   )

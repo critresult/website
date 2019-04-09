@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore, { Promoter } from './promoter'
 import uniqby from 'lodash.uniqby'
+import { eventStore } from './event'
 
 export interface Series {
   _id: string
@@ -18,6 +19,16 @@ export default class SeriesStore {
   @observable _promotersBySeriesId: {
     [key: string]: Promoter[]
   } = {}
+  @observable _eventsBySeriesId: {
+    [key: string]: Event[]
+  } = {}
+
+  eventsBySeriesId(id: string): Event[] {
+    if (!this._eventsBySeriesId[id]) {
+      this._eventsBySeriesId[id] = []
+    }
+    return this._eventsBySeriesId[id]
+  }
 
   seriesById(id: string): Series {
     return this._seriesById[id] || ({} as Series)
@@ -63,6 +74,24 @@ export default class SeriesStore {
     }
   }
 
+  async loadEventsBySeriesId(seriesId: string) {
+    try {
+      const { data } = await axios.get('/events', {
+        params: {
+          seriesId,
+          token: PromoterStore.activeToken(),
+        },
+      })
+      data.forEach((event: any) => {
+        eventStore._eventsById[event._id] = event
+      })
+      this._eventsBySeriesId[seriesId] = data
+    } catch (err) {
+      console.log('Error loading events for series', err)
+      throw err
+    }
+  }
+
   async loadMySeries() {
     try {
       const { data } = await axios.get('/series/authenticated', {
@@ -103,3 +132,5 @@ export default class SeriesStore {
     }
   }
 }
+
+export const seriesStore = new SeriesStore()

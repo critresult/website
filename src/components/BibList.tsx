@@ -7,7 +7,6 @@ import idx from 'idx'
 import RiderEdit from './RiderEdit'
 import Popup from './Popup'
 import RentTransponder from './RentTransponder'
-import Hydrated from 'hydrated'
 import BibStore, { Bib } from '../stores/bib'
 
 @inject('bib', 'rider')
@@ -125,7 +124,7 @@ export default class BibList extends React.Component<{
                 <RentTransponder
                   bibId={bib._id}
                   onUpdated={() =>
-                    Hydrated.hydrate('bib').then(() => this.filterBibs())
+                    this.props.bib.loadBibsForSeries(this.props.seriesId)
                   }
                 />
               </VFlex>

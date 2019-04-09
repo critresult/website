@@ -17,7 +17,6 @@ import keyby from 'lodash.keyby'
 import Colors from './Colors'
 import AddBibCell from './components/AddBibCell'
 import Footer from './components/Footer'
-import Hydrated from 'hydrated'
 import emailValidator from 'email-validator'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -25,6 +24,7 @@ import Popup from './components/Popup'
 import EventCreate from './components/EventCreate'
 import BibList from './components/BibList'
 import EventStore from './stores/event'
+import idx from 'idx'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -45,16 +45,24 @@ export default class Series extends React.Component<{
   searchRef = React.createRef<any>()
 
   async componentDidMount() {
-    await Hydrated.hydrate()
-    const seriesId = this.props.match.params.id
-    await this.props.bib.loadBibsForSeries(seriesId)
+    this.componentDidUpdate({})
   }
 
   componentDidUpdate(prevProps: any) {
     const seriesId = this.props.match.params.id
-    const lastSeriesId = prevProps.match.params.id
+    const lastSeriesId = idx(prevProps, (_: any) => _.match.params.id)
     if (seriesId === lastSeriesId) return
+    this.props.series.load(seriesId)
     this.props.bib.loadBibsForSeries(seriesId)
+    this.props.series
+      .loadEventsBySeriesId(seriesId)
+      .then(() =>
+        Promise.all(
+          this.props.series
+            .eventsBySeriesId(seriesId)
+            .map((event: any) => this.props.event.loadRacesByEventId(event._id))
+        )
+      )
   }
 
   searchChanged = (e: any) => {
@@ -80,7 +88,7 @@ export default class Series extends React.Component<{
     const bibs = this.props.bib.bibsBySeriesId(seriesId)
     const bibsByRiderId = keyby(bibs, 'riderId')
     const promoters = this.props.series.promotersBySeriesId(seriesId)
-    const events = this.props.event.eventsBySeriesId(seriesId)
+    const events = this.props.series.eventsBySeriesId(seriesId)
     return (
       <>
         <Popup visible={this.state.showingCreatePopup}>
@@ -166,7 +174,7 @@ export default class Series extends React.Component<{
           </VFlex>
           <HFlex>
             {events.map((event: any) => {
-              const races = event.races || []
+              const races = this.props.event.racesByEventId(event._id)
               return (
                 <RootCell key={event._id} style={{ margin: 8 }}>
                   <HFlex>
