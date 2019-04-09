@@ -14,7 +14,6 @@ import RiderStore from './stores/rider'
 import SeriesStore from './stores/series'
 import BibStore from './stores/bib'
 import PassingStore from './stores/passing'
-import Hydrated from 'hydrated'
 import Race from './Race'
 import throttle from 'lodash.throttle'
 
@@ -38,8 +37,6 @@ const stores = {
   bib: new BibStore(),
   passing: new PassingStore(),
 }
-
-Hydrated.stores = stores
 
 const appDiv = document.getElementById('app')
 const setAppStyle = () => {

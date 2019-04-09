@@ -1,7 +1,6 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
-import Hydrated from 'hydrated'
 import { Entry } from './entry'
 import { Passing } from './passing'
 
@@ -14,7 +13,7 @@ export interface Race {
   actualStart?: string
 }
 
-export default class RaceStore implements Hydrated {
+export default class RaceStore {
   @observable _racesById: {
     [key: string]: Race
   } = {}

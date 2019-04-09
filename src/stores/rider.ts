@@ -3,7 +3,6 @@ import axios from 'axios'
 import PromoterStore from './promoter'
 import chunk from 'lodash.chunk'
 import uniqby from 'lodash.uniqby'
-import Hydrated from 'hydrated'
 
 export interface Rider {
   _id: string
@@ -24,8 +23,6 @@ export default class RiderStore implements Hydrated {
       ...(this._ridersById[id] || {}),
     } as Rider
   }
-
-  async hydrate() {}
 
   async load(_id: string) {
     try {

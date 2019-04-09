@@ -1,6 +1,5 @@
 import { computed, observable, action, runInAction } from 'mobx'
 import axios from 'axios'
-import Hydrated from 'hydrated'
 import omitby from 'lodash.omitby'
 
 export interface Promoter {
@@ -9,7 +8,7 @@ export interface Promoter {
   email: string
 }
 
-export default class PromoterStore implements Hydrated {
+export default class PromoterStore {
   @observable userId: string
   @observable _promotersById: {
     [key: string]: Promoter
@@ -30,8 +29,6 @@ export default class PromoterStore implements Hydrated {
       this.loadPromoter().catch(() => {})
     }
   }
-
-  async hydrate() {}
 
   @computed
   get active() {

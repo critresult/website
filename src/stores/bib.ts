@@ -1,9 +1,6 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import PromoterStore from './promoter'
-import Hydrated from 'hydrated'
-import groupby from 'lodash.groupby'
-import keyby from 'lodash.keyby'
 
 export interface Bib {
   _id: string
@@ -13,7 +10,7 @@ export interface Bib {
   hasRentalTransponder?: boolean
 }
 
-export default class BibStore implements Hydrated {
+export default class BibStore {
   @observable _bibsBySeriesId: {
     [key: string]: Bib[]
   } = {}
@@ -27,16 +24,6 @@ export default class BibStore implements Hydrated {
 
   bibsById(id: string): Bib {
     return this._bibsById[id] || ({} as Bib)
-  }
-
-  async hydrate() {
-    const { data } = await axios.get('/bibs', {
-      params: {
-        token: PromoterStore.activeToken(),
-      },
-    })
-    this._bibsById = keyby(data, '_id')
-    this._bibsBySeriesId = groupby(data, 'seriesId')
   }
 
   availableBibsForSeriesId(seriesId: string) {

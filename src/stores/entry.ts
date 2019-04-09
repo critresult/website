@@ -1,11 +1,7 @@
 import { observable } from 'mobx'
 import axios from 'axios'
-import PromoterStore from './promoter'
 import { Rider } from './rider'
 import { Race } from './race'
-import Hydrated from 'hydrated'
-import groupby from 'lodash.groupby'
-import keyby from 'lodash.keyby'
 
 export interface Entry {
   _id: string
@@ -16,6 +12,4 @@ export interface Entry {
   rider?: Rider
 }
 
-export default class EntryStore implements Hydrated {
-  async hydrate() {}
-}
+export default class EntryStore {}
