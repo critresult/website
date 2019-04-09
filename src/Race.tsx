@@ -29,9 +29,29 @@ export default class RaceScreen extends React.Component<{
   series: SeriesStore
   event: EventStore
   rider: RiderStore
+  match: any
 }> {
   reloadTimer: any
+
   async componentDidMount() {
+    await this.loadResultData()
+  }
+
+  componentDidUpdate(prevProps: any) {
+    const raceId = this.props.match.params.id
+    const lastRaceId = prevProps.match.params.id
+    if (raceId === lastRaceId) return
+    clearInterval(this.reloadTimer)
+    this.reloadTimer = undefined
+    this.loadResultData()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.reloadTimer)
+    this.reloadTimer = undefined
+  }
+
+  loadResultData = async () => {
     const raceId = this.props.match.params.id
     await Promise.all([
       this.props.passing.loadByRaceId(raceId),
@@ -51,10 +71,7 @@ export default class RaceScreen extends React.Component<{
       5000
     )
   }
-  componentWillUnmount() {
-    clearInterval(this.reloadTimer)
-    this.reloadTimer = undefined
-  }
+
   render() {
     const raceId = this.props.match.params.id
     const race = this.props.race.racesById(raceId)
