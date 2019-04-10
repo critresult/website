@@ -17,7 +17,7 @@ export interface Event {
 }
 
 export default class EventStore {
-  @observable upcomingEvents: Event[] = []
+  @observable homeEvents: Event[] = []
   @observable _eventsById: {
     [key: string]: Event
   } = {}
@@ -119,29 +119,19 @@ export default class EventStore {
     }
   }
 
-  async loadUpcoming() {
+  async loadHome() {
     try {
-      const { data } = await axios.get('/events/upcoming', {
+      const { data } = await axios.get('/events/home', {
         params: {
           token: PromoterStore.activeToken(),
         },
       })
-      const redundantEvents = [...this.upcomingEvents, ...data]
-      this.upcomingEvents = uniqby(redundantEvents, '_id').sort(
-        (e1: Event, e2: Event) => {
-          const date1 = new Date(e1.startDate)
-          const date2 = new Date(e2.startDate)
-          if (date1 > date2) {
-            return 1
-          } else if (date1 === date2) {
-            return 0
-          }
-          return -1
-        }
-      )
-      this.upcomingEvents.forEach((event) => {
+      const redundantEvents = [...this.homeEvents, ...data]
+      this.homeEvents = uniqby(redundantEvents, '_id')
+      this.homeEvents.forEach((event) => {
         seriesStore._seriesById[event.seriesId] = event.series
         this._eventsById[event._id] = event
+        this._racesByEventId[event._id] = event.races
       })
     } catch (err) {
       console.log('Error loading upcoming events', err)

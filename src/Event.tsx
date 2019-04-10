@@ -130,7 +130,7 @@ export default class _Event extends React.Component<
                     ) return
                     return this.props.event
                       .delete(eventId)
-                      .then(() => this.props.event.loadUpcoming())
+                      .then(() => this.props.event.loadHome())
                       .then(() => this.props.history.push('/'))
                   }}
                   style={{ backgroundColor: Colors.pink }}

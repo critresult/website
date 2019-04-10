@@ -68,7 +68,7 @@ export const RootCellInternal = styled.div`
 `
 
 export const RootCell = (props: any) => (
-  <div>
+  <div style={{ display: 'flex' }}>
     <RootCellInternal {...props} />
   </div>
 )
