@@ -178,7 +178,7 @@ export default class RaceScreen extends React.Component<{
                       <div style={{ flex: 1 }} />
                       <div style={{ margin: 8, minWidth: 100 }}>
                         {' '}
-                        {rider.lastname}
+                        {rider.lastname.toUpperCase()}
                       </div>
                       <div style={{ margin: 8, minWidth: 100 }}>
                         #{bib.bibNumber || '-'}
