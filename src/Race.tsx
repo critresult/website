@@ -185,8 +185,9 @@ export default class RaceScreen extends React.Component<{
                       </div>
                       <div style={{ flex: 1 }} />
                       <div style={{ margin: 8, minWidth: 50 }}>
-                        {passing.transponder}
+                        {typeof passing.secondsDiff === 'number' ? `+${passing.secondsDiff} s` : ''}
                       </div>
+                      <div style={{ flex: 1 }} />
                       <div style={{ margin: 8 }}>
                         {moment(passing.date).format('HH:mm:ss:SSS')}
                       </div>
