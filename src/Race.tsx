@@ -174,13 +174,11 @@ export default class RaceScreen extends React.Component<{
                           index % 2 === 0 ? Colors.white : Colors.whiteDark,
                       }}
                     >
-                      <div style={{ margin: 8 }}>{index + 1}</div>
-                      <div style={{ flex: 1 }} />
-                      <div style={{ margin: 8, minWidth: 100 }}>
-                        {' '}
+                      <div style={{ margin: 8, minWidth: 30 }}>{index + 1}</div>
+                      <div style={{ margin: 8, minWidth: 200 }}>
                         {rider.lastname.toUpperCase()}
                       </div>
-                      <div style={{ margin: 8, minWidth: 100 }}>
+                      <div style={{ margin: 8, minWidth: 50 }}>
                         #{bib.bibNumber || '-'}
                       </div>
                       <div style={{ flex: 1 }} />
@@ -191,6 +189,7 @@ export default class RaceScreen extends React.Component<{
                       <div style={{ margin: 8 }}>
                         {moment(passing.date).format('HH:mm:ss:SSS')}
                       </div>
+                      <div style={{ flex: 1 }} />
                       <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
                     </HFlex>
                   )
