@@ -114,6 +114,9 @@ export default class EntryCreate extends React.Component<{
                             this.searchRef.current.value = ''
                             this.searchRef.current.focus()
                             this.setState({ foundRiders: [] })
+                            if (this.props.onFinished) {
+                              this.props.onFinished()
+                            }
                           })
                       }
                     />
@@ -156,6 +159,9 @@ export default class EntryCreate extends React.Component<{
                             this.searchRef.current.value = ''
                             this.searchRef.current.focus()
                             this.setState({ foundRiders: [] })
+                            if (this.props.onFinished) {
+                              this.props.onFinished()
+                            }
                           })
                       }
                     />
