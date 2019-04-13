@@ -205,7 +205,7 @@ export default class RaceScreen extends React.Component<{
                       style={{
                         justifyContent: 'space-around',
                         backgroundColor:
-                          index % 2 === 0 ? Colors.white : Colors.whiteDark,
+                          index % 2 === 1 ? Colors.white : Colors.whiteDark,
                       }}
                     >
                       <div style={{ margin: 8, minWidth: 30 }}>{index + 1}</div>
