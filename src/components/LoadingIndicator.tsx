@@ -1,11 +1,16 @@
 import React from 'react'
 import { VFlex } from './Shared'
 
-export default class LoadingIndicator extends React.Component {
+export default class LoadingIndicator extends React.Component<{
+  height?: number
+}> {
   render() {
     return (
       <VFlex style={{ margin: 8, fontSize: 25, justifyContent: 'center' }}>
-        <img src={require('../../static/bikeLoading.svg')} height="75" />
+        <img
+          src={require('../../static/bikeLoading.svg')}
+          height={this.props.height || 75}
+        />
       </VFlex>
     )
   }
