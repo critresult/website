@@ -80,7 +80,7 @@ export default class RaceScreen extends React.Component<{
       this.props.event.load(race.eventId),
       this.props.event.loadRacesByEventId(race.eventId),
       this.props.rider.loadMany(
-        leaderboard
+        leaderboard.passings
           .filter((passing) => !!passing.riderId)
           .map((passing) => passing.riderId)
       ),
@@ -88,7 +88,7 @@ export default class RaceScreen extends React.Component<{
     this.reloadTimer = setInterval(() => {
       this.props.race.loadLeaderboard(raceId).then(() => {
         const leaderboard = this.props.race.leaderboardByRaceId(raceId)
-        const unloadedRiderIds = leaderboard
+        const unloadedRiderIds = leaderboard.passings
           .filter((passing) => !!passing.riderId)
           .filter(
             (passing) => !this.props.rider.ridersById(passing.riderId)._id
@@ -126,9 +126,6 @@ export default class RaceScreen extends React.Component<{
                 <TitleText>
                   {series.name} - {event.name}
                 </TitleText>
-                {event.startDate === event.endDate ? null : (
-                  <LargeText>Event End: {event.endDate}</LargeText>
-                )}
               </VFlex>
               <VFlex>
                 <HFlex>
@@ -153,12 +150,23 @@ export default class RaceScreen extends React.Component<{
             {race.actualStart ? (
               <RootCell>
                 <HFlex style={{ justifyContent: 'space-between' }}>
-                  <LargeText>
+                  <LargeText style={{ minWidth: 100 }}>
                     {moment(race.actualStart).format('HH:mm:ss')} start
-                    {race.lapCount ? ` - ${race.lapCount} laps` : ''}
+                  </LargeText>
+                  <TitleText>
+                    {leaderboard.isFinished
+                      ? '🏁 Final Results 🏁'
+                      : 'Racing Now'}
+                  </TitleText>
+                  <LargeText style={{ textAlign: 'right', minWidth: 100 }}>
+                    {leaderboard.isFinished && race.lapCount ? (
+                      `${race.lapCount} laps`
+                    ) : (
+                      <LoadingIndicator height={50} />
+                    )}
                   </LargeText>
                 </HFlex>
-                {leaderboard.map((passing, index) => {
+                {leaderboard.passings.map((passing, index) => {
                   const bib =
                     this.props.bib
                       .bibsBySeriesId(passing.seriesId)
@@ -183,7 +191,9 @@ export default class RaceScreen extends React.Component<{
                       </div>
                       <div style={{ flex: 1 }} />
                       <div style={{ margin: 8, minWidth: 50 }}>
-                        {typeof passing.secondsDiff === 'number' ? `+${passing.secondsDiff} s` : ''}
+                        {typeof passing.secondsDiff === 'number'
+                          ? `+${passing.secondsDiff} s`
+                          : ''}
                       </div>
                       <div style={{ flex: 1 }} />
                       <div style={{ margin: 8 }}>

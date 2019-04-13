@@ -11,6 +11,16 @@ export interface Race {
   seriesId: string
   eventId: string
   actualStart?: string
+  lapCount?: number
+}
+
+export interface Leaderboard {
+  isFinished: boolean
+  leaderFinishTime?: Date
+  passings: (Passing & {
+    lapCount: number
+    secondsDiff?: number
+  })[]
 }
 
 export default class RaceStore {
@@ -21,11 +31,16 @@ export default class RaceStore {
     [key: string]: Entry[]
   } = {}
   @observable _leaderboardByRaceId: {
-    [key: string]: Passing[]
+    [key: string]: Leaderboard
   } = {}
 
   leaderboardByRaceId(id: string) {
-    return this._leaderboardByRaceId[id] || []
+    return (
+      this._leaderboardByRaceId[id] || {
+        isFinished: true,
+        passings: [],
+      }
+    )
   }
 
   racesById(id: string): Race {
