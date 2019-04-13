@@ -221,12 +221,10 @@ export default class RaceScreen extends React.Component<{
                           ? `+${passing.secondsDiff} s`
                           : ''}
                       </div>
-                      <AutoHide>
-                        <div style={{ flex: 1 }} />
+                      <AutoHide style={{ flex: 1 }}>
                         <div style={{ margin: 8 }}>
                           {moment(passing.date).format('HH:mm:ss:SSS')}
                         </div>
-                        <div style={{ flex: 1 }} />
                       </AutoHide>
                       <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
                     </HFlex>
