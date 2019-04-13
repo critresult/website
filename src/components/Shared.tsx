@@ -72,3 +72,21 @@ export const RootCell = (props: any) => (
     <RootCellInternal {...props} />
   </div>
 )
+
+export const AutoHide = styled.div`
+  @media (max-width: 700px) {
+    display: none;
+  }
+`
+
+export const MobileOnly = styled.div`
+  display: none;
+  @media (max-width: 700px) {
+    display: block;
+  }
+`
+export const NonMobileOnly = styled.div`
+  @media (max-width: 700px) {
+    display: none;
+  }
+`
