@@ -8,6 +8,9 @@ import {
   VFlex,
   HFlex,
   TitleText,
+  AutoHide,
+  MobileOnly,
+  NonMobileOnly,
 } from './components/Shared'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -149,23 +152,46 @@ export default class RaceScreen extends React.Component<{
             </RootCell>
             {race.actualStart ? (
               <RootCell>
-                <HFlex style={{ justifyContent: 'space-between' }}>
-                  <LargeText style={{ minWidth: 100 }}>
-                    {moment(race.actualStart).format('HH:mm:ss')} start
-                  </LargeText>
-                  <TitleText>
-                    {leaderboard.isFinished
-                      ? '🏁 Final Results 🏁'
-                      : 'Racing Now'}
-                  </TitleText>
-                  <LargeText style={{ textAlign: 'right', minWidth: 100 }}>
-                    {leaderboard.isFinished && race.lapCount ? (
-                      `${race.lapCount} laps`
-                    ) : (
-                      <LoadingIndicator height={50} />
-                    )}
-                  </LargeText>
-                </HFlex>
+                <NonMobileOnly>
+                  <HFlex style={{ justifyContent: 'space-between' }}>
+                    <LargeText style={{ minWidth: 100 }}>
+                      {moment(race.actualStart).format('HH:mm:ss')} start
+                    </LargeText>
+                    <TitleText>
+                      {leaderboard.isFinished
+                        ? '🏁 Final Results 🏁'
+                        : 'Racing Now'}
+                    </TitleText>
+                    <LargeText style={{ textAlign: 'right', minWidth: 100 }}>
+                      {leaderboard.isFinished && race.lapCount ? (
+                        `${race.lapCount} laps`
+                      ) : (
+                        <LoadingIndicator height={50} />
+                      )}
+                    </LargeText>
+                  </HFlex>
+                </NonMobileOnly>
+                <MobileOnly>
+                  <HFlex style={{ justifyContent: 'center' }}>
+                    <TitleText>
+                      {leaderboard.isFinished
+                        ? '🏁 Final Results 🏁'
+                        : 'Racing Now'}
+                    </TitleText>
+                  </HFlex>
+                  <HFlex style={{ justifyContent: 'space-between' }}>
+                    <LargeText>
+                      {moment(race.actualStart).format('HH:mm:ss')} start
+                    </LargeText>
+                    <LargeText style={{ textAlign: 'right' }}>
+                      {leaderboard.isFinished && race.lapCount ? (
+                        `${race.lapCount} laps`
+                      ) : (
+                        <LoadingIndicator style={{ margin: 0 }} height={50} />
+                      )}
+                    </LargeText>
+                  </HFlex>
+                </MobileOnly>
                 {leaderboard.passings.map((passing, index) => {
                   const bib =
                     this.props.bib
@@ -195,11 +221,13 @@ export default class RaceScreen extends React.Component<{
                           ? `+${passing.secondsDiff} s`
                           : ''}
                       </div>
-                      <div style={{ flex: 1 }} />
-                      <div style={{ margin: 8 }}>
-                        {moment(passing.date).format('HH:mm:ss:SSS')}
-                      </div>
-                      <div style={{ flex: 1 }} />
+                      <AutoHide>
+                        <div style={{ flex: 1 }} />
+                        <div style={{ margin: 8 }}>
+                          {moment(passing.date).format('HH:mm:ss:SSS')}
+                        </div>
+                        <div style={{ flex: 1 }} />
+                      </AutoHide>
                       <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
                     </HFlex>
                   )
