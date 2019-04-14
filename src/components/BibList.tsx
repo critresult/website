@@ -53,6 +53,7 @@ export default class BibList extends React.Component<{
         <Popup visible={this.state.showingRiderEditPopup}>
           <RiderEdit
             riderId={this.state.editRiderId}
+            seriesId={this.props.seriesId}
             onCancelled={() => {
               this.setState({
                 showingRiderEditPopup: false,
