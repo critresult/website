@@ -10,6 +10,9 @@ export interface Rider {
   lastname: string
   license: string
   transponder?: string
+  email?: string
+  phone?: string
+  teamName?: string
 }
 
 export default class RiderStore {
