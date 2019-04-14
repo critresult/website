@@ -91,28 +91,6 @@ export default class RiderStore {
     }
   }
 
-  async createMany(models: any) {
-    try {
-      const chunks = chunk(uniqby(models, 'license'), 100)
-      const created = []
-      for (const modelChunk of chunks) {
-        console.log(modelChunk)
-        const { data } = await axios
-          .post('/riders', {
-            models: modelChunk,
-            token: PromoterStore.activeToken(),
-          })
-          .catch(() => ({ data: [] }))
-        created.push(...data)
-        await new Promise((r) => setTimeout(r, 1000))
-      }
-      created.map((model: Rider) => (this._ridersById[model._id] = model))
-    } catch (err) {
-      console.log('Error creating many models', err)
-      throw err
-    }
-  }
-
   async create(riderData: any) {
     try {
       const { data } = await axios.post('/riders', {
