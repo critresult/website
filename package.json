@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/critrace/website#readme",
   "dependencies": {
-    "@types/lodash.uniqby": "^4.7.6",
     "axios": "^0.18.0",
     "email-validator": "^2.0.4",
     "idx": "^2.5.5",
@@ -62,6 +61,7 @@
     "@types/lodash.keyby": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
     "@types/lodash.throttle": "^4.1.6",
+    "@types/lodash.uniqby": "^4.7.6",
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
