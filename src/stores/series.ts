@@ -53,6 +53,11 @@ export default class SeriesStore {
     }
   }
 
+  async loadIfNeeded(_id?: string) {
+    if (this._seriesById[_id] && this._seriesById[_id]._id) return
+    return await this.load(_id)
+  }
+
   async load(_id?: string) {
     try {
       const { data } = await axios.get('/series', {
