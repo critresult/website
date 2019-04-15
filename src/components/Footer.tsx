@@ -1,7 +1,7 @@
 import React from 'react'
 import Colors from '../Colors'
-import { TiSocialGithub } from 'react-icons/ti'
-import { RootCell } from './Shared'
+import { TiSocialGithub, TiHeart } from 'react-icons/ti'
+import { RootCell, VFlex, HFlex } from './Shared'
 
 export default class Footer extends React.Component<{}> {
   render() {
@@ -22,9 +22,15 @@ export default class Footer extends React.Component<{}> {
               borderBottomRightRadius: 0,
             }}
           >
-            <a href="https://github.com/critrace" target="_blank">
-              <TiSocialGithub color={Colors.black} size={50} />
-            </a>
+            <VFlex>
+              <a href="https://github.com/critrace" target="_blank">
+                <TiSocialGithub color={Colors.black} size={50} />
+              </a>
+              <HFlex style={{ color: Colors.black, fontSize: 11 }}>
+                <div>Inspired by and in memory of M.M.</div>
+                <TiHeart color={Colors.pink} size={14} />
+              </HFlex>
+            </VFlex>
           </RootCell>
         </div>
       </>
