@@ -63,18 +63,18 @@ export default class Header extends React.Component<
   render() {
     const tabs = [
       {
-        title: 'Sign Up',
+        title: 'Login',
         render: () => (
-          <Signup
+          <Login
             onAuthenticated={this.onAuthenticated}
             onCancelled={this.onCancelled}
           />
         ),
       },
       {
-        title: 'Login',
+        title: 'Sign Up',
         render: () => (
-          <Login
+          <Signup
             onAuthenticated={this.onAuthenticated}
             onCancelled={this.onCancelled}
           />
