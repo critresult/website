@@ -17,6 +17,7 @@ import BibStore from '../stores/bib'
 import { withRouter } from 'react-router-dom'
 import LoadingIndicator from './LoadingIndicator'
 import RiderStore from '../stores/rider'
+import RiderEdit from './RiderEdit'
 
 const EntryCell = styled(HFlex)`
   min-height: 40px;
@@ -42,6 +43,8 @@ class Entrylist extends React.Component<{
     createEntryVisible: false,
     exportingCSV: false,
     loading: true,
+    editRiderVisible: false,
+    editRiderId: '',
   }
   componentDidMount() {
     this.componentDidUpdate({})
@@ -133,6 +136,22 @@ class Entrylist extends React.Component<{
         <Popup visible={this.state.createEntryVisible}>
           <TabSelector tabs={tabs} />
         </Popup>
+        <Popup visible={this.state.editRiderVisible}>
+          <RiderEdit
+            riderId={this.state.editRiderId}
+            seriesId={this.props.seriesId}
+            onCancelled={() => {
+              this.setState({
+                editRiderVisible: false,
+              })
+            }}
+            onUpdated={() => {
+              this.setState({
+                editRiderVisible: false,
+              })
+            }}
+          />
+        </Popup>
         <EntryCell
           style={{
             justifyContent: 'space-between',
@@ -192,19 +211,34 @@ class Entrylist extends React.Component<{
                 </VFlex>
                 {this.props.editable === false ? null : (
                   <VFlex style={{ flex: 1 }}>
-                    <Button
-                      style={{ minWidth: 0, backgroundColor: Colors.pink }}
-                      onClick={() => {
-                        if (!confirm('Remove this entry?')) return
-                        return this.props.race
-                          .removeEntry(this.props.raceId, entry.riderId)
-                          .then(() =>
-                            this.props.race.loadEntries(this.props.raceId)
-                          )
-                      }}
-                    >
-                      <TiTimes size={25} color={Colors.white} />
-                    </Button>
+                    <HFlex>
+                      <Button
+                        title="Edit"
+                        style={{
+                          color: Colors.black,
+                          backgroundColor: Colors.yellow,
+                        }}
+                        onClick={() => {
+                          this.setState({
+                            editRiderId: rider._id,
+                            editRiderVisible: true,
+                          })
+                        }}
+                      />
+                      <Button
+                        style={{ maxHeight: 20, backgroundColor: Colors.pink }}
+                        onClick={() => {
+                          if (!confirm('Remove this entry?')) return
+                          return this.props.race
+                            .removeEntry(this.props.raceId, entry.riderId)
+                            .then(() =>
+                              this.props.race.loadEntries(this.props.raceId)
+                            )
+                        }}
+                      >
+                        <TiTimes size={20} color={Colors.white} />
+                      </Button>
+                    </HFlex>
                   </VFlex>
                 )}
               </EntryCell>
