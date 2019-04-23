@@ -156,6 +156,19 @@ export default class RaceStore {
       throw err
     }
   }
+
+  async update(_id: string, changes = {}) {
+    try {
+      await axios.put('/races', {
+        token: PromoterStore.activeToken(),
+        _id,
+        changes,
+      })
+    } catch (err) {
+      console.log('Error updating race', err)
+      throw err
+    }
+  }
 }
 
 export const raceStore = new RaceStore()

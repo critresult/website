@@ -11,6 +11,7 @@ import {
   AutoHide,
   MobileOnly,
   NonMobileOnly,
+  Input,
 } from './components/Shared'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -25,6 +26,8 @@ import { Link } from 'react-router-dom'
 import idx from 'idx'
 import LoadingIndicator from './components/LoadingIndicator'
 import BibStore from './stores/bib'
+
+const DATE_FORMAT = 'hh:mm:ss A - MMM DD, YYYY'
 
 @inject('rider', 'promoter', 'passing', 'race', 'series', 'event', 'bib')
 @observer
@@ -42,6 +45,8 @@ export default class RaceScreen extends React.Component<{
 
   state = {
     loading: true,
+    raceLapCount: '',
+    raceStartTime: '',
   }
 
   async componentDidMount() {
@@ -56,7 +61,13 @@ export default class RaceScreen extends React.Component<{
     clearInterval(this.reloadTimer)
     this.reloadTimer = undefined
     this.loadResultData()
-      .then(() => this.setState({ loading: false }))
+      .then(() => {
+        const race = this.props.race.racesById(raceId)
+        this.setState({
+          loading: false,
+          raceStartTime: moment(race.actualStart).format(DATE_FORMAT),
+        })
+      })
       .catch((err) => {
         this.setState({ loading: false })
         throw err
@@ -150,12 +161,111 @@ export default class RaceScreen extends React.Component<{
                 </HFlex>
               </VFlex>
             </RootCell>
+            {this.props.promoter.authenticated ? (
+              <RootCell>
+                <VFlex>
+                  <LargeText>Promoter Settings</LargeText>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    {!race.actualStart ? (
+                      <Button
+                        title="Start Race"
+                        style={{
+                          backgroundColor: Colors.green,
+                        }}
+                        onClick={() =>
+                          this.props.race
+                            .update(race._id, { actualStart: new Date() })
+                            .then(() => this.props.race.load(race._id))
+                            .then(() => {
+                              const startDate = this.props.race.racesById(
+                                race._id
+                              ).actualStart
+                              this.setState({
+                                raceStartTime: moment(startDate).format(
+                                  DATE_FORMAT
+                                ),
+                              })
+                            })
+                        }
+                      />
+                    ) : (
+                      <>
+                        <Input
+                          type="text"
+                          value={this.state.raceStartTime}
+                          onChange={(e) => {
+                            this.setState({
+                              raceStartTime: e.target.value,
+                            })
+                          }}
+                        />
+                        <Button
+                          title="Update Start Time"
+                          onClick={() => {
+                            const newStart = moment(
+                              this.state.raceStartTime,
+                              DATE_FORMAT,
+                              true
+                            )
+                            if (!newStart.isValid()) {
+                              alert(
+                                'Your date is formatted incorrectly. Please edit the date in place and keep the formatting the same.'
+                              )
+                              this.setState({
+                                raceStartTime: moment(race.actualStart).format(
+                                  DATE_FORMAT
+                                ),
+                              })
+                              return
+                            }
+                            return this.props.race
+                              .update(race._id, {
+                                actualStart: newStart.toISOString(),
+                              })
+                              .then(() => this.props.race.load(race._id))
+                          }}
+                        />
+                      </>
+                    )}
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    <Input
+                      type="text"
+                      placeholder={`lap count: ${race.lapCount || 0}`}
+                      onChange={(e) => {
+                        this.setState({ raceLapCount: e.target.value })
+                      }}
+                      value={this.state.raceLapCount}
+                    />
+                    <Button
+                      title="Update Final Count"
+                      onClick={() => {
+                        if (!this.state.raceLapCount) {
+                          alert('Lap count must be a number')
+                          return
+                        }
+                        return this.props.race
+                          .update(race._id, {
+                            lapCount: this.state.raceLapCount,
+                          })
+                          .then(() => this.props.race.load(race._id))
+                          .then(() => this.setState({ raceLapCount: '' }))
+                      }}
+                    />
+                  </HFlex>
+                </VFlex>
+              </RootCell>
+            ) : null}
             {race.actualStart ? (
               <RootCell>
                 <NonMobileOnly>
                   <HFlex style={{ justifyContent: 'space-between' }}>
                     <LargeText style={{ minWidth: 100 }}>
-                      {moment(race.actualStart).format('HH:mm:ss')} start
+                      {moment(race.actualStart).format('hh:mm a')}
                     </LargeText>
                     <TitleText>
                       {leaderboard.isFinished
