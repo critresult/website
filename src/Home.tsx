@@ -56,49 +56,41 @@ export default class Home extends React.Component<{
                 <TitleText>Events</TitleText>
               </VFlex>
             </RootCell>
-            <HFlex
-              style={{
-                justifyContent: 'space-around',
-                alignItems: 'space-around',
-                margin: 'auto',
-              }}
-            >
-              {this.props.event.homeEvents.map((_event) => {
-                const event = this.props.event.eventsById(_event._id)
-                const series = this.props.series.seriesById(event.seriesId)
-                const races = this.props.event.racesByEventId(_event._id)
-                return (
-                  <RootCell key={_event._id} style={{ flex: 1, margin: 8 }}>
-                    <VFlex style={{ minWidth: 250, minHeight: 100 }}>
-                      <HFlex style={{ fontSize: 20 }}>
-                        {series.name || ''} - {event.name}
-                      </HFlex>
-                      <HFlex>
-                        {moment(event.startDate)
-                          .utc()
-                          .format('MMMM D, YYYY')}
-                        {' - '}
-                        {races.length} race
-                        {races.length === 1 ? '' : 's'}
-                      </HFlex>
-                      <div style={{ flex: 1 }} />
-                      <Link
-                        style={{ textDecoration: 'none' }}
-                        to={`/race/${(races[0] || {})._id}`}
-                      >
-                        <Button
-                          style={{
-                            backgroundColor: Colors.yellow,
-                            color: Colors.black,
-                          }}
-                          title="View Details"
-                        />
-                      </Link>
-                    </VFlex>
-                  </RootCell>
-                )
-              })}
-            </HFlex>
+            {this.props.event.homeEvents.map((_event) => {
+              const event = this.props.event.eventsById(_event._id)
+              const series = this.props.series.seriesById(event.seriesId)
+              const races = this.props.event.racesByEventId(_event._id)
+              return (
+                <RootCell key={_event._id}>
+                  <VFlex style={{ minWidth: 250, minHeight: 100 }}>
+                    <HFlex style={{ fontSize: 20 }}>
+                      {series.name || ''} - {event.name}
+                    </HFlex>
+                    <HFlex>
+                      {moment(event.startDate)
+                        .utc()
+                        .format('MMMM D, YYYY')}
+                      {' - '}
+                      {races.length} race
+                      {races.length === 1 ? '' : 's'}
+                    </HFlex>
+                    <div style={{ flex: 1 }} />
+                    <Link
+                      style={{ textDecoration: 'none' }}
+                      to={`/race/${(races[0] || {})._id}`}
+                    >
+                      <Button
+                        style={{
+                          backgroundColor: Colors.yellow,
+                          color: Colors.black,
+                        }}
+                        title="View Details"
+                      />
+                    </Link>
+                  </VFlex>
+                </RootCell>
+              )
+            })}
           </>
         )}
         <Footer />
