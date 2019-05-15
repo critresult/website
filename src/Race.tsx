@@ -26,6 +26,8 @@ import { Link } from 'react-router-dom'
 import idx from 'idx'
 import LoadingIndicator from './components/LoadingIndicator'
 import BibStore from './stores/bib'
+import startcase from 'lodash.startcase'
+import truncate from 'lodash.truncate'
 
 const DATE_FORMAT = 'hh:mm:ss A - MMM DD, YYYY'
 
@@ -319,13 +321,26 @@ export default class RaceScreen extends React.Component<{
                       }}
                     >
                       <div style={{ margin: 8, minWidth: 30 }}>{index + 1}</div>
-                      <div style={{ margin: 8, minWidth: 200 }}>
-                        {rider.lastname.toUpperCase()}
+                      <div style={{ margin: 8, minWidth: 250 }}>
+                        {`${rider.firstname
+                          .slice(0, 1)
+                          .toUpperCase()}. ${rider.lastname.toUpperCase()}`}
                       </div>
                       <div style={{ margin: 8, minWidth: 50 }}>
                         #{bib.bibNumber || '-'}
                       </div>
-                      <div style={{ flex: 1 }} />
+                      <AutoHide style={{ flex: 1 }}>
+                        <div style={{ margin: 8, minWidth: 250 }}>
+                          {truncate(
+                            startcase(
+                              (rider.teamName || 'no team').toLowerCase()
+                            ),
+                            {
+                              length: 30,
+                            }
+                          )}
+                        </div>
+                      </AutoHide>
                       <div style={{ margin: 8, minWidth: 50 }}>
                         {typeof passing.secondsDiff === 'number'
                           ? `+${passing.secondsDiff} s`
