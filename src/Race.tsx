@@ -316,8 +316,29 @@ export default class RaceScreen extends React.Component<{
                 </VFlex>
                 <VFlex>
                   <HFlex>
+                    Import Passings:{' '}
+                    <input
+                      type="file"
+                      onChange={async (e) => {
+                        const data = new FormData()
+                        data.append('eventId', race.eventId)
+                        data.append('csv', e.target.files[0])
+                        await axios.post('/passings/import', data, {
+                          params: {
+                            token: this.props.promoter.token,
+                          },
+                          headers: {
+                            'content-type': 'multipart/form-data',
+                          },
+                        })
+                      }}
+                    />
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
                     <Button
-                      title="Export CSV"
+                      title="Export Results"
                       style={{
                         backgroundColor: Colors.green,
                       }}
