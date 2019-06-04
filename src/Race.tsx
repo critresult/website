@@ -28,6 +28,7 @@ import LoadingIndicator from './components/LoadingIndicator'
 import BibStore from './stores/bib'
 import startcase from 'lodash.startcase'
 import truncate from 'lodash.truncate'
+import axios from 'axios'
 
 const DATE_FORMAT = 'hh:mm:ss A - MMM DD, YYYY'
 
@@ -49,6 +50,8 @@ export default class RaceScreen extends React.Component<{
     loading: true,
     raceLapCount: '',
     raceStartTime: '',
+    raceCategory: '',
+    raceGender: '',
   }
 
   async componentDidMount() {
@@ -89,6 +92,9 @@ export default class RaceScreen extends React.Component<{
       this.props.race.loadLeaderboard(raceId),
     ])
     const race = this.props.race.racesById(raceId)
+    this.setState({
+      raceGender: race.gender,
+    })
     const leaderboard = this.props.race.leaderboardByRaceId(raceId)
     await Promise.all([
       this.props.bib.loadBibsForSeries(race.seriesId),
@@ -256,6 +262,72 @@ export default class RaceScreen extends React.Component<{
                           })
                           .then(() => this.props.race.load(race._id))
                           .then(() => this.setState({ raceLapCount: '' }))
+                      }}
+                    />
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    <Input
+                      type="text"
+                      placeholder={`category: ${race.category || ''}`}
+                      onChange={(e) => {
+                        this.setState({ raceCategory: e.target.value })
+                      }}
+                      value={this.state.raceCategory}
+                    />
+                    <Button
+                      title="Update Category"
+                      onClick={() =>
+                        this.props.race
+                          .update(race._id, {
+                            category: this.state.raceCategory,
+                          })
+                          .then(() => this.props.race.load(race._id))
+                          .then(() => this.setState({ raceCategory: '' }))
+                      }
+                    />
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    <select
+                      placeholder="gender"
+                      onChange={(e) => {
+                        this.setState({ raceGender: e.target.value })
+                      }}
+                      value={this.state.raceGender}
+                    >
+                      <option value="">-</option>
+                      <option value="M">Mens</option>
+                      <option value="F">Womens</option>
+                    </select>
+                    <Button
+                      title="Update Gender"
+                      onClick={() =>
+                        this.props.race
+                          .update(race._id, {
+                            gender: this.state.raceGender,
+                          })
+                          .then(() => this.props.race.load(race._id))
+                      }
+                    />
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    <Button
+                      title="Export CSV"
+                      style={{
+                        backgroundColor: Colors.green,
+                      }}
+                      onClick={async () => {
+                        // Generate and download result CSV
+                        window.open(
+                          `${axios.defaults.baseURL}/events/csv?eventId=${
+                            race.eventId
+                          }&token=${this.props.promoter.token}`
+                        )
                       }}
                     />
                   </HFlex>
