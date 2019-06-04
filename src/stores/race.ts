@@ -12,6 +12,8 @@ export interface Race {
   eventId: string
   actualStart?: string
   lapCount?: number
+  category: string
+  gender: 'M' | 'F'
 }
 
 export interface Leaderboard {
