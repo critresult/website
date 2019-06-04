@@ -420,10 +420,16 @@ export default class RaceScreen extends React.Component<{
                       </div>
                       <AutoHide style={{ flex: 1 }}>
                         <div style={{ margin: 8 }}>
-                          {moment(passing.date).format('HH:mm:ss:SSS')}
+                          {passing.dns ? 'DNS' : ''}
+                          {passing.dnf ? 'DNF' : ''}
+                          {!passing.dns && !passing.dnf
+                            ? moment(passing.date).format('HH:mm:ss:SSS')
+                            : ''}
                         </div>
                       </AutoHide>
-                      <div style={{ margin: 8 }}>{passing.lapCount} laps</div>
+                      <div style={{ margin: 8 }}>
+                        {passing.lapCount ? `${passing.lapCount} laps` : ''}
+                      </div>
                     </HFlex>
                   )
                 })}

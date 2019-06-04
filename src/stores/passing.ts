@@ -10,6 +10,8 @@ export class Passing {
   seriesId: string
   raceId: string
   lapCount?: number
+  dnf?: boolean
+  dns?: boolean
   constructor(args: Optional<Passing>) {
     Object.assign(this, {
       ...args,
