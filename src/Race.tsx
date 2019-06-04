@@ -28,6 +28,7 @@ import LoadingIndicator from './components/LoadingIndicator'
 import BibStore from './stores/bib'
 import startcase from 'lodash.startcase'
 import truncate from 'lodash.truncate'
+import axios from 'axios'
 
 const DATE_FORMAT = 'hh:mm:ss A - MMM DD, YYYY'
 
@@ -256,6 +257,24 @@ export default class RaceScreen extends React.Component<{
                           })
                           .then(() => this.props.race.load(race._id))
                           .then(() => this.setState({ raceLapCount: '' }))
+                      }}
+                    />
+                  </HFlex>
+                </VFlex>
+                <VFlex>
+                  <HFlex>
+                    <Button
+                      title="Export CSV"
+                      style={{
+                        backgroundColor: Colors.green,
+                      }}
+                      onClick={async () => {
+                        // Generate and download result CSV
+                        window.open(
+                          `${axios.defaults.baseURL}/events/csv?eventId=${
+                            race.eventId
+                          }&token=${this.props.promoter.token}`
+                        )
                       }}
                     />
                   </HFlex>
