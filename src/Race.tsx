@@ -53,7 +53,7 @@ export default class RaceScreen extends React.Component<{
     raceStartTime: '',
     raceCategory: '',
     raceGender: '',
-    foundRiders: [],
+    foundRiders: {},
   }
 
   async componentDidMount() {
@@ -371,33 +371,42 @@ export default class RaceScreen extends React.Component<{
                           <RiderSearch
                             ridersChanged={(riders) => {
                               this.setState({
-                                foundRiders: riders.slice(0, 3),
+                                foundRiders: {
+                                  ...this.state.foundRiders,
+                                  [passing._id]: riders.slice(0, 3),
+                                },
                               })
                             }}
                           />
                         </HFlex>
-                        {this.state.foundRiders.map((rider) => (
-                          <HFlex key={rider._id}>
-                            <span style={{ margin: 8 }}>{rider.firstname}</span>
-                            <span style={{ margin: 8 }}>{rider.lastname}</span>
-                            <span style={{ margin: 8 }}>{rider.license}</span>
-                            <Button
-                              title="Associate"
-                              onClick={async () => {
-                                await axios.post('/passings/associate', {
-                                  token: this.props.promoter.token,
-                                  transponder: passing.transponder,
-                                  eventId: passing.eventId,
-                                  riderId: rider._id,
-                                })
-                              }}
-                              style={{
-                                backgroundColor: Colors.yellow,
-                                color: Colors.black,
-                              }}
-                            />
-                          </HFlex>
-                        ))}
+                        {(this.state.foundRiders[passing._id] || []).map(
+                          (rider) => (
+                            <HFlex key={rider._id}>
+                              <span style={{ margin: 8 }}>
+                                {rider.firstname}
+                              </span>
+                              <span style={{ margin: 8 }}>
+                                {rider.lastname}
+                              </span>
+                              <span style={{ margin: 8 }}>{rider.license}</span>
+                              <Button
+                                title="Associate"
+                                onClick={async () => {
+                                  await axios.post('/passings/associate', {
+                                    token: this.props.promoter.token,
+                                    transponder: passing.transponder,
+                                    eventId: passing.eventId,
+                                    riderId: rider._id,
+                                  })
+                                }}
+                                style={{
+                                  backgroundColor: Colors.yellow,
+                                  color: Colors.black,
+                                }}
+                              />
+                            </HFlex>
+                          )
+                        )}
                       </VFlex>
                     </HFlex>
                   ))}
