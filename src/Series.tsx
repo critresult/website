@@ -26,6 +26,7 @@ import BibList from './components/BibList'
 import EventStore from './stores/event'
 import idx from 'idx'
 import LoadingIndicator from './components/LoadingIndicator'
+import RiderSearch from './components/RiderSearch'
 
 @inject('series', 'event', 'rider', 'bib')
 @observer
@@ -126,20 +127,11 @@ export default class Series extends React.Component<{
                 <LargeText>Add Rider to Series</LargeText>
                 <HFlex>
                   Search:
-                  <Input
-                    ref={this.searchRef}
-                    type="text"
-                    placeholder="firstname, lastname, or license #"
-                    style={{ minWidth: 200 }}
-                    onChange={this.searchChanged}
+                  <RiderSearch
+                    ridersChanged={(riders) => {
+                      this.setState({ foundRiders: riders })
+                    }}
                   />
-                  {this.state.isSearching ? (
-                    <img
-                      src={require('../static/puff.svg')}
-                      height="15"
-                      style={{ filter: 'brightness(0)' }}
-                    />
-                  ) : null}
                 </HFlex>
               </VFlex>
               {this.state.foundRiders.map((_rider: Rider) => (

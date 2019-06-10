@@ -13,12 +13,13 @@ export interface Race {
   actualStart?: string
   lapCount?: number
   category: string
-  gender: 'M' | 'F'
+  gender: 'M' | 'F' | 'All'
 }
 
 export interface Leaderboard {
   isFinished: boolean
   leaderFinishTime?: Date
+  emptyPassings: Passing[]
   passings: (Passing & {
     lapCount: number
     secondsDiff?: number

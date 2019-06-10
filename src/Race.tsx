@@ -29,6 +29,7 @@ import BibStore from './stores/bib'
 import startcase from 'lodash.startcase'
 import truncate from 'lodash.truncate'
 import axios from 'axios'
+import RiderSearch from './components/RiderSearch'
 
 const DATE_FORMAT = 'hh:mm:ss A - MMM DD, YYYY'
 
@@ -52,6 +53,7 @@ export default class RaceScreen extends React.Component<{
     raceStartTime: '',
     raceCategory: '',
     raceGender: '',
+    foundRiders: {},
   }
 
   async componentDidMount() {
@@ -301,6 +303,7 @@ export default class RaceScreen extends React.Component<{
                       <option value="">-</option>
                       <option value="M">Mens</option>
                       <option value="F">Womens</option>
+                      <option value="All">All</option>
                     </select>
                     <Button
                       title="Update Gender"
@@ -353,6 +356,61 @@ export default class RaceScreen extends React.Component<{
                     />
                   </HFlex>
                 </VFlex>
+                <VFlex>
+                  {(leaderboard.emptyPassings || []).map((passing) => (
+                    <HFlex key={passing._id}>
+                      <VFlex>
+                        <HFlex>
+                          <div>
+                            {`Transponder ${passing.transponder} finished lap ${
+                              passing.lapCount
+                            } at ${moment(passing.date).format(
+                              'HH:mm:ss:SSS'
+                            )}`}
+                          </div>
+                          <RiderSearch
+                            ridersChanged={(riders) => {
+                              this.setState({
+                                foundRiders: {
+                                  ...this.state.foundRiders,
+                                  [passing._id]: riders.slice(0, 3),
+                                },
+                              })
+                            }}
+                          />
+                        </HFlex>
+                        {(this.state.foundRiders[passing._id] || []).map(
+                          (rider) => (
+                            <HFlex key={rider._id}>
+                              <span style={{ margin: 8 }}>
+                                {rider.firstname}
+                              </span>
+                              <span style={{ margin: 8 }}>
+                                {rider.lastname}
+                              </span>
+                              <span style={{ margin: 8 }}>{rider.license}</span>
+                              <Button
+                                title="Associate"
+                                onClick={async () => {
+                                  await axios.post('/passings/associate', {
+                                    token: this.props.promoter.token,
+                                    transponder: passing.transponder,
+                                    eventId: passing.eventId,
+                                    riderId: rider._id,
+                                  })
+                                }}
+                                style={{
+                                  backgroundColor: Colors.yellow,
+                                  color: Colors.black,
+                                }}
+                              />
+                            </HFlex>
+                          )
+                        )}
+                      </VFlex>
+                    </HFlex>
+                  ))}
+                </VFlex>
               </RootCell>
             ) : null}
             {race.actualStart ? (
@@ -397,7 +455,7 @@ export default class RaceScreen extends React.Component<{
                     </LargeText>
                   </HFlex>
                 </MobileOnly>
-                {leaderboard.passings.map((passing, index) => {
+                {(leaderboard.passings as any[]).map((passing, index) => {
                   const bib =
                     this.props.bib
                       .bibsBySeriesId(passing.seriesId)
