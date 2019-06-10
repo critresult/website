@@ -303,6 +303,7 @@ export default class RaceScreen extends React.Component<{
                       <option value="">-</option>
                       <option value="M">Mens</option>
                       <option value="F">Womens</option>
+                      <option value="All">All</option>
                     </select>
                     <Button
                       title="Update Gender"
