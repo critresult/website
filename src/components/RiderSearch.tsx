@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from './shared'
+import { Input } from './Shared'
 import RiderStore from '../stores/rider'
 import { inject, observer } from 'mobx-react'
 
