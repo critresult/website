@@ -19,6 +19,7 @@ export interface Race {
 export interface Leaderboard {
   isFinished: boolean
   leaderFinishTime?: Date
+  emptyPassings: Passing[]
   passings: (Passing & {
     lapCount: number
     secondsDiff?: number

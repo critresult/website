@@ -353,6 +353,33 @@ export default class RaceScreen extends React.Component<{
                     />
                   </HFlex>
                 </VFlex>
+                <VFlex>
+                  {(leaderboard.emptyPassings || []).map((passing) => (
+                    <HFlex key={passing._id}>
+                      <div>
+                        {`Transponder ${
+                          passing.transponder
+                        } finished at ${moment(passing.date).format(
+                          'DD:ss:SSS'
+                        )}`}
+                      </div>
+                      <Input
+                        type="text"
+                        placeholder="firstname, lastname, or license #"
+                        style={{ minWidth: 200 }}
+                        onChange={() => {}}
+                      />
+                      <Button
+                        title="Associate"
+                        onClick={() => {}}
+                        style={{
+                          backgroundColor: Colors.yellow,
+                          color: Colors.black,
+                        }}
+                      />
+                    </HFlex>
+                  ))}
+                </VFlex>
               </RootCell>
             ) : null}
             {race.actualStart ? (
