@@ -19,6 +19,7 @@ export default class RiderEdit extends React.Component<{
   state = {
     riderData: {} as Rider,
     hasRentalTransponder: false,
+    bibNumber: 0,
     isLoading: false,
   }
 
@@ -46,6 +47,7 @@ export default class RiderEdit extends React.Component<{
     }
     this.setState({
       hasRentalTransponder: bib.hasRentalTransponder,
+      bibNumber: bib.bibNumber,
     })
   }
 
@@ -78,6 +80,7 @@ export default class RiderEdit extends React.Component<{
         // We have a bib
         await this.props.bib.update(bib._id, {
           hasRentalTransponder: this.state.hasRentalTransponder,
+          ...(this.state.bibNumber ? { bibNumber: this.state.bibNumber } : {}),
         })
         await this.props.bib.loadBibsForSeries(this.props.seriesId)
       }
@@ -169,6 +172,18 @@ export default class RiderEdit extends React.Component<{
                 placeholder={rider.teamName}
                 onChange={(e: any) => {
                   this.updateRiderData('teamName', e.target.value)
+                }}
+              />
+            </HFlex>
+            <HFlex>
+              Bib Number:{' '}
+              <Input
+                type="text"
+                placeholder={`${this.state.bibNumber}`}
+                onChange={(e: any) => {
+                  this.setState({
+                    bibNumber: e.target.value ? +e.target.value : 0,
+                  })
                 }}
               />
             </HFlex>
