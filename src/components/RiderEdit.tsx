@@ -47,7 +47,6 @@ export default class RiderEdit extends React.Component<{
     }
     this.setState({
       hasRentalTransponder: bib.hasRentalTransponder,
-      bibNumber: bib.bibNumber,
     })
   }
 
@@ -96,6 +95,9 @@ export default class RiderEdit extends React.Component<{
 
   render() {
     const rider = this.props.rider.ridersById(this.props.riderId)
+    const bib = this.props.bib
+      .bibsBySeriesId(this.props.seriesId)
+      .find((bib) => bib.riderId === rider._id)
     return (
       <ModalContainer>
         <LargeText>Edit Rider</LargeText>
@@ -179,7 +181,7 @@ export default class RiderEdit extends React.Component<{
               Bib Number:{' '}
               <Input
                 type="text"
-                placeholder={`${this.state.bibNumber}`}
+                placeholder={`${bib.bibNumber}`}
                 onChange={(e: any) => {
                   this.setState({
                     bibNumber: e.target.value ? +e.target.value : 0,
